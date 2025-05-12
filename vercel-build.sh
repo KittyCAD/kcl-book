@@ -1,6 +1,13 @@
+#!/bin/bash
+
+# This is a build script intended to be consumed by Vercel, though it should work locally if your platform matches.
+
+# Make a temporary directory for binaries
+mkdir -p bin
+
 curl -Lo mdbook-toc.tar.gz https://github.com/badboy/mdbook-toc/releases/download/0.14.2/mdbook-toc-0.14.2-x86_64-unknown-linux-musl.tar.gz
 curl -Lo mdbook.tar.gz https://github.com/rust-lang/mdBook/releases/download/v0.4.49/mdbook-v0.4.49-x86_64-unknown-linux-musl.tar.gz
-tar -xvzf mdbook.tar.gz
-tar -xvzf mdbook-toc.tar.gz
-export PATH="$(pwd)/mdbook-toc;$PATH"
-./mdbook build kcl-book
+tar -xvzf mdbook.tar.gz -C bin
+tar -xvzf mdbook-toc.tar.gz -C bin
+export PATH="$(pwd)/bin;$PATH"
+mdbook build kcl-book
