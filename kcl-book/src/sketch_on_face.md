@@ -25,7 +25,7 @@ When our triangle is extruded, its 3 edges create 3 new side faces, one for each
 
 Now, if we want to start a new sketch _on that face_, we can do so!
 
-```kcl=parse
+```kcl
 sketch001 = startSketchOn(triangle, face = b)
 ```
 

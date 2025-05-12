@@ -97,7 +97,7 @@ Let's see an example:
 
 ```kcl
 inputArray = [1, 2, 3, 4]
-sum = reduce(inputArray, initial = 0, f = fn(@i, accum) => { return i + accum }) 
+sum = reduce(inputArray, initial = 0, f = fn(@i, accum) { return i + accum }) 
 ```
 
 If you open `sum` in the Variables pane, you'll see it's 10, as we expect. How does this work? Let's break it down and see what happens in each step of the `reduce`.

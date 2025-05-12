@@ -1,1 +1,1 @@
-cargo run -q -- /Users/adamchalmers/kc-repos/modeling-app new
+cargo run -q -- /Users/adamchalmers/kc-repos/kcl-book new

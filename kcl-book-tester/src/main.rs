@@ -39,15 +39,6 @@ fn run() -> Result<()> {
     let kcl_programs = files.flat_map(kcl_code_blocks);
 
     for code_block in kcl_programs {
-        println!(
-            "Running {} {} {}",
-            code_block.file,
-            code_block.block_number,
-            code_block
-                .name
-                .clone()
-                .unwrap_or_else(|| "unnamed".to_owned())
-        );
         if let Some(name) = code_block.name {
             render_snapshot(code_block.contents, &name, book_dir.clone(), mode)?;
         } else {
@@ -62,6 +53,7 @@ fn run() -> Result<()> {
 }
 
 fn check_parses(program: String, file: String, block_number: usize) -> Result<()> {
+    println!("Linting {} {}", file, block_number);
     let mut cmd = Command::new("zoo")
         .args(["kcl", "lint", "-"])
         .stdin(Stdio::piped())

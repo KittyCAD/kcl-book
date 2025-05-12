@@ -39,7 +39,7 @@ shouldBe2 = log10(100)
 
 The `min` function takes just one argument: an array of numbers. But most KCL functions take in multiple arguments. When there's many different arguments, it can be confusing to tell which argument means what. For example, what does this function do?
 
-```kcl
+```
 x = pow(4, 2)
 ```
 
