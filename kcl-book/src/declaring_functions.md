@@ -76,7 +76,7 @@ Its specific measurements, like number of holes, radius, thickness etc were chos
 
 ```kcl=parametric_flange
 // Define a parametric flange
-fn flange(numHoles, holeRadius, radius, thickness) {
+fn flange(numHoles, holeRadius, radius, thickness, holeEdgeGap) {
   holes = startSketchOn(XZ)
     |> circle(radius = holeRadius, center = [radius - holeEdgeGap, 0])
     |> patternCircular2d(
