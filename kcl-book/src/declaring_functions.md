@@ -71,7 +71,7 @@ base = startSketchOn(XZ)
 
 ![The pipe flange](images/dynamic/specific_flange.png)
 
-Its specific measurements, like number of holes, radius, thickness etc were chosen somewhat arbitrarily. What if we want to make another pipe flange in the future, with different measurements? We can turn this specific flange model into a parametric design by making it into a function. We'll define a function `pipe_flange` which takes in several parameters. Let's see:
+Its specific measurements, like number of holes, radius, thickness etc were chosen somewhat arbitrarily. What if we want to make another pipe flange in the future, with different measurements? We can turn this specific flange model into a parametric design by making it into a function. We'll define a function `flange` which takes in several parameters. Let's see:
 
 ```kcl=parametric_flange
 // Define a parametric flange
