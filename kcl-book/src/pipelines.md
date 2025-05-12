@@ -1,6 +1,11 @@
 # Pipeline syntax
 <!-- toc -->
 
+
+When you have repeated function calls wrapping each other, it can become difficult to understand your code. KCL code relies heavily on _pipelines_ to keep code readable. Let's get into the details and learn how to write neater, idiomatic KCL.
+
+## The |> operator
+
 In the previous chapter we learned how to call functions: you write the function's name, then give its inputs in parentheses, like this:
 
 ```kcl

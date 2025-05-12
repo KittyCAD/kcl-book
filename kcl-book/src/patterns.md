@@ -1,4 +1,5 @@
 # Patterns
+<!-- toc -->
 
 Real-world objects often have repeated parts. Consider a LEGO brick, which has a lot of repeated bumps on its top face. Or a table, with four repeated legs. KCL would be a very tedious language if we made you define each leg, or each LEGO bump, over and over again every time your model needed one. Luckily, there's a simple way to repeat geometry in your model. It's called a _pattern_. There are several ways to use patterns. Let's learn how they work!
 

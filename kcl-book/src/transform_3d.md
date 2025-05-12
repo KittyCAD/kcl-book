@@ -1,4 +1,5 @@
 # Transforming 3D solids
+<!-- toc -->
 
 We've covered many different ways to create 3D solids from 2D sketches, but what can we do with our solids afterwards? In this chapter we'll cover how to combine them via union, intersection and subtraction. This is sometimes called _constructive solid geometry_. We'll also look at how to scale, rotate or translate them. But before we get to that, let's start with something a little fun:
 

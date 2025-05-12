@@ -1,4 +1,5 @@
 # Combining 3D solids
+<!-- toc -->
 
 We've seen how to make a lot of different solids. You could transform a 2D shape into a 3D solid. From there, you can copy and transform that 3D solid by rotating, translating or rotating it. Now it's time to learn a third way to build 3D solids: by combining other 3D solids. This is sometimes called _constructive solid geometry_ and it's a very powerful tool for any serious mechanical engineering work.
 
