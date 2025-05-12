@@ -2,4 +2,4 @@ curl -Lo mdbook-toc.tar.gz https://github.com/badboy/mdbook-toc/releases/downloa
 curl -Lo mdbook.tar.gz https://github.com/rust-lang/mdBook/releases/download/v0.4.49/mdbook-v0.4.49-x86_64-unknown-linux-musl.tar.gz
 tar -xvzf mdbook.tar.gz
 tar -xvzf mdbook-toc.tar.gz
-./mdbook build
+./mdbook build kcl-book
