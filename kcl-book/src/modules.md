@@ -63,7 +63,7 @@ fn sphere() {
     |> revolve(axis = Y)
 }
 
-map([1..20], f = fn(@i) { return sphere() |> translate(y = i * 20) }
+map([1..10], f = fn(@i) { return sphere() |> translate(y = i * 20) })
 ```
 
 To tell `main.kcl` to execute these two files, we use the `import` keyword with each file's filepath.
@@ -118,7 +118,7 @@ export mySpecificCube = cube(sideLength = 20)
 
 Now in `main.kcl` we can access `mySpecificCube`, and translate or rotate it. We can also use the `cube` function to make more cubes.
 
-```
+```kcl
 // main.kcl
 import mySpecificCube, cube from "cube.kcl"
 
