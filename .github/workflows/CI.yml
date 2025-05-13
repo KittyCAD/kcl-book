@@ -21,7 +21,6 @@ jobs:
         cargo build
     - name: Run tester
       run: |
-        cd kcl-book
         ./kcl-book-tester/target/debug/kcl-book-tester . all
 
   spelling:
@@ -43,7 +42,6 @@ jobs:
         with:
           mdbook-version: 'latest'
       - run: |
-          cd kcl-book
           cd kcl-book
           mdbook build
 
