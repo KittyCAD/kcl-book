@@ -75,7 +75,7 @@ import "spheres.kcl"
 
 If you open this file, you'll see the same image as before (10 spheres and 10 cubes). But grouping related code into its own file can make it easier to read.
 
-The other big change in our new code is that _each module executes in parallel_. This means the circles and spheres will be drawn simultaneously, instead of drawing all the cubes and then all the spheres. Splitting your big KCL files into smaller modules can therefore be really helpful for speeding up large models.
+The other big change in our new code is that _each module executes in parallel_. This means the cubes and spheres will be drawn simultaneously, instead of drawing all the cubes and then all the spheres. Splitting your big KCL files into smaller modules can therefore be really helpful for speeding up large models.
 
 Each of your `.kcl` files is a KCL module. Files must all be in the same directory -- we don't currently support importing KCL modules from other directories. Import statements have to be at the top of a file -- they can't be nested within something like a function definition.
 
