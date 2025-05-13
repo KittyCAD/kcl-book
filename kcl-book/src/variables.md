@@ -97,3 +97,9 @@ Sometimes, you need to store several pieces of related data together. KCL has _o
  - `sphere = { radius = 4, center = [0, 0, 3.2] }`
  - `wires = { positive = [1, 2], negative = [3, 4], resistance = 0.3 }`
  - `components = { name = "Flange", holes = { inner = [[0, 0], [1, 0]], outer = [[4, 4]] } }`
+
+## More info
+
+We used several different operators so far, including `+` and `-`, but KCL supports a lot of other operators. You can find a full list in the [operator docs].
+
+[operator docs]: https://zoo.dev/docs/kcl-lang/arithmetic

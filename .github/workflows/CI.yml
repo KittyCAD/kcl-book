@@ -1,0 +1,58 @@
+name: KCL Book CI
+
+env:
+  CLICOLOR: 1
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Run book tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Rust
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+    - name: Install zoo CLI
+      run: |
+        # Export the sha256sum for verification.
+        export ZOO_CLI_SHA256="6e4254249c76f040aefaa9847a0e47fbb56c9d284a03d3abc55a4150199be112"
+        # Download and check the sha256sum.
+        curl -fSL "https://dl.zoo.dev/releases/cli/v0.2.111/zoo-x86_64-unknown-linux-musl" -o "/usr/local/bin/zoo" \
+        	&& echo "${ZOO_CLI_SHA256}  /usr/local/bin/zoo" | sha256sum -c - \
+        	&& chmod a+x "/usr/local/bin/zoo"
+        echo "zoo cli installed!"
+    - name: Build tester
+      run: |
+        cd kcl-book-tester
+        cargo build
+    - name: Run tester
+      env:
+        ZOO_TOKEN: ${{secrets.KITTYCAD_API_TOKEN}}
+      run: |
+        ./kcl-book-tester/target/debug/kcl-book-tester . all
+
+  spelling:
+    name: Spell Check with Typos
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Spell Check Repo
+      uses: crate-ci/typos@v1.32.0
+
+  check:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: 'latest'
+      - run: |
+          cd kcl-book
+          mdbook build
+
+

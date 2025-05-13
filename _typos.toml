@@ -1,0 +1,9 @@
+[files]
+extend-exclude = [
+  "**/target",
+  "kcl-book/book",
+]
+
+[default.extend-words]
+metalness = "metalness" # appearance API 
+
