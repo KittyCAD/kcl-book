@@ -1,0 +1,43 @@
+name: KCL Book CI
+
+env:
+  CLICOLOR: 1
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Run book tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Rust
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+    - name: Build tester
+      run: cd kcl-book-tester; cargo build
+    - name: Run tester
+      run: |
+        ./kcl-book-tester/target/debug/kcl-book-tester . all
+
+  spelling:
+    name: Spell Check with Typos
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Actions Repository
+      uses: actions/checkout@v4
+    - name: Spell Check Repo
+      uses: crate-ci/typos@v1.32.0
+
+  check:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: 'latest'
+      - run: mdbook build
+
+
