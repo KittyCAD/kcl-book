@@ -15,14 +15,7 @@ jobs:
     - name: Install Rust
       uses: actions-rust-lang/setup-rust-toolchain@v1
     - name: Install zoo CLI
-      run: |
-        # Export the sha256sum for verification.
-        export ZOO_CLI_SHA256="6e4254249c76f040aefaa9847a0e47fbb56c9d284a03d3abc55a4150199be112"
-        # Download and check the sha256sum.
-        curl -fSL "https://dl.zoo.dev/releases/cli/v0.2.111/zoo-x86_64-unknown-linux-musl" -o "/usr/local/bin/zoo" \
-        	&& echo "${ZOO_CLI_SHA256}  /usr/local/bin/zoo" | sha256sum -c - \
-        	&& chmod a+x "/usr/local/bin/zoo"
-        echo "zoo cli installed!"
+      uses: KittyCAD/action-install-cli@main
     - name: Build tester
       run: |
         cd kcl-book-tester
