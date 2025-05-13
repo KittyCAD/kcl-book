@@ -1,3 +1,5 @@
+<script type="module" src="scripts/model-viewer.min.js"></script>
+
 # Modeling 3D shapes
 <!-- toc -->
 
@@ -9,7 +11,7 @@ Previous chapters covered designing 2D shapes. Now it's time to design 3D shapes
 
 Extruding basically takes a 2D shape and pulls it up, stretching it upwards into the third dimension. Let's start with our existing 2D pill shape from the previous chapter:
 
-```kcl
+```kcl=pill_2d
 height = 4
 width = 8
 pill = startSketchOn(XZ)
@@ -22,11 +24,11 @@ pill = startSketchOn(XZ)
 ```
 It should look like this:
 
-![2D pill, before extruding](images/static/pill_2d.png)
+![2D pill, before extruding](images/dynamic/pill_2d.png)
 
 Now we're going to extrude it up into the third axis, making a 3D solid.
 
-```kcl
+```kcl=pill_3d
 height = 4
 width = 8
 
@@ -48,7 +50,7 @@ pill = startSketchOn(XZ)
 
 You should see something like this:
 
-![3D pill, after extruding](images/static/pill_3d.png)
+<model-viewer alt="3D pill, after extruding" src="gltf/pill_3d/output.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
 
 The [`extrude`] function takes a distance, which is how far along the third axis to extrude. Every plane has a _normal_, or an axis which is _tangent_ to the plane. For the plane XZ, this is the Y axis. This normal, or tangent, or axis perpendicular to the plane, is the direction that extrudes go along.
 
@@ -109,7 +111,7 @@ sweepPath = startSketchOn(XZ)
 swept = sweep(pill, path = sweepPath)
 ```
 
-![A 2D pill shape, swept along a path to make it 3D](images/dynamic/swept_along_path.png)
+<model-viewer alt="A 2D pill shape, swept along a path to make it 3D" src="gltf/swept_along_path/output.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
 
 The [`sweep`] call has several other options you can set, so read its docs page for more information.
 
@@ -133,7 +135,7 @@ startSketchOn(XZ)
   |> revolve(axis = Y)
 ```
 
-![The circle, revolved around the axis, to make a donut](images/dynamic/donut.png)
+<model-viewer alt="The circle, revolved around the axis, to make a donut" src="gltf/donut/output.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
 
 There's an optional argument called `angle`. In the above example, we didn't provide it, so it defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
 
@@ -143,7 +145,7 @@ startSketchOn(XZ)
   |> revolve(axis = Y, angle = 240)
 ```
 
-![The circle, revolved partway around the axis, to make part of a donut](images/dynamic/donut240.png)
+<model-viewer alt="The circle, revolved partway around the axis, to make part of a donut" src="gltf/donut240/output.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
 
 ### Spheres
 
@@ -171,7 +173,7 @@ startSketchOn(XY)
   |> revolve(axis = Y, angle = 360)
 ```
 
-![Revolving a semicircle to make a sphere](images/dynamic/sphere.png)
+<model-viewer alt="Revolving a semicircle to make a sphere" src="gltf/sphere/output.gltf" ar shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
 
 ## Lofts
 
