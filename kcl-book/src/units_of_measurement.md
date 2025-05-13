@@ -109,13 +109,13 @@ fn f(theta: number(Angle)) {
   return cos(theta)
 }
 
-// These work
-x = f(theta = 90deg)
-y = f(theta = 2 * PI)
-
-// This errors:
-z = f(theta = 20cm)
+xArg = 360deg
+x = f(theta = xArg)
+yArg = (2 * PI): number(rad)
+y = f(theta = yArg)
 ```
+
+If you try to run `f(theta = 2in)` you'll see an error that explains you're using the wrong type of number. But both `x` and `y` will correctly be 1 if you open the Variables panel, showing that their units are being tracked correctly.
 
 ## Other types
 
