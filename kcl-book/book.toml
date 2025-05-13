@@ -9,6 +9,12 @@ title = "Modeling with KCL"
 command = "mdbook-toc"
 renderer = ["html"]
 
+[output.html]
+git-repository-url = "https://github.com/KittyCAD/kcl-book"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/KittyCAD/kcl-book/edit/main/guide/{path}"
+site-url = "/docs/kcl/"
+
 # [output.pdf]
 
 # [output.html.print]
