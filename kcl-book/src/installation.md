@@ -1,6 +1,6 @@
 # Installation
 
-There's two main ways to work with KCL. You can use [Zoo Design Studio], our all-in-one application built specifically for KCL designs, or you can use a traditional programming interface with your own text editor. We definitely recommend the Zoo Design Studio.
+There are two main ways to work with KCL. You can use [Zoo Design Studio], our all-in-one application built specifically for KCL designs, or you can use a traditional programming interface with your own text editor. We definitely recommend the Zoo Design Studio.
 
 ## Zoo Design Studio
 
