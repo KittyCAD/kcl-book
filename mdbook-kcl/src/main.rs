@@ -3,7 +3,7 @@
 use clap::{Arg, ArgMatches, Command};
 use mdbook::errors::Error;
 use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
-use mdbook_kcl::Nop;
+use mdbook_kcl::Kcl;
 use semver::{Version, VersionReq};
 use std::io;
 use std::process;
@@ -22,7 +22,7 @@ fn main() {
     let matches = make_app().get_matches();
 
     // Users will want to construct their own preprocessor here
-    let preprocessor = Nop::new();
+    let preprocessor = Kcl::new();
 
     if let Some(sub_args) = matches.subcommand_matches("supports") {
         handle_supports(&preprocessor, sub_args);
@@ -67,7 +67,3 @@ fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
         process::exit(1);
     }
 }
-
-/// The actual implementation of the `Nop` preprocessor. This would usually go
-/// in your main `lib.rs` file.
-mod nop_lib {}

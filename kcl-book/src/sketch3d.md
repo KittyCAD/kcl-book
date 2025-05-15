@@ -24,6 +24,8 @@ It should look like this:
 
 ![2D pill, before extruding](images/static/pill_2d.png)
 
+{{#kcl_model path="pill_2d"}}
+
 Now we're going to extrude it up into the third axis, making a 3D solid.
 
 ```kcl
