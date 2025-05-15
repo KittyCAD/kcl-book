@@ -4,6 +4,7 @@
 
 # Language basics
 
+- [Installation](./installation.md)
 - [Calculations and variables](./variables.md)
 - [Calling functions](./calling_functions.md)
 - [Pipeline syntax](./pipelines.md)

@@ -2,6 +2,7 @@
 extend-exclude = [
   "**/target",
   "kcl-book/book",
+  "**.js",
 ]
 
 [default.extend-words]
