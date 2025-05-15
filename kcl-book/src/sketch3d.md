@@ -24,11 +24,9 @@ It should look like this:
 
 ![2D pill, before extruding](images/static/pill_2d.png)
 
-{{#kcl_model path="pill_2d"}}
-
 Now we're going to extrude it up into the third axis, making a 3D solid.
 
-```kcl
+```kcl=pill_3d
 height = 4
 width = 8
 
@@ -50,7 +48,7 @@ pill = startSketchOn(XZ)
 
 You should see something like this:
 
-![3D pill, after extruding](images/static/pill_3d.png)
+<!-- KCL: name=pill_3d,alt=2D pill extruded into 3D -->
 
 The [`extrude`] function takes a distance, which is how far along the third axis to extrude. Every plane has a _normal_, or an axis which is _tangent_ to the plane. For the plane XZ, this is the Y axis. This normal, or tangent, or axis perpendicular to the plane, is the direction that extrudes go along.
 
@@ -111,7 +109,7 @@ sweepPath = startSketchOn(XZ)
 swept = sweep(pill, path = sweepPath)
 ```
 
-![A 2D pill shape, swept along a path to make it 3D](images/dynamic/swept_along_path.png)
+<!-- KCL: name=swept_along_path,alt=2D pill swept along path into 3D -->
 
 The [`sweep`] call has several other options you can set, so read its docs page for more information.
 
@@ -135,7 +133,7 @@ startSketchOn(XZ)
   |> revolve(axis = Y)
 ```
 
-![The circle, revolved around the axis, to make a donut](images/dynamic/donut.png)
+<!-- KCL: name=donut,alt=The circle has been revolved around an axis to make a donut -->
 
 There's an optional argument called `angle`. In the above example, we didn't provide it, so it defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
 
@@ -145,7 +143,7 @@ startSketchOn(XZ)
   |> revolve(axis = Y, angle = 240)
 ```
 
-![The circle, revolved partway around the axis, to make part of a donut](images/dynamic/donut240.png)
+<!-- KCL: name=donut240,alt=The circle has been revolved partway around an axis to make a donut -->
 
 ### Spheres
 
@@ -173,7 +171,7 @@ startSketchOn(XY)
   |> revolve(axis = Y, angle = 360)
 ```
 
-![Revolving a semicircle to make a sphere](images/dynamic/sphere.png)
+<!-- KCL: name=sphere,skip3d=true,alt=Revolving a semicircle makes a sphere -->
 
 ## Lofts
 
@@ -197,7 +195,7 @@ circleSketch = startSketchOn(offsetPlane(XY, offset = 200))
 loft([squareSketch, circleSketch])
 ```
 
-![Basic loft of a square into a circle](images/dynamic/loft_basic.png)
+<!-- KCL: name=loft_basic,alt=Basic loft of a square into a circle-->
 
 Note that we used the [`offsetPlane`] function to start the circle sketch 200 units above the XY plane. We'll cover offsetPlane more in the chapter on [sketch on face]. The [`loft`] function has a few other advanced options you can set. One of these is `vDegree`, which affects how smoothly KCL interpolates between the shapes. Take a look at these two examples, which are identical except for vDegree. This example uses `vDegree = 1`:
 
@@ -222,7 +220,7 @@ circ1 = startSketchOn(offsetPlane(XY, offset = 200))
 loftedSolid = loft([circ0, squareSketch, circ1], vDegree = 1)
 ```
 
-![Loft with vDegree 1](images/dynamic/loft_vd1.png)
+<!-- KCL: name=loft_vd1,alt=Loft with vDegree 1-->
 
 The following loft is identical, but we set `vDegree = 2`. That's actually the default, so we don't need to set it, but for the sake of example we'll explicitly set it there.
 
@@ -247,7 +245,7 @@ circ1 = startSketchOn(offsetPlane(XY, offset = 200))
 loftedSolid = loft([circ0, squareSketch, circ1], vDegree = 2)
 ```
 
-![Loft with vDegree 2](images/dynamic/loft_vd2.png)
+<!-- KCL: name=loft_vd2,alt=Loft with vDegree 2-->
 
 As you can see, the `vDegree` makes a big difference. You can view other options on the [`loft`] docs page.
 

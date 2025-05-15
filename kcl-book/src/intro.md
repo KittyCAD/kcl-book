@@ -1,4 +1,11 @@
 # Introduction
+<model-viewer
+  alt="Test"
+  src="gltf/pill_3d/output.gltf"
+  environment-image="images/whipple_creek.jpg"
+  auto-rotate
+  camera-controls
+  touch-action="pan-y"></model-viewer>
 
 Engineering is about solving problems, given some constraints. My name is Adam, and I'm a software engineer. I write code. Many of my colleagues at Zoo are hardware engineers. They design and build real-world objects. Some people see software and hardware engineering as two different disciplines. After all, software can't be touched or seen. It can't keep the two ends of a bridge together. And hardware -- everything from bridges to buildings to clamps to rockets -- can. Physical and software systems seem very separate. But that's not how I see it. Both coders and Formula 1 car designers are fundamentally _engineers_. We're both trying to solve difficult problems, with limited resources and various constraints. We're both trying to satisfy some requirement (like function) while minimizing some measurements (like cost or size) and still making the final result comprehensible (to our colleagues, to our users, or to our future self who revisits this project in two years).
 

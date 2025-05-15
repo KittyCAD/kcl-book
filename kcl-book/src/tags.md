@@ -21,7 +21,7 @@ cube = startSketchOn(XY)
 
 It produces a cube like this:
 
-![A cube](images/dynamic/cube_no_fillets.png)
+<!-- KCL: name=cube_no_fillets,alt=A cube -->
 
 What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four `line` calls. How can we refer back to them? Usually, to use some data in an operation, we just put that data into a variable, and pass it into a function. That won't work here, because the data is in a pipeline. So what do we do?
 

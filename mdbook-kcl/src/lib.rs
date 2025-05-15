@@ -4,7 +4,11 @@ use mdbook::errors::Error;
 use mdbook::preprocess::{Preprocessor, PreprocessorContext};
 use pulldown_cmark::{Event, Parser, Tag, TagEnd};
 
+const LOAD_MODEL_VIEWER: &str =
+    "<script type=\"module\" src=\"scripts/model-viewer.min.js\"></script>\n";
+
 /// KCL book's custom preprocessor.
+#[derive(Default)]
 pub struct Kcl;
 
 impl Kcl {
@@ -30,12 +34,10 @@ impl Preprocessor for Kcl {
         book.for_each_mut(|mut item| match &mut item {
             BookItem::Chapter(chapter) => {
                 // At the start of each chapter, insert a <script> that loads the model-viewer library.
-                chapter.content.insert_str(
-                    0,
-                    "<script type=\"module\" src=\"scripts/model-viewer.js\"></script>\n",
-                );
-                if let Err(e) = remove_emphasis(&mut count, chapter) {
-                    errors.push(e);
+                chapter.content.insert_str(0, LOAD_MODEL_VIEWER);
+                match remove_emphasis(&mut count, chapter) {
+                    Ok(new_chapter) => chapter.content = new_chapter,
+                    Err(e) => errors.push(e),
                 }
             }
             _other => {}
@@ -61,18 +63,21 @@ struct KclRenderFields {
     skip_3d: bool,
 }
 
-fn remove_emphasis(kcl_comments_found: &mut usize, chapter: &mut Chapter) -> Result<String, Error> {
+fn remove_emphasis(kcl_comments_found: &mut usize, chapter: &Chapter) -> Result<String, Error> {
     let mut buf = String::with_capacity(chapter.content.len());
 
     let events = Parser::new(&chapter.content).flat_map(|e: Event<'_>| match e {
         Event::Html(a) if a.starts_with("<!-- KCL:") => {
-            println!("Found KCL render");
             let s = a.strip_prefix("<!-- KCL: ");
             let Some(s) = s else {
                 eprintln!("Malformed KCL test {a}");
                 return vec![Event::Html(a)];
             };
-            let s = s.strip_suffix(" -->").unwrap();
+            let s = s.trim();
+            let Some(s) = s.strip_suffix("-->") else {
+                eprintln!("Malformed KCL test {s}");
+                return vec![Event::Html(a)];
+            };
 
             *kcl_comments_found += 1;
             let mut kcl_render = KclRenderFields::default();
@@ -81,7 +86,7 @@ fn remove_emphasis(kcl_comments_found: &mut usize, chapter: &mut Chapter) -> Res
                     kcl_render.name = v.to_owned();
                 }
                 if k == "alt" {
-                    kcl_render.alt = v.to_owned();
+                    kcl_render.alt = v.trim().to_owned();
                 }
                 if k == "skip3d" {
                     kcl_render.skip_3d = v == "true";
@@ -90,14 +95,14 @@ fn remove_emphasis(kcl_comments_found: &mut usize, chapter: &mut Chapter) -> Res
 
             eprintln!("Found KCL render: {kcl_render:?}");
             let KclRenderFields { name, alt, skip_3d } = kcl_render;
-            let out: Vec<Event> = if skip_3d {
+            let out: Vec<Event> = if !skip_3d {
                 let mv = format!(
                     r#"<model-viewer
             alt="{alt}"
             src="gltf/{name}/output.gltf"
+            poster="images/dynamic/{name}.png"
             ar
-            environment-image="images/moon_1k.hdr"
-            poster="images/{name}.png"
+            environment-image="images/whipple_creek.jpg"
             shadow-intensity="1"
             auto-rotate
             camera-controls touch-action="pan-y">
@@ -109,11 +114,11 @@ fn remove_emphasis(kcl_comments_found: &mut usize, chapter: &mut Chapter) -> Res
                     Event::Start(Tag::Paragraph),
                     Event::Start(Tag::Image {
                         link_type: pulldown_cmark::LinkType::Inline,
-                        dest_url: format!("images/static/{name}.png").into(),
-                        title: alt.clone().into(),
+                        dest_url: format!("images/dynamic/{name}.png").into(),
+                        title: format!("2D fallback: {alt}").into(),
                         id: "".into(),
                     }),
-                    Event::Text(alt.into()),
+                    Event::Text(format!("2D fallback: {alt}").into()),
                     Event::End(TagEnd::Image),
                     Event::End(TagEnd::Paragraph),
                 ]
@@ -123,7 +128,8 @@ fn remove_emphasis(kcl_comments_found: &mut usize, chapter: &mut Chapter) -> Res
         other => vec![other],
     });
 
-    Ok(pulldown_cmark_to_cmark::cmark(events, &mut buf).map(|_| buf)?)
+    let html = pulldown_cmark_to_cmark::cmark(events, &mut buf).map(|_| buf)?;
+    Ok(html)
 }
 
 #[cfg(test)]
@@ -174,13 +180,13 @@ mod test {
         let input_json = input_json.as_bytes();
 
         let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-        let input_book = book.clone().sections.remove(0);
+        // let input_book = book.clone().sections.remove(0);
         let result = Kcl::new().run(&ctx, book);
         assert!(result.is_ok());
 
         // The nop-preprocessor should not have made any changes to the book content.
         let actual_book = &result.unwrap().sections[0];
-        println!("{actual_book:#?}");
+        eprintln!("{actual_book:#?}");
 
         // assert_eq!(actual_book, &expected_book);
     }
