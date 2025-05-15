@@ -7,7 +7,7 @@ var hljs = function () { "use strict"; function e(n) { Object.freeze(n); var t =
 hljs.registerLanguage("kcl", function () {
     "use strict";
     return function (e) {
-        const KEYWORDS = "if impl let if else for while return break continue fn let mut as loop nil and or not var const import export type interface new self from record struct object"
+        const KEYWORDS = "impl let if else for while return break continue fn let mut as loop nil and or not var const import export type interface new self from record struct object"
         // var operators = "(|>|\+|\-)";
         return {
             name: "KittyCAD",
