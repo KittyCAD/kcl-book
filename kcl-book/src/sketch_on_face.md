@@ -19,7 +19,7 @@ triangle = startSketchOn(XY)
   |> extrude(length = 40)
 ```
 
-![An extruded triangle](images/dynamic/triangle_for_sketching.png)
+<!-- KCL: name=triangle_for_sketching,alt=An extruded triangle -->
 
 When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces. So, each new side face corresponds to an existing edge. And crucially, the faces share a tag with their parent edge. This means the face which grew out of the edge tagged `b` also has the tag `b`. We can use this to reference this face in our 3D model.
 
@@ -47,7 +47,7 @@ cylinder = startSketchOn(triangle, face = b)
   |> extrude(length = 40)
 ```
 
-![The previous triangle, with a cylinder sketched on its side face](images/dynamic/triangle_with_cylinder_sketched.png)
+<!-- KCL: name=triangle_with_cylinder_sketched,alt=Previous triangle now has a cylinder sketched on one side face-->
 
 Great! We extruded a solid (the triangle), and could sketch on one of its faces, even extruding that sketch.
 
@@ -78,7 +78,7 @@ box = startSketchOn(triangle, face = START)
   |> extrude(length = 10)
 ```
 
-![Solid with a cylinder extruded on top, and a cube extruded below](images/dynamic/triangle_top_and_bottom_sketches.png)
+<!-- KCL: name=triangle_top_and_bottom_sketches,alt=Solid with a cylinder extruded on top and a cube extruded below-->
 
 Great! These built-in face identifiers are always available on solids. We've learned how to sketch on the top, bottom and side faces. That covers all possible faces, right? Right? Not exactly! There's one more kind of face we haven't talked about yet. 
 
@@ -104,7 +104,7 @@ cube = startSketchOn(XY)
      )
 ```
 
-![A chamfered cube](images/dynamic/chamfered_cube.png)
+<!-- KCL: name=chamfered_cube,alt=A chamfered cube-->
 
 The chamfer produced a new face, and we can sketch on it too. Firstly, we add a tag to the [`chamfer`] call, and then we can sketch on it like any other tagged face.
 
@@ -131,7 +131,7 @@ startSketchOn(cube, face = chamferedFace)
   |> extrude(length = 40)
 ```
 
-![A chamfered cube, with a protruding cylinder from the chamfer](images/dynamic/sketch_on_chamfered_cube.png)
+<!-- KCL: name=sketch_on_chamfered_cube,alt=Chamfered cube with cylinder sketched on the chamfered face-->
 
 So far, we've sketched on standard planes (like XY), on tagged faces, and on standard faces like END. There's one more place you can start sketching on: a custom plane. Let's learn how.
 
@@ -148,15 +148,18 @@ r = 10
 
 startSketchOn(XY)
   |> circle(center = [0, 0], radius = r)
+  |> extrude(length = 1)
   
 startSketchOn(offsetPlane(XY, offset = 10))
   |> circle(center = [0, 0], radius = 2 * r)
+  |> extrude(length = 1)
   
 startSketchOn(offsetPlane(XY, offset = 20))
   |> circle(center = [0, 0], radius = 3 * r)
+  |> extrude(length = 1)
 ```
 
-![Circles on the XY plane, 10 above it, and 20 above it](images/dynamic/three_offset_planes.png)
+<!-- KCL: name=three_offset_planes,alt=Circles on the XY plane and 10 above it and 20 above it-->
 
 Offset planes are a quick and easy way to create new planes by using some other plane as a template. But what if you want to create a plane that actually points in a different direction, i.e. has different axes? What if you wanted to create a plane that was pointing at an unusual angle from the global X Y and Z axes? Let's try it.
 
@@ -202,7 +205,7 @@ startSketchOn(customPlane)
   |> extrude(length = 10)
 ```
 
-![Two cylinders, one on XY and one on a custom plane](images/dynamic/custom_plane.png)
+<!-- KCL: name=custom_plane,alt=One cylinder on XY plane and another on a custom plane-->
 
 Great! Custom planes give you a lot of power and flexibility. You can draw sketches in any orientation now. But they can be a bit verbose and complicated to define, so you should use [`offsetPlane`] if you've already defined a plane on the same X and Y axis. You can even use `offsetPlane` to offset a custom plane, like this:
 

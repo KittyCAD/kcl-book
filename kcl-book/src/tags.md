@@ -62,7 +62,7 @@ The [`fillet`] function accepts an argument `tags`, which expects an array of on
 
 That program should produce a cube with one filleted edge, like this:
 
-![A cube with one filleted edge](images/dynamic/cube_one_fillet.png)
+<!-- KCL: name=cube_one_fillet,alt=A cube with one filleted edge -->
 
 Nice! We could tag and fillet all four sides if we wanted to:
 
@@ -79,7 +79,7 @@ cube = startSketchOn(XY)
   |> fillet(radius = 5, tags = [a, c, b, d])
 ```
 
-![A cube with four filleted edges](images/dynamic/cube_four_fillets.png)
+<!-- KCL: name=cube_four_fillets,alt=A cube with four filleted edges-->
 
 ## Relationships between edges
 
@@ -99,7 +99,7 @@ cube = startSketchOn(XY)
   |> fillet(radius = 5, tags = [side, getOppositeEdge(side)])
 ```
 
-![A cube with one filleted edge on the bottom, and the opposite top edge filleted too](images/dynamic/cube_two_opposite_fillets.png)
+<!-- KCL: name=cube_two_opposite_fillets,alt=Cube with one filleted edge on the bottom and the opposite top edge too-->
 
 We can fillet all four top edges by tagging all four bottom edges, and then using [`getOppositeEdge`] on each:
 
@@ -116,7 +116,7 @@ cube = startSketchOn(XY)
   |> fillet(radius = 5, tags = [a, c, b, d, getOppositeEdge(a), getOppositeEdge(c), getOppositeEdge(b), getOppositeEdge(d)])
 ```
 
-![A cube with one filleted edge on the bottom, and the opposite top edge filleted too](images/dynamic/cube_eigth_fillets.png)
+<!-- KCL: name=cube_eight_fillets,alt=Cube with all top and bottom edge fillets-->
 
 So, we've filleted the bottom horizontal edges, and the top horizontal edges. What about the vertical side edges, which connect the top and bottom face? We can use [`getNextAdjacentEdge`] and [`getPreviousAdjacentEdge`] to reference them:
 
@@ -140,7 +140,7 @@ cube = startSketchOn(XY)
      )
 ```
 
-![A cube with two side fillets and one bottom fillet](images/dynamic/cube_next_prev_fillets.png)
+<!-- KCL: name=cube_next_prev_fillets,alt=Cube with two side fillets and one bottom-->
 
 Here, we filleted the bottom side `a` just like we did before. But we've also filleted the sides adjacent to it. We can use a similar trick to fillet all four vertical side edges:
 
@@ -166,7 +166,7 @@ cube = startSketchOn(XY)
      )
 ```
 
-![A cube with two side fillets and one bottom fillet](images/dynamic/cube_next_prev_fillets_all_sides.png)
+<!-- KCL: name=cube_next_prev_fillets_all_sides,alt=Cube with two side fillets and one bottom fillet-->
 
 ## Chamfers
 
@@ -190,7 +190,7 @@ cube = startSketchOn(XY)
      )
 ```
 
-![A chamfered cube](images/dynamic/chamfered_cube.png)
+<!-- KCL: name=chamfered_cube,alt=A chamfered cube-->
 
 So we've learned to use tags to reference the lines we create, then use helper functions like [`getOppositeEdge`] to reference other geometry elsewhere in the model. But tags aren't just used for altering edges. They provide a valuable way to query and measure your models. Let's see how.
 
