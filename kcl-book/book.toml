@@ -5,6 +5,11 @@ multilingual = false
 src = "src"
 title = "Modeling with KCL"
 
+[preprocessor.kcl]
+command = "mdbook-kcl"
+renderer = ["html"]
+blow-up = true
+
 [preprocessor.toc]
 command = "mdbook-toc"
 renderer = ["html"]
@@ -14,6 +19,7 @@ git-repository-url = "https://github.com/KittyCAD/kcl-book"
 git-repository-icon = "fa-github"
 edit-url-template = "https://github.com/KittyCAD/kcl-book/edit/main/guide/{path}"
 site-url = "/docs/kcl/"
+
 
 # [output.pdf]
 
