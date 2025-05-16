@@ -26,11 +26,11 @@ fn square(sideLength) {
 square(sideLength = 10) |> extrude(length = 1)
 ```
 
-What's going on here? Let's break it down. We declare `fn square` which takes one argument, the `sideLength`. We create an initial empty sketch (at [0, 0] on the XY plane), and declare that the angle is 90.
+What's going on here? Let's break it down. We declare `fn square` which takes one argument, the `sideLength`. We create an initial empty sketch (at `[0, 0]` on the XY plane), and declare that the angle is 90.
 
 Next, we declare a `fn addOneSide`. It takes in two arguments: `i`, which represents the index of which side we're currently adding, and `accum`, which is the sketch we're adding it to. This function adds one angled line to the sketch. The line's side is whatever side length was given, and its angle is 90 times `i`. So, the first line will have an angle of 90, the second 180, the third 270, and the last 360.
 
-Then we call `reduce`, passing in the array [1, 2, 3, 4], setting the initial accumulator value to the empty sketch we started above, and calling `addOneSide` every time the reduce handles an array item. When reduce runs, it:
+Then we call `reduce`, passing in the array `[1, 2, 3, 4]`, setting the initial accumulator value to the empty sketch we started above, and calling `addOneSide` every time the reduce handles an array item. When reduce runs, it:
 
  - Starts `accum` as the empty sketch
  - Handles the first item, `i = 1`, calls `addOneSide`, which takes the previous accumulated sketch (currently empty) and adds an angled line at 90 degrees. This becomes the next accumulated sketch.

@@ -253,6 +253,6 @@ As you can see, the `vDegree` makes a big difference. You can view other options
 [`loft`]: https://zoo.dev/docs/kcl/loft
 [`offsetPlane`]: https://zoo.dev/docs/kcl-std/functions/std-offsetPlane
 [`revolve`]: https://zoo.dev/docs/kcl/revolve
-[sketch on face]: /sketch_on_face.html
+[sketch on face]: sketch_on_face.html
 [`sweep`]: https://zoo.dev/docs/kcl/sweep
 

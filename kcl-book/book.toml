@@ -19,6 +19,10 @@ git-repository-icon = "fa-github"
 edit-url-template = "https://github.com/KittyCAD/kcl-book/edit/main/guide/{path}"
 site-url = "/docs/kcl/"
 
+[output.html.code.hidelines]
+kcl = "#"
+
+# [output.linkcheck]
 
 # [output.pdf]
 

@@ -88,7 +88,7 @@ One important principle in programming is "don't repeat yourself" (DRY). Look ba
 
 Here's a few ways to make this code less repetitive, less brittle, and DRY-er.
 
-Firstly, you could replace [0, 0] with a variable like `start`, and use it in both places.
+Firstly, you could replace `[0, 0]` with a variable like `start`, and use it in both places.
 
 
 ```kcl
@@ -149,4 +149,4 @@ We've written our first triangle. We learned:
 [`startSketchOn`]: https://zoo.dev/docs/kcl/startSketchOn
 [`xLine`]: https://zoo.dev/docs/kcl/xLine
 [`yLine`]: https://zoo.dev/docs/kcl/yLine
-[sketch on face]: /sketch_on_face.html
+[sketch on face]: sketch_on_face.html

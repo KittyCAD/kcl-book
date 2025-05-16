@@ -44,7 +44,7 @@ cubes = startSketchOn(XZ)
 
 <!-- KCL: name=circular_cubes_false,alt=Using circular patterns to replicate a cube-->
 
-Here, the center of the pattern is [0, 0, 0]. We drew the first cube at the northernmost position (12 o'clock) and all the other instances were patterned around that center. Nice!
+Here, the center of the pattern is `[0, 0, 0]`. We drew the first cube at the northernmost position (12 o'clock) and all the other instances were patterned around that center. Nice!
 
 Notice that we used `rotateDuplicates = false`. As the name implies, this argument controls whether the duplicates get rotated, so that they're always facing the same way with regards to the center. If we set it to true, we get this:
 
