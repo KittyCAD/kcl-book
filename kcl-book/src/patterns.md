@@ -143,7 +143,7 @@ The [`floor`] function takes a fractional number, and rounds it down to the near
 
 The final result speaks for itself:
 
-![Grid of tiles, using a pattern transform](images/dynamic/xform_grid.png)
+![Grid of tiles using a pattern transform](images/dynamic/xform_grid.png)
 
 We can transform each replica in other ways, too. For example, we can skip a replica altogether! Let's make a chessboard pattern, where we skip every second tile. 
 
@@ -169,7 +169,7 @@ startSketchOn(XY)
 
 In this example, we use a very similar transform function. The only difference is, we're setting the `replicate` property on the final transform too. And we're setting it to the variable `isEven`. This variable is a boolean value -- it's true if `i` divided by 2 has a remainder of 0, which is the definition of an even number (it's divisible by 2). This should skip every second replication. Let's try it out!
 
-![chessboard of tiles, using a pattern transform](images/dynamic/xform_chessboard.png)
+![chessboard of tiles using a pattern transform](images/dynamic/xform_chessboard.png)
 
 Here's another example, with some different transform properties being set.
 
@@ -201,7 +201,7 @@ cube |> patternTransform(instances = 25, transform = transform)
 
 In this example, we make 25 cubes, slightly transforming each one. Each cube gets **translated** (moving down along the Z axis), and **scaled** (becoming longer, wider and flatter), as well as **rotating** 15 degrees around its own center (i.e. its **local** origin). We could rotate them around the scene's center by using `origin = "global"`. Here's the result.
 
-![chessboard of tiles, using a pattern transform](images/dynamic/cube_spiral.png)
+![many cubes in a spiral which gradually flattens each cube](images/dynamic/cube_spiral.png)
 
 The transform functions we've used so far each return a single transform. But if you'd like, they can return an array of transforms. Each transform in the array will get executed in order. This is helpful for simplifying some of your math calculations. Sometimes it's easier to formulate a transformation as a rotate, then a translate, then rotating back, rather than trying to calculate the perfect translation all at once.
 
@@ -244,7 +244,7 @@ base = startSketchOn(XZ)
   |> extrude(length = 10)
 ```
 
-![Subtracting a pattern of circles, then extruding](images/dynamic/subtract2d_patterns.png)
+![Subtracting a pattern of circles then extruding](images/dynamic/subtract2d_patterns.png)
 
 This could be done with CSG, but it's faster to produce the 2D sketch you want, then do a simple extrude, rather than doing the extrude and then many CSG operations. Full 3D CSG operations are mathematically difficult to calculate compared to simple 2D operations, so if you see the chance to use a simple [`subtract2d`], you should consider it.
 

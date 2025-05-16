@@ -126,7 +126,7 @@ mySpecificCube |> translate(x = 50) |> rotate(pitch = 40)
 secondCube = cube(sideLength = 7)
 ```
 
-![The imported specific cube, and a second cube created from the imported `fn cube`](images/static/two_cubes_import.png)
+![The imported specific cube and a second cube created from the imported `fn cube`](images/static/two_cubes_import.png)
 
 ## Default export
 

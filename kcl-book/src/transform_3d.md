@@ -30,7 +30,7 @@ greenCubeShiny = startSketchOn(XY)
   |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
 ```
 
-![Three cubes with different textures](images/dynamic/cube_textures.png)
+<!-- KCL: name=cube_textures,skip3d=true,alt=Three cubes with different textures-->
 
 The [`appearance`] call takes in three arguments, each of which is optional. You can provide:
 
@@ -73,6 +73,7 @@ greenCube = startSketchOn(XY)
 ```
 
 ![Three translated cubes](images/dynamic/translate_cubes.png)
+<!-- KCL: name=translate_cubes,skip3d=true,alt=Three translated cubes-->
 
 The [`translate`] call takes three arguments, `x`, `y` and `z`. Each of them is optional. If you provide one, it'll shift the solid along that axis. If you don't provide an axis, it'll remain unchanged.
 
@@ -190,7 +191,7 @@ green3 = startSketchOn(XY)
   |> appearance(color = "#332200")
 ```
 
-![Four cubes, rotated around the same axis](images/dynamic/rotated_cubes_axis.png)
+![Four cubes rotated around the same axis](images/dynamic/rotated_cubes_axis.png)
 
 ## Using transformations
 

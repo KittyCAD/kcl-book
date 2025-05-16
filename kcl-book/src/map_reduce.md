@@ -65,7 +65,7 @@ offsets = [
 map(offsets, f = cube)
 ```
 
-![Three mapped cubes](images/dynamic/three_map_cubes_color.png)
+![Three mapped cubes of different colors](images/dynamic/three_map_cubes_color.png)
 
 Remember, `map` takes in an array, and outputs an array. The arrays always have the same length. Item `x` in the input array will be `f(x)` in the output array, where `f` is whichever function you pass in.
 

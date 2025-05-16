@@ -25,7 +25,7 @@ cubeBlue = startSketchOn(XY)
   |> appearance(color = "#222299")
 ```
 
-![Two cubes, one green, one blue](images/dynamic/two_cubes.png)
+![One green and one blue cube](images/dynamic/two_cubes.png)
 
 That's what it looks like _before_ we apply any CSG operations. Now let's see what happens when we use KCL's [`union`], [`intersect`] and [`subtract`] functions on these. Firstly, let's do a union. This should create a new solid which combines both input solids. 
 
@@ -46,7 +46,7 @@ cubeBlue = startSketchOn(XY)
 both = union([cubeGreen, cubeBlue])
 ```
 
-![Two cubes, one green, one blue](images/dynamic/two_cubes_union.png)
+![Two gray cubes just like the previous picture](images/dynamic/two_cubes_union.png)
 
 Of course, this [`union`] of our two cubes has the exact same dimensions and position as the two cubes. So it looks the exact same. What's the point of doing this? Well, for a start, we can use transforms like `appearance` or `rotate` on the single unified shape. Previously we needed to transform each part separately, which can get annoying. Now that it's a single shape, transformations will apply to the whole thing -- both the first cube's volume, and the second cube's.
 

@@ -53,7 +53,7 @@ startSketchOn(XY)
   |> xLine(length = 20in)
 ```
 
-![Three lines of length 20 mm, 20 cm and 20 inches](images/dynamic/lines_units.png)
+![Three lines of length 20 mm and 20 cm and 20 inches](images/dynamic/lines_units.png)
 
 Other suffixes include metres (`m`), feet (`ft`) and yards (`yd`).
 

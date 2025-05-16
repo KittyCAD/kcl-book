@@ -40,7 +40,7 @@ Then we call `reduce`, passing in the array [1, 2, 3, 4], setting the initial ac
 
 Thus it builds up a square.
 
-![A square, made by reducing an array](images/dynamic/reduce_square.png)
+![A square made by reducing an array](images/dynamic/reduce_square.png)
 
 ## Sketching a parametric polygon with reduce
 
@@ -78,7 +78,7 @@ fn sketchPolygon(@numLines, sideLength) {
 sketchPolygon(7, sideLength = 10)
 ```
 
-![A 7-sided polygon, made by reducing an array](images/dynamic/reduce_polygon.png)
+![A 7-sided polygon made by reducing an array](images/dynamic/reduce_polygon.png)
 
 Reduce can be a very powerful tool for repeating paths in a sketch. We hope to simplify this in the future. It's easy to dynamically repeat 2D shapes or 3D solids with `pattern2D` and `pattern3D`, so we hope to add a `pattern1D` eventually, so that these complicated reduces won't be necessary. Until then, reduce can be a good way to implement tricky functions like `sketchPolygon`.
 
