@@ -89,14 +89,13 @@ shelfMountingHolePlacementOffset = shelfMountingHoleDiameter * 1.5
 wallMountingHolePlacementOffset = wallMountingHoleDiameter * 1.5
 
 // Compute bending stress, rectangular section. 
-// Assign single-letter variables to make transcribing the math equation easier.
-m = moment
-d = thickness
-b = width
-moi = (b * d^3)/12
-c = d/2 // Distance to neutral axis.
-actualSigma = (moment * c) / moi
-assert(actualSigma, isLessThanOrEqual = sigmaAllow)
+// See: https://www.omnicalculator.com/construction/bending-stress
+momentOfInertia = (width * thickness^3)/12 // b.d^3 / 12
+perpDistNeutralAxis = thickness/2 // c
+
+sigmaCalculated = (moment * perpDistNeutralAxis) / momentOfInertia
+
+assert(sigmaCalculated * fos, isLessThanOrEqual = sigmaAllow)
 
 // Add checks to ensure bracket is possible. These make sure that there is adequate distance between holes and edges.
 assert(wallMountLength, isGreaterThanOrEqual = wallMountingHoleDiameter * 3, error = "Holes not possible. Either decrease hole diameter or increase wallMountLength")
