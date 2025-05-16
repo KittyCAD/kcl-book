@@ -3,7 +3,7 @@
 # This is a build script intended to be consumed by Vercel, though it should work locally if your platform matches.
 
 # First install Rust because we need to compile mdbook-kcl
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -y
 rustup install stable
 
 # Make a temporary directory for binaries
