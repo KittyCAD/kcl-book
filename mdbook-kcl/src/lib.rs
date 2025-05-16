@@ -7,6 +7,18 @@ use pulldown_cmark::{Event, Parser, Tag, TagEnd};
 const LOAD_MODEL_VIEWER: &str =
     "<script type=\"module\" src=\"scripts/model-viewer.min.js\"></script>\n";
 
+const UPDATE_MV_TEXTURE: &str = r#"
+<script type="module">
+const modelViewer = document.querySelectorAll("model-viewer").forEach((modelViewer) => {
+  modelViewer.addEventListener("load", () => {
+    const material = modelViewer.model.materials[0];
+    material.pbrMetallicRoughness.setMetallicFactor(0.8);
+    material.pbrMetallicRoughness.setRoughnessFactor(0.2);
+  });
+});
+</script>
+"#;
+
 /// KCL book's custom preprocessor.
 #[derive(Default)]
 pub struct Kcl;
@@ -39,6 +51,7 @@ impl Preprocessor for Kcl {
                     Ok(new_chapter) => chapter.content = new_chapter,
                     Err(e) => errors.push(e),
                 }
+                chapter.content.push_str(UPDATE_MV_TEXTURE);
             }
             _other => {}
         });
