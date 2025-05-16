@@ -72,7 +72,7 @@ greenCube = startSketchOn(XY)
   |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
 ```
 
-![Three translated cubes](images/dynamic/translate_cubes.png)
+<!-- KCL: name=translate_cubes,skip3d=true,alt=Three translated cubes-->
 <!-- KCL: name=translate_cubes,skip3d=true,alt=Three translated cubes-->
 
 The [`translate`] call takes three arguments, `x`, `y` and `z`. Each of them is optional. If you provide one, it'll shift the solid along that axis. If you don't provide an axis, it'll remain unchanged.
@@ -107,7 +107,7 @@ greenCube = startSketchOn(XY)
   |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
 ```
 
-![Three scaled cubes](images/dynamic/scaled_cubes.png)
+<!-- KCL: name=scaled_cubes,skip3d=true,alt=Three scaled cubes-->
 
 The [`scale`] call works similarly. You provide one or more axes -- if you don't provide an axis, it's left unchanged. Numbers less than 1 will shrink the solid (e.g. 0.25 means 1/4th its original size). Numbers larger than 1 will expand the solid (e.g. 4 means 4 times its original size).
 
@@ -154,7 +154,7 @@ blueCube = startSketchOn(XY)
   |> appearance(color = "#0000ff", metalness = 90, roughness = 10)
 ```
 
-![Four rotated cubes](images/dynamic/rotated_cubes.png)
+<!-- KCL: name=rotated_cubes,skip3d=true,alt=Four rotated cubes-->
 
 Note that these rotations are all around their own center (not the center of the plane).
 
@@ -191,7 +191,7 @@ green3 = startSketchOn(XY)
   |> appearance(color = "#332200")
 ```
 
-![Four cubes rotated around the same axis](images/dynamic/rotated_cubes_axis.png)
+<!-- KCL: name=rotated_cubes_axis,skip3d=true,alt=Four cubes rotated around the same axis-->
 
 ## Using transformations
 

@@ -30,7 +30,7 @@ offsets = [0, 25, 50]
 cubes = map(offsets, f = cube)
 ```
 
-![Three mapped cubes](images/dynamic/three_map_cubes.png)
+<!-- KCL: name=three_map_cubes,skip3d=true,alt=Three mapped cubes-->
 
 We created an array of offsets, then called the `cube` function on each offset in the array. The final result is an array of cubes. Calling the `cube` function drew the three cubes, each at their own offset.
 
@@ -65,7 +65,7 @@ offsets = [
 map(offsets, f = cube)
 ```
 
-![Three mapped cubes of different colors](images/dynamic/three_map_cubes_color.png)
+<!-- KCL: name=three_map_cubes_color,skip3d=true,alt=Three mapped cubes of different colors-->
 
 Remember, `map` takes in an array, and outputs an array. The arrays always have the same length. Item `x` in the input array will be `f(x)` in the output array, where `f` is whichever function you pass in.
 

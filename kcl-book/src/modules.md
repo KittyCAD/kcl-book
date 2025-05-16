@@ -34,7 +34,7 @@ map([1..10], f = fn(@i) { return cube() |> translate( x = i * 20)})
 map([1..10], f = fn(@i) { return sphere() |> translate(y = i * 20) })
 ```
 
-![Several cubes and spheres](images/dynamic/cubes_and_spheres.png)
+<!-- KCL: name=cubes_and_spheres,alt=Several cubes and spheres-->
 
 We can split this file into two separate files, `cubes.kcl` and `spheres.kcl`. Here's `cubes.kcl`:
 

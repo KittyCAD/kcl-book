@@ -53,7 +53,7 @@ startSketchOn(XY)
   |> xLine(length = 20in)
 ```
 
-![Three lines of length 20 mm and 20 cm and 20 inches](images/dynamic/lines_units.png)
+<!-- KCL: name=lines_units,skip3d=true,alt=Three lines of length 20 mm and 20 cm and 20 inches-->
 
 Other suffixes include metres (`m`), feet (`ft`) and yards (`yd`).
 
@@ -74,7 +74,7 @@ startSketchOn(XZ)
   |> revolve(axis = Y, angle = 6rad)
 ```
 
-![Revolve of 6 degrees vs. 6 radians](images/dynamic/donut_angle_units.png)
+<!-- KCL: name=donut_angle_units,alt=Revolve of 6 degrees vs. 6 radians-->
 
 ## Mixing units
 

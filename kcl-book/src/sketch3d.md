@@ -79,7 +79,7 @@ sweepPath = startSketchOn(XZ)
   |> line(end = [0, 7])
 ```
 
-![A 2D pill shape, and a path we're going to sweep it along](images/dynamic/path_for_sweep.png)
+<!-- KCL: name=path_for_sweep,skip3d=true,alt=A 2D pill shape and a path we're going to sweep it along-->
 
 Now we'll add the [`sweep`] call, like `swept = sweep(pill, path = sweepPath)`, which will drag our 2D pill sketch along the path we defined.
 
@@ -123,7 +123,7 @@ startSketchOn(XZ)
   |> circle(center = [-200, 0], radius = 100)
 ```
 
-![A 2D circle, before revolving.](images/dynamic/circle.png)
+<!-- KCL: name=circle,skip3d=true,alt=A 2D circle before revolving.-->
 
 The [`revolve`] function takes a shape and revolves it, dragging it around an axis. Let's revolve it around the Y axis (which is perpendicular to XZ, the plane we're sketching on), to make a donut shape.
 
@@ -157,7 +157,7 @@ startSketchOn(XY)
   |> arc(angleStart = 90, angleEnd = 270, radius = radius)
 ```
 
-![Sketching a semicircle](images/dynamic/semicircle.png)
+<!-- KCL: name=semicircle,skip3d=true,alt=Sketching a semicircle-->
 
 Then we can `close()` it and add a call to `revolve(axis = Y, angle = 360)` to revolve it into a sphere:
 
