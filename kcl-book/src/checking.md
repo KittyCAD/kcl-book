@@ -59,7 +59,7 @@ assert(1.0000001214, isEqualTo = 1.0, tolerance = 0.001)
 
 ## Asserts and parametric design
 
-For a realistic example of asserts, see this [bracket] we modelled in KCL. You can see the mechanical engineer designed this parametrically. They designed the bracket in terms of parameters like `width`, `p` (the force on the shelf), `shelfMountLength` etc. From these initial parameters, they calculate other quantities, like the `moment` (the force applied on the shelf) or the `thickness`. Then they use `asserts` to make sure that when the parameters are changed, the results are still sensible. For example, they check that the parameters leave enough of a gap between the holes and the bracket's edge. They're also checking that the bracket is strong enough, by checking the `moment` value.
+For a realistic example of asserts, see this [bracket] we modelled in KCL. You can see the mechanical engineer designed this parametrically. They designed the bracket in terms of parameters like `width`, `p` (the force on the shelf), `shelfMountLength` etc. From these initial parameters, they calculate other quantities, like the `moment` or the `thickness`. Then they use `asserts` to make sure that when the parameters are changed, the results are still sensible. For example, they check that the parameters leave enough of a gap between the holes and the bracket's edge. They're also checking that the bracket is strong enough, by checking the actual stress on the model for these parameters (`actualSigma`) is below the maximum allowed stress, via `assert(actualSigma, isLessThanOrEqual = sigmaAllow)`.
 
 ```kcl=bracket
 // Shelf Bracket
@@ -88,8 +88,15 @@ filletRadius = .5
 shelfMountingHolePlacementOffset = shelfMountingHoleDiameter * 1.5
 wallMountingHolePlacementOffset = wallMountingHoleDiameter * 1.5
 
-// Add checks to ensure bracket is strong enough.
-assert(moment, isGreaterThanOrEqual = 1000, "bracket is too weak")
+// Compute bending stress, rectangular section. 
+// Assign single-letter variables to make transcribing the math equation easier.
+m = moment
+d = thickness
+b = width
+moi = (b * d^3)/12
+c = d/2 // Distance to neutral axis.
+actualSigma = (moment * c) / moi
+assert(actualSigma, isLessThanOrEqual = sigmaAllow)
 
 // Add checks to ensure bracket is possible. These make sure that there is adequate distance between holes and edges.
 assert(wallMountLength, isGreaterThanOrEqual = wallMountingHoleDiameter * 3, error = "Holes not possible. Either decrease hole diameter or increase wallMountLength")
