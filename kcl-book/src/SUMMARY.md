@@ -27,6 +27,7 @@
 - [Reduce and geometry](./reduce_geometry.md)
 
 # KCL projects
+- [Checking your work](./checking.md)
 - [Types and Units](./units_of_measurement.md)
 - [Modules](./modules.md)
 - [Interop with other CAD programs](./interop.md)
