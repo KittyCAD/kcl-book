@@ -97,9 +97,9 @@ wallMountingHolePlacementOffset = wallMountingHoleDiameter * 1.5
 momentOfInertia = (width * thickness^3)/12 // b.d^3 / 12
 perpDistNeutralAxis = thickness/2 // c
 
-sigmaCalculated = (moment * perpDistNeutralAxis) / momentOfInertia
+actualSigma = (moment * perpDistNeutralAxis) / momentOfInertia
 
-assert(sigmaCalculated * fos, isLessThanOrEqual = sigmaAllow)
+assert(actualSigma * fos, isLessThanOrEqual = sigmaAllow)
 
 // Add checks to ensure bracket is possible. These make sure that there is adequate distance between holes and edges.
 assert(wallMountLength, isGreaterThanOrEqual = wallMountingHoleDiameter * 3, error = "Holes not possible. Either decrease hole diameter or increase wallMountLength")
