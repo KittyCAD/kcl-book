@@ -70,7 +70,7 @@ base = startSketchOn(XZ)
   |> extrude(length = 10)
 ```
 
-![The pipe flange](images/dynamic/specific_flange.png)
+<!-- KCL: name=specific_flange,alt=The pipe flange-->
 
 Its specific measurements, like number of holes, radius, thickness etc were chosen somewhat arbitrarily. What if we want to make another pipe flange in the future, with different measurements? We can turn this specific flange model into a parametric design by making it into a function. We'll define a function `flange` which takes in several parameters. Let's see:
 
@@ -162,7 +162,7 @@ greenCubeShiny = startSketchOn(XY)
   |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
 ```
 
-![Three cubes with different textures](images/dynamic/cube_textures.png)
+<!-- KCL: name=cube_textures,skip3d=true,alt=Three cubes with different textures-->
 
 This code works fine, but it's got one small problem. We're repeating the code for "sketch a cube" three times. This makes it a bit annoying to read, and also, if we want to tweak the cubes (making them larger, or rotating them), we'd have to update them in three different places. We could improve this code by making a function for the cube, and calling that function three times.
 
@@ -203,7 +203,7 @@ greenCubeShiny = cube(offset = 50)
   |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
 ```
 
-![Three flat cubes with different textures](images/dynamic/three_short_cubes.png)
+<!-- KCL: name=three_short_cubes,skip3d=true,alt=Three flat cubes with different textures-->
 
 If we hadn't made the cube into a function, we would have had to change every extrude call separately. By putting the details of "what does a cube look like" in a single function, we make our code both more readable, and easier to change in the future.
 

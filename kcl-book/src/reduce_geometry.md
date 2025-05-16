@@ -23,14 +23,14 @@ fn square(sideLength) {
     |> close()
 }
 
-square(sideLength = 10)
+square(sideLength = 10) |> extrude(length = 1)
 ```
 
-What's going on here? Let's break it down. We declare `fn square` which takes one argument, the `sideLength`. We create an initial empty sketch (at [0, 0] on the XY plane), and declare that the angle is 90.
+What's going on here? Let's break it down. We declare `fn square` which takes one argument, the `sideLength`. We create an initial empty sketch (at `[0, 0]` on the XY plane), and declare that the angle is 90.
 
 Next, we declare a `fn addOneSide`. It takes in two arguments: `i`, which represents the index of which side we're currently adding, and `accum`, which is the sketch we're adding it to. This function adds one angled line to the sketch. The line's side is whatever side length was given, and its angle is 90 times `i`. So, the first line will have an angle of 90, the second 180, the third 270, and the last 360.
 
-Then we call `reduce`, passing in the array [1, 2, 3, 4], setting the initial accumulator value to the empty sketch we started above, and calling `addOneSide` every time the reduce handles an array item. When reduce runs, it:
+Then we call `reduce`, passing in the array `[1, 2, 3, 4]`, setting the initial accumulator value to the empty sketch we started above, and calling `addOneSide` every time the reduce handles an array item. When reduce runs, it:
 
  - Starts `accum` as the empty sketch
  - Handles the first item, `i = 1`, calls `addOneSide`, which takes the previous accumulated sketch (currently empty) and adds an angled line at 90 degrees. This becomes the next accumulated sketch.
@@ -40,7 +40,7 @@ Then we call `reduce`, passing in the array [1, 2, 3, 4], setting the initial ac
 
 Thus it builds up a square.
 
-![A square, made by reducing an array](images/dynamic/reduce_square.png)
+<!-- KCL: name=reduce_square,alt=A square made by reducing an array-->
 
 ## Sketching a parametric polygon with reduce
 
@@ -75,10 +75,10 @@ fn sketchPolygon(@numLines, sideLength) {
   return finished |> close()
 }
 
-sketchPolygon(7, sideLength = 10)
+sketchPolygon(7, sideLength = 10) |> extrude(length = 1)
 ```
 
-![A 7-sided polygon, made by reducing an array](images/dynamic/reduce_polygon.png)
+<!-- KCL: name=reduce_polygon,alt=A 7-sided polygon made by reducing an array-->
 
 Reduce can be a very powerful tool for repeating paths in a sketch. We hope to simplify this in the future. It's easy to dynamically repeat 2D shapes or 3D solids with `pattern2D` and `pattern3D`, so we hope to add a `pattern1D` eventually, so that these complicated reduces won't be necessary. Until then, reduce can be a good way to implement tricky functions like `sketchPolygon`.
 
@@ -110,12 +110,12 @@ fn comb(teeth, sideLength) {
   return finalComb
 }
 
-comb(teeth = 10, sideLength = 10)
+comb(teeth = 10, sideLength = 10) |> extrude(length = 1)
 ```
 
 We write a function `addTooth` which adds a tooth (going up, then back down) to a sketch. Using `reduce`, we can call that function `teeth` times. Each time, the new tooth gets appended to the end of the sketch path. Once we've drawn all the teeth, we draw a simple handle leading back to the start.
 
-![A comb with a variable number of teeth](images/dynamic/reduce_comb.png)
+<!-- KCL: name=reduce_comb,alt=A comb with a variable number of teeth-->
 
 To wrap up, [`reduce`] is a powerful way to make parametric designs, repeating geometric features as many times as you need. You can design parametric polygons with a variable number of sides, or repeat geometry linearly (like we did for our comb). You can even make parametric gears, take a look at the [KCL samples] for examples.
 

@@ -25,7 +25,7 @@ cubeBlue = startSketchOn(XY)
   |> appearance(color = "#222299")
 ```
 
-![Two cubes, one green, one blue](images/dynamic/two_cubes.png)
+<!-- KCL: name=two_cubes,skip3d=true,alt=One green and one blue cube-->
 
 That's what it looks like _before_ we apply any CSG operations. Now let's see what happens when we use KCL's [`union`], [`intersect`] and [`subtract`] functions on these. Firstly, let's do a union. This should create a new solid which combines both input solids. 
 
@@ -46,7 +46,7 @@ cubeBlue = startSketchOn(XY)
 both = union([cubeGreen, cubeBlue])
 ```
 
-![Two cubes, one green, one blue](images/dynamic/two_cubes_union.png)
+<!-- KCL: name=two_cubes_union,skip3d=true,alt=Two gray cubes just like the previous picture-->
 
 Of course, this [`union`] of our two cubes has the exact same dimensions and position as the two cubes. So it looks the exact same. What's the point of doing this? Well, for a start, we can use transforms like `appearance` or `rotate` on the single unified shape. Previously we needed to transform each part separately, which can get annoying. Now that it's a single shape, transformations will apply to the whole thing -- both the first cube's volume, and the second cube's.
 
@@ -72,7 +72,7 @@ cubeBlue = startSketchOn(XY)
 both = intersect([cubeGreen, cubeBlue])
 ```
 
-![Intersection of the two cubes](images/dynamic/two_cubes_intersection.png)
+<!-- KCL: name=two_cubes_intersection,skip3d=true,alt=Intersection of the two cubes-->
 
 This keeps only the small cube shape from where the previous two intersected. This is a new solid, so it can be transformed just like any other solid. 
 
@@ -97,7 +97,7 @@ cubeBlue = startSketchOn(XY)
 both = subtract(cubeGreen, tools=[cubeBlue])
 ```
 
-![Green cube with blue cube subtracted](images/dynamic/two_cubes_subtraction.png)
+<!-- KCL: name=two_cubes_subtraction,skip3d=true,alt=Green cube with blue cube subtracted-->
 
 Note that the syntax for `subtract` is a little different. The first argument is the solid which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes.
 

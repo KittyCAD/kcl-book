@@ -14,7 +14,7 @@ cylinders = startSketchOn(XY)
   |> patternLinear3d(instances = 4, distance = 10, axis = [1, 0, 0])
 ```
 
-![Using linear patterns to replicate a cylinder](images/dynamic/linear_pattern.png)
+<!-- KCL: name=linear_pattern,alt=Using linear patterns to replicate a cylinder-->
 
 The [`patternLinear3d`] function takes 4 args:
  - A solid to pattern (the unlabeled first arg, which is implicitly set to % and therefore gets the cylinder piped in)
@@ -42,9 +42,9 @@ cubes = startSketchOn(XZ)
      )
 ```
 
-![Using circular patterns to replicate a cube](images/dynamic/circular_cubes_false.png)
+<!-- KCL: name=circular_cubes_false,alt=Using circular patterns to replicate a cube-->
 
-Here, the center of the pattern is [0, 0, 0]. We drew the first cube at the northernmost position (12 o'clock) and all the other instances were patterned around that center. Nice!
+Here, the center of the pattern is `[0, 0, 0]`. We drew the first cube at the northernmost position (12 o'clock) and all the other instances were patterned around that center. Nice!
 
 Notice that we used `rotateDuplicates = false`. As the name implies, this argument controls whether the duplicates get rotated, so that they're always facing the same way with regards to the center. If we set it to true, we get this:
 
@@ -62,7 +62,7 @@ cubes = startSketchOn(XZ)
      )
 ```
 
-![Using circular patterns to replicate a cube](images/dynamic/circular_cubes_true.png)
+<!-- KCL: name=circular_cubes_true,alt=Using circular patterns to replicate a cube-->
 
 Of course, if we change the `arcDegrees` argument, we could pattern around only part of the circle instead. Let's do two thirds of the circle:
 
@@ -80,7 +80,7 @@ cylinders = startSketchOn(XZ)
      )
 ```
 
-![Using semi-circular patterns to replicate a cube](images/dynamic/circular_cubes_partway.png)
+<!-- KCL: name=circular_cubes_partway,alt=Using semi-circular patterns to replicate a cube-->
 
 You can use patterns and sketch on face together, patterning an extrusion upon some base.
 
@@ -101,7 +101,7 @@ boxes = startSketchOn(base, face = END)
        rotateDuplicates = true,
      )
 ```
-![Using a pattern to repeatedly sketch on face](images/dynamic/pattern_sof.png)
+<!-- KCL: name=pattern_sof,alt=Using a pattern to repeatedly sketch on face-->
 
 ## Transform patterns
 
@@ -143,7 +143,7 @@ The [`floor`] function takes a fractional number, and rounds it down to the near
 
 The final result speaks for itself:
 
-![Grid of tiles, using a pattern transform](images/dynamic/xform_grid.png)
+<!-- KCL: name=xform_grid,alt=Grid of tiles using a pattern transform-->
 
 We can transform each replica in other ways, too. For example, we can skip a replica altogether! Let's make a chessboard pattern, where we skip every second tile. 
 
@@ -169,7 +169,7 @@ startSketchOn(XY)
 
 In this example, we use a very similar transform function. The only difference is, we're setting the `replicate` property on the final transform too. And we're setting it to the variable `isEven`. This variable is a boolean value -- it's true if `i` divided by 2 has a remainder of 0, which is the definition of an even number (it's divisible by 2). This should skip every second replication. Let's try it out!
 
-![chessboard of tiles, using a pattern transform](images/dynamic/xform_chessboard.png)
+<!-- KCL: name=xform_chessboard,alt=chessboard of tiles using a pattern transform-->
 
 Here's another example, with some different transform properties being set.
 
@@ -193,7 +193,7 @@ fn transform(@i) {
 
 cube = startSketchOn(XY)
 |> startProfile(at = [0, 0])
-|> polygon(numSides = 4, radius = 100, center = [width, width])
+|> polygon(numSides = 4, radius = width, center = [width, width])
 |> extrude(length = width)
 
 cube |> patternTransform(instances = 25, transform = transform)
@@ -201,7 +201,7 @@ cube |> patternTransform(instances = 25, transform = transform)
 
 In this example, we make 25 cubes, slightly transforming each one. Each cube gets **translated** (moving down along the Z axis), and **scaled** (becoming longer, wider and flatter), as well as **rotating** 15 degrees around its own center (i.e. its **local** origin). We could rotate them around the scene's center by using `origin = "global"`. Here's the result.
 
-![chessboard of tiles, using a pattern transform](images/dynamic/cube_spiral.png)
+<!-- KCL: name=cube_spiral,alt=many cubes in a spiral which gradually flattens each cube-->
 
 The transform functions we've used so far each return a single transform. But if you'd like, they can return an array of transforms. Each transform in the array will get executed in order. This is helpful for simplifying some of your math calculations. Sometimes it's easier to formulate a transformation as a rotate, then a translate, then rotating back, rather than trying to calculate the perfect translation all at once.
 
@@ -222,7 +222,7 @@ manyCircles = startSketchOn(XZ)
      )
 ```
 
-![Patterning 2D sketches of circles](images/dynamic/pattern2d.png)
+<!-- KCL: name=pattern2d,alt=Patterning 2D sketches of circles-->
 
 Now, you could use these 2D patterns as the basis for 3D solids, by extruding or revolving them. You can see this by adding the line `extrude(manyCircles, length = 10)` to the end of the above KCL program. But it's not a good idea, because it produces the exact same model as you would have gotten from making a single 3D solid, then using 3D patterns on that. The only difference is, extruding a 2D pattern is much slower than patterning a 3D solid. So, can we do anything _useful_ with 2D patterns?
 
@@ -244,7 +244,7 @@ base = startSketchOn(XZ)
   |> extrude(length = 10)
 ```
 
-![Subtracting a pattern of circles, then extruding](images/dynamic/subtract2d_patterns.png)
+<!-- KCL: name=subtract2d_patterns,alt=Subtracting a pattern of circles then extruding-->
 
 This could be done with CSG, but it's faster to produce the 2D sketch you want, then do a simple extrude, rather than doing the extrude and then many CSG operations. Full 3D CSG operations are mathematically difficult to calculate compared to simple 2D operations, so if you see the chance to use a simple [`subtract2d`], you should consider it.
 

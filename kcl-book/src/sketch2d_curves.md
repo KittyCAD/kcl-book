@@ -64,7 +64,7 @@ startSketchOn(XY)
   |> circle(center = [0, 0], radius = 10)
 ```
 
-![A simple circle](images/dynamic/basic_circle.png)
+<!-- KCL: name=basic_circle,skip3d=true,alt=A simple circle-->
 
 The [`circle`] call takes `center` and `radius` arguments. Note that `circle` closes itself without any need for a `close()` call. That's because a circle is inherently closed -- it always starts and ends its own profile.
 

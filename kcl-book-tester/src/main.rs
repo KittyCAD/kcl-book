@@ -88,8 +88,50 @@ fn render_snapshot(program: String, name: &str, book_dir: Utf8PathBuf, mode: Mod
         // PNG already exists, so skip it.
         return Ok(());
     }
+
+    // Render PNG
     let mut cmd = Command::new("zoo")
         .args(["kcl", "snapshot", "-", png_dst.as_ref()])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("could not spawn 'zoo' cli");
+    drop(png_dst);
+    let mut cmd_stdin = cmd.stdin.take().expect("Could not open stdin");
+    let p = program.clone();
+    std::thread::spawn(move || {
+        cmd_stdin
+            .write_all(p.as_bytes())
+            .expect("Failed to write to stdin");
+    });
+    let cmd_out = cmd.wait_with_output()?;
+    if !cmd_out.stderr.is_empty() {
+        println!(
+            "Stderr from {name}.kcl: {}",
+            String::from_utf8_lossy(&cmd_out.stderr)
+        );
+    }
+    // Prepare directory for the GLTF
+    let mut gltf_dst = book_dir.clone();
+    gltf_dst.push("gltf");
+    gltf_dst.push(name);
+    let mkdir_ok = Command::new("mkdir")
+        .args(["-p", gltf_dst.as_ref()])
+        .status()
+        .expect("could not spawn mkdir");
+    if !mkdir_ok.success() {
+        anyhow::bail!("mkdir failed");
+    }
+    // Render GLTF
+    let mut cmd = Command::new("zoo")
+        .args([
+            "kcl",
+            "export",
+            "--output-format",
+            "gltf",
+            "-",
+            gltf_dst.as_ref(),
+        ])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()
