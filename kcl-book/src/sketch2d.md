@@ -145,7 +145,7 @@ We've written our first triangle. We learned:
 [`close`]: https://zoo.dev/docs/kcl-std/close
 [`line`]: https://zoo.dev/docs/kcl-std/line
 [`profileStart`]: https://zoo.dev/docs/kcl-std/profileStart
-[`startProfileAt`]: https://zoo.dev/docs/kcl-std/startProfile
+[`startProfile`]: https://zoo.dev/docs/kcl-std/startProfile
 [`startSketchOn`]: https://zoo.dev/docs/kcl-std/startSketchOn
 [`xLine`]: https://zoo.dev/docs/kcl-std/xLine
 [`yLine`]: https://zoo.dev/docs/kcl-std/yLine
