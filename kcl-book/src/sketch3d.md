@@ -249,10 +249,10 @@ loftedSolid = loft([circ0, squareSketch, circ1], vDegree = 2)
 
 As you can see, the `vDegree` makes a big difference. You can view other options on the [`loft`] docs page.
 
-[`extrude`]: https://zoo.dev/docs/kcl/extrude
-[`loft`]: https://zoo.dev/docs/kcl/loft
+[`extrude`]: https://zoo.dev/docs/kcl-std/extrude
+[`loft`]: https://zoo.dev/docs/kcl-std/loft
 [`offsetPlane`]: https://zoo.dev/docs/kcl-std/functions/std-offsetPlane
-[`revolve`]: https://zoo.dev/docs/kcl/revolve
+[`revolve`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-revolve
 [sketch on face]: sketch_on_face.html
-[`sweep`]: https://zoo.dev/docs/kcl/sweep
+[`sweep`]: https://zoo.dev/docs/kcl-std/sweep
 
