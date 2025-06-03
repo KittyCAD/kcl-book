@@ -17,7 +17,7 @@ renderer = ["html"]
 git-repository-url = "https://github.com/KittyCAD/kcl-book"
 git-repository-icon = "fa-github"
 edit-url-template = "https://github.com/KittyCAD/kcl-book/edit/main/guide/{path}"
-site-url = "/docs/kcl/"
+site-url = "/docs/kcl-lang/"
 
 [output.html.code.hidelines]
 kcl = "#"
