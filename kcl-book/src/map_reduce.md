@@ -120,6 +120,6 @@ reduce(inputArray, initial = 1, f = fn(@i, accum) { return i * accum})
 
 In the next chapter we'll cover one of the most powerful uses for `reduce`: dynamically building up geometry.
 
-[`map`]: https://zoo.dev/docs/kcl-std/map
-[`reduce`]: https://zoo.dev/docs/kcl-std/reduce
+[`map`]: https://zoo.dev/docs/kcl-std/functions/std-array-map
+[`reduce`]: https://zoo.dev/docs/kcl-std/functions/std-array-reduce
 

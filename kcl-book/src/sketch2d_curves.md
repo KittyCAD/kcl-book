@@ -68,5 +68,5 @@ startSketchOn(XY)
 
 The [`circle`] call takes `center` and `radius` arguments. Note that `circle` closes itself without any need for a `close()` call. That's because a circle is inherently closed -- it always starts and ends its own profile.
 
-[`tangentialArc`]: <https://zoo.dev/docs/kcl/tangentialArc>
+[`tangentialArc`]: <https://zoo.dev/docs/kcl-std/tangentialArc>
 [`circle`]: <https://zoo.dev/docs/kcl-std/functions/std-sketch-circle>
