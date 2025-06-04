@@ -252,8 +252,8 @@ This could be done with CSG, but it's faster to produce the 2D sketch you want, 
 [`patternLinear2d`]: https://zoo.dev/docs/kcl-std/patternLinear2d
 [`patternCircular3d`]: https://zoo.dev/docs/kcl-std/patternCircular3d
 [`patternCircular2d`]: https://zoo.dev/docs/kcl-std/patternCircular2d
-[`patternTransform`]: https://zoo.dev/docs/kcl-std/patternTransform
-[`patternTransform2d`]: https://zoo.dev/docs/kcl-std/patternTransform2d
+[`patternTransform`]: https://zoo.dev/docs/kcl-std/functions/std-solid-patternTransform
+[`patternTransform2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternTransform2d
 [`rem`]: https://zoo.dev/docs/kcl-std/functions/std-math-rem
 [`floor`]: https://zoo.dev/docs/kcl-std/functions/std-math-floor
 [`subtract2d`]: https://zoo.dev/docs/kcl-std/subtract2d

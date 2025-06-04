@@ -121,4 +121,4 @@ To wrap up, [`reduce`] is a powerful way to make parametric designs, repeating g
 
 [`map`]: https://zoo.dev/docs/kcl-std/map
 [`reduce`]: https://zoo.dev/docs/kcl-std/reduce
-[KCL samples]: https://zoo.dev/docs/kcl-samples/gear
+[KCL samples]: https://zoo.dev/docs/kcl-samples/spur-gear
