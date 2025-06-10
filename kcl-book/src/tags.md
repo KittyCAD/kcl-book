@@ -248,10 +248,11 @@ KCL's tagging system is simple, but powerful. It lets you build up a model (like
 
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`fillet`]: https://zoo.dev/docs/kcl-std/functions/std-solid-fillet
-[`getNextAdjacentEdge`]: https://zoo.dev/docs/kcl-std/getNextAdjacentEdge
-[`getOppositeEdge`]: https://zoo.dev/docs/kcl-std/getOppositeEdge
-[`getPreviousAdjacentEdge`]: https://zoo.dev/docs/kcl-std/getPreviousAdjacentEdge
-[`segAng`]: https://zoo.dev/docs/kcl-std/segAng
-[`segEnd`]: https://zoo.dev/docs/kcl-std/segEnd
-[`segLen`]: https://zoo.dev/docs/kcl-std/segLen
-[`segStart`]: https://zoo.dev/docs/kcl-std/segStart
+[`getNextAdjacentEdge`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-getNextAdjacentEdge
+[`getOppositeEdge`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-getOppositeEdge
+[`getPreviousAdjacentEdge`]:
+  https://zoo.dev/docs/kcl-std/functions/std-sketch-getPreviousAdjacentEdge
+[`segAng`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segAng
+[`segEnd`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segEnd
+[`segLen`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segLen
+[`segStart`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segStart
