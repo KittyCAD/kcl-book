@@ -142,11 +142,11 @@ We've written our first triangle. We learned:
  - Lines can end either a certain distance away along X and Y (a _relative_ end), or at a particular point along the plane (an _absolute_ end)
  - The `close` function turns a sequence of paths that form a loop into a single 2D shape.
 
-[`close`]: https://zoo.dev/docs/kcl-std/close
-[`line`]: https://zoo.dev/docs/kcl-std/line
-[`profileStart`]: https://zoo.dev/docs/kcl-std/profileStart
-[`startProfile`]: https://zoo.dev/docs/kcl-std/startProfile
-[`startSketchOn`]: https://zoo.dev/docs/kcl-std/startSketchOn
-[`xLine`]: https://zoo.dev/docs/kcl-std/xLine
-[`yLine`]: https://zoo.dev/docs/kcl-std/yLine
+[`close`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-close
+[`line`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-line
+[`profileStart`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-profileStart
+[`startProfile`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-startProfile
+[`startSketchOn`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-startSketchOn
+[`xLine`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-xLine
+[`yLine`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-yLine
 [sketch on face]: sketch_on_face.html

@@ -104,6 +104,6 @@ Note that the syntax for `subtract` is a little different. The first argument is
 **NOTE**: Currently only one tool can be passed in, but we're nearly finished supporting multiple tools here.
 
 [Wikipedia's article on boolean operations]: https://en.wikipedia.org/wiki/Set_(mathematics)#Basic_operations
-[`intersect`]: https://zoo.dev/docs/kcl-std/intersect
-[`subtract`]: https://zoo.dev/docs/kcl-std/subtract
-[`union`]: https://zoo.dev/docs/kcl-std/union
+[`intersect`]: https://zoo.dev/docs/kcl-std/functions/std-solid-intersect
+[`subtract`]: https://zoo.dev/docs/kcl-std/functions/std-solid-subtract
+[`union`]: https://zoo.dev/docs/kcl-std/functions/std-solid-union

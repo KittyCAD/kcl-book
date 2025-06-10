@@ -248,12 +248,12 @@ base = startSketchOn(XZ)
 
 This could be done with CSG, but it's faster to produce the 2D sketch you want, then do a simple extrude, rather than doing the extrude and then many CSG operations. Full 3D CSG operations are mathematically difficult to calculate compared to simple 2D operations, so if you see the chance to use a simple [`subtract2d`], you should consider it.
 
-[`patternLinear3d`]: https://zoo.dev/docs/kcl-std/patternLinear3d
-[`patternLinear2d`]: https://zoo.dev/docs/kcl-std/patternLinear2d
-[`patternCircular3d`]: https://zoo.dev/docs/kcl-std/patternCircular3d
-[`patternCircular2d`]: https://zoo.dev/docs/kcl-std/patternCircular2d
+[`patternLinear3d`]: https://zoo.dev/docs/kcl-std/functions/std-solid-patternLinear3d
+[`patternLinear2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternLinear2d
+[`patternCircular3d`]: https://zoo.dev/docs/kcl-std/functions/std-solid-patternCircular3d
+[`patternCircular2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternCircular2d
 [`patternTransform`]: https://zoo.dev/docs/kcl-std/functions/std-solid-patternTransform
 [`patternTransform2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternTransform2d
 [`rem`]: https://zoo.dev/docs/kcl-std/functions/std-math-rem
 [`floor`]: https://zoo.dev/docs/kcl-std/functions/std-math-floor
-[`subtract2d`]: https://zoo.dev/docs/kcl-std/subtract2d
+[`subtract2d`]: https://zoo.dev/docs/kcl-std/functions/std-solid-subtract2d

@@ -202,8 +202,8 @@ You can combine multiple transformations, for example a translate and scale: `|>
 
 These transformations make your job easier by letting you reuse work from previous designs. Once you know how to sketch a cube, you don't need to recalculate your cube every time it needs to grow, rotate or get moved over. You can just use our simple transformation functions. Recalculating a cube each time is annoying, but possible. For more complicated geometry, with weird curves and many edges, redoing all your calculations to handle different scales and rotations can be _very_ difficult and waste a lot of time! So don't recalculate them. Just reuse your work and transform it.
 
-[`appearance`]: https://zoo.dev/docs/kcl-std/appearance
-[`translate`]: https://zoo.dev/docs/kcl-std/translate
-[`scale`]: https://zoo.dev/docs/kcl-std/scale
-[`rotate`]: https://zoo.dev/docs/kcl-std/rotate
+[`appearance`]: https://zoo.dev/docs/kcl-std/functions/std-solid-appearance
+[`translate`]: https://zoo.dev/docs/kcl-std/functions/std-transform-translate
+[`scale`]: https://zoo.dev/docs/kcl-std/functions/std-transform-scale
+[`rotate`]: https://zoo.dev/docs/kcl-std/functions/std-transform-rotate
 [online color picker]: https://g.co/kgs/wVN95r4

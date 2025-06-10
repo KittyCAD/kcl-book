@@ -180,6 +180,6 @@ KCL helps you automatically check your work. You should be able to analyze your 
 
 [into parts and inspected them]: calling_functions.html#combining-functions
 [measuring them with tags]: tags.html#measuring-with-tags
-[`assert`]: https://zoo.dev/docs/kcl-std/assert
-[`segAng`]: https://zoo.dev/docs/kcl-std/segAng
+[`assert`]: https://zoo.dev/docs/kcl-std/functions/std-assert
+[`segAng`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segAng
 [bracket]: https://zoo.dev/docs/kcl-samples/bracket
