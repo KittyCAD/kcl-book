@@ -45,14 +45,14 @@ In KCL, there's six basic built-in planes you can use: XY, YZ, XZ, and negative 
 
 ### 2: Start sketching
 
-Sketches contain profiles -- basically, a sequence of lines, laid out top-to-tail (i.e. one line starts where the previous line ends). We have to start the profile somewhere, so we use `startProfile(at = [0, 0])`. The [`startProfileAt`] takes two parameters:
+Sketches contain profiles -- basically, a sequence of lines, laid out top-to-tail (i.e. one line starts where the previous line ends). We have to start the profile somewhere, so we use `startProfile(at = [0, 0])`. The [`startProfile`] takes two parameters:
 
 1. The sketch we're adding a profile with. This is one of those special unlabeled first parameters, so we don't need a label. We're setting it to the sketch from `startSketchOn(XY)`, which is being piped in via the `|>`. If you don't set this first parameter, it defaults to `%`, i.e. the previous pipeline expression. And that's exactly what we want! So we're leaving it unset.
 2. The `at` parameter indicates where the profile starts. For this example, we'll start at the origin of the XY plane, i.e. the point `[0, 0]`.
 
 ### 3: Add paths
 
-A profile is a sequence of paths. A path is some sort of curve between two points, possibly straight lines, circular arcs, parabolae, or something else. For this triangle, we're adding 3 paths, which are all straight lines. The [`line`] call says to draw a line starting at the previous end point. Currently, this is `[0, 0]` from the `startProfileAt` call. So this line starts at `[0, 0]`. Where does it end? Well, the `line` call says that `end = [3, 0]`, which means "extend this line 3 units along the X axis, and 0 units along the Y axis". This is a _relative_ distance, because it's telling you how far to move from the previous point. So, this line goes from `[0, 0]` to `[3, 0]`.
+A profile is a sequence of paths. A path is some sort of curve between two points, possibly straight lines, circular arcs, parabolae, or something else. For this triangle, we're adding 3 paths, which are all straight lines. The [`line`] call says to draw a line starting at the previous end point. Currently, this is `[0, 0]` from the [`startProfile`] call. So this line starts at `[0, 0]`. Where does it end? Well, the `line` call says that `end = [3, 0]`, which means "extend this line 3 units along the X axis, and 0 units along the Y axis". This is a _relative_ distance, because it's telling you how far to move from the previous point. So, this line goes from `[0, 0]` to `[3, 0]`.
 
 ### 4: Add more lines, joining on from previous lines.
 
