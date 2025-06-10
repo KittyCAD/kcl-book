@@ -1,13 +1,18 @@
 # Modeling 3D shapes
+
 <!-- toc -->
 
 Previous chapters covered designing 2D shapes. Now it's time to design 3D shapes!
 
-3D shapes are usually made by adding depth to a 2D shape. There are two common ways engineers do this: by extruding or revolving 2D shapes into 3D. There's some less common ways too, including sweeps and lofts. In this chapter, we'll go through each of these! Let's get started with the most common method: extruding.
+3D shapes are usually made by adding depth to a 2D shape. There are two common ways engineers do
+this: by extruding or revolving 2D shapes into 3D. There's some less common ways too, including
+sweeps and lofts. In this chapter, we'll go through each of these! Let's get started with the most
+common method: extruding.
 
 ## Extrude
 
-Extruding basically takes a 2D shape and pulls it up, stretching it upwards into the third dimension. Let's start with our existing 2D pill shape from the previous chapter:
+Extruding basically takes a 2D shape and pulls it up, stretching it upwards into the third
+dimension. Let's start with our existing 2D pill shape from the previous chapter:
 
 ```kcl
 height = 4
@@ -20,6 +25,7 @@ pill = startSketchOn(XZ)
   |> tangentialArc(endAbsolute = profileStart())
   |> close()
 ```
+
 It should look like this:
 
 ![2D pill, before extruding](images/static/pill_2d.png)
@@ -50,11 +56,17 @@ You should see something like this:
 
 <!-- KCL: name=pill_3d,alt=2D pill extruded into 3D -->
 
-The [`extrude`] function takes a distance, which is how far along the third axis to extrude. Every plane has a _normal_, or an axis which is _tangent_ to the plane. For the plane XZ, this is the Y axis. This normal, or tangent, or axis perpendicular to the plane, is the direction that extrudes go along.
+The [`extrude`] function takes a distance, which is how far along the third axis to extrude. Every
+plane has a _normal_, or an axis which is _tangent_ to the plane. For the plane XZ, this is the Y
+axis. This normal, or tangent, or axis perpendicular to the plane, is the direction that extrudes go
+along.
 
 ## Sweep
 
-An extrude takes some 2D sketch and drags it up in a straight line along the normal axis. A _sweep_ is like an extrude, but the shape isn't just moved along a straight line: it could be moved along any path. Let's reuse our previous pill-shape example, but this time we'll sweep it instead of extruding it. First, we have to define a path that the sweep will take. Let's add one:
+An extrude takes some 2D sketch and drags it up in a straight line along the normal axis. A _sweep_
+is like an extrude, but the shape isn't just moved along a straight line: it could be moved along
+any path. Let's reuse our previous pill-shape example, but this time we'll sweep it instead of
+extruding it. First, we have to define a path that the sweep will take. Let's add one:
 
 ```kcl=path_for_sweep
 height = 4
@@ -81,7 +93,8 @@ sweepPath = startSketchOn(XZ)
 
 <!-- KCL: name=path_for_sweep,skip3d=true,alt=A 2D pill shape and a path we're going to sweep it along-->
 
-Now we'll add the [`sweep`] call, like `swept = sweep(pill, path = sweepPath)`, which will drag our 2D pill sketch along the path we defined.
+Now we'll add the [`sweep`] call, like `swept = sweep(pill, path = sweepPath)`, which will drag our
+2D pill sketch along the path we defined.
 
 ```kcl=swept_along_path
 height = 4
@@ -111,12 +124,13 @@ swept = sweep(pill, path = sweepPath)
 
 <!-- KCL: name=swept_along_path,alt=2D pill swept along path into 3D -->
 
-The [`sweep`] call has several other options you can set, so read its docs page for more information.
+The [`sweep`] call has several other options you can set, so read its docs page for more
+information.
 
 ## Revolve
 
-Revolves are the other common way to make a 3D shape. Let's start with a 2D shape, like a basic circle.
-
+Revolves are the other common way to make a 3D shape. Let's start with a 2D shape, like a basic
+circle.
 
 ```kcl=circle
 startSketchOn(XZ)
@@ -125,7 +139,9 @@ startSketchOn(XZ)
 
 <!-- KCL: name=circle,skip3d=true,alt=A 2D circle before revolving.-->
 
-The [`revolve`] function takes a shape and revolves it, dragging it around an axis. Let's revolve it around the Y axis (which is perpendicular to XZ, the plane we're sketching on), to make a donut shape.
+The [`revolve`] function takes a shape and revolves it, dragging it around an axis. Let's revolve it
+around the Y axis (which is perpendicular to XZ, the plane we're sketching on), to make a donut
+shape.
 
 ```kcl=donut
 startSketchOn(XZ)
@@ -135,7 +151,8 @@ startSketchOn(XZ)
 
 <!-- KCL: name=donut,alt=The circle has been revolved around an axis to make a donut -->
 
-There's an optional argument called `angle`. In the above example, we didn't provide it, so it defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
+There's an optional argument called `angle`. In the above example, we didn't provide it, so it
+defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
 
 ```kcl=donut240
 startSketchOn(XZ)
@@ -147,7 +164,8 @@ startSketchOn(XZ)
 
 ### Spheres
 
-You can make a sphere by revolving a semicircle its full 360 degrees. First, let's make a semicircle:
+You can make a sphere by revolving a semicircle its full 360 degrees. First, let's make a
+semicircle:
 
 ```kcl=semicircle
 radius = 10
@@ -159,7 +177,8 @@ startSketchOn(XY)
 
 <!-- KCL: name=semicircle,skip3d=true,alt=Sketching a semicircle-->
 
-Then we can `close()` it and add a call to `revolve(axis = Y, angle = 360)` to revolve it into a sphere:
+Then we can `close()` it and add a call to `revolve(axis = Y, angle = 360)` to revolve it into a
+sphere:
 
 ```kcl=sphere
 radius = 10
@@ -175,7 +194,10 @@ startSketchOn(XY)
 
 ## Lofts
 
-All previous methods -- extrudes, sweeps, revolves -- took a single 2D shape and made a single 3D solid. Lofts are a little different -- they take _multiple_ 2D shapes and join them to make a single 3D shape. A loft interpolates between various sketches, creating a volume that smoothly blends from one shape into another. Let's see an example:
+All previous methods -- extrudes, sweeps, revolves -- took a single 2D shape and made a single 3D
+solid. Lofts are a little different -- they take _multiple_ 2D shapes and join them to make a single
+3D shape. A loft interpolates between various sketches, creating a volume that smoothly blends from
+one shape into another. Let's see an example:
 
 ```kcl=loft_basic
 // Sketch a square on the XY plane
@@ -197,7 +219,11 @@ loft([squareSketch, circleSketch])
 
 <!-- KCL: name=loft_basic,alt=Basic loft of a square into a circle-->
 
-Note that we used the [`offsetPlane`] function to start the circle sketch 200 units above the XY plane. We'll cover offsetPlane more in the chapter on [sketch on face]. The [`loft`] function has a few other advanced options you can set. One of these is `vDegree`, which affects how smoothly KCL interpolates between the shapes. Take a look at these two examples, which are identical except for vDegree. This example uses `vDegree = 1`:
+Note that we used the [`offsetPlane`] function to start the circle sketch 200 units above the XY
+plane. We'll cover offsetPlane more in the chapter on [sketch on face]. The [`loft`] function has a
+few other advanced options you can set. One of these is `vDegree`, which affects how smoothly KCL
+interpolates between the shapes. Take a look at these two examples, which are identical except for
+vDegree. This example uses `vDegree = 1`:
 
 ```kcl=loft_vd1
 // Circle, 200 units below the XY plane.
@@ -222,7 +248,8 @@ loftedSolid = loft([circ0, squareSketch, circ1], vDegree = 1)
 
 <!-- KCL: name=loft_vd1,alt=Loft with vDegree 1-->
 
-The following loft is identical, but we set `vDegree = 2`. That's actually the default, so we don't need to set it, but for the sake of example we'll explicitly set it there.
+The following loft is identical, but we set `vDegree = 2`. That's actually the default, so we don't
+need to set it, but for the sake of example we'll explicitly set it there.
 
 ```kcl=loft_vd2
 // Circle, 200 units below the XY plane.
@@ -247,12 +274,12 @@ loftedSolid = loft([circ0, squareSketch, circ1], vDegree = 2)
 
 <!-- KCL: name=loft_vd2,alt=Loft with vDegree 2-->
 
-As you can see, the `vDegree` makes a big difference. You can view other options on the [`loft`] docs page.
+As you can see, the `vDegree` makes a big difference. You can view other options on the [`loft`]
+docs page.
 
-[`extrude`]: https://zoo.dev/docs/kcl-std/extrude
-[`loft`]: https://zoo.dev/docs/kcl-std/loft
+[`extrude`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-extrude
+[`loft`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-loft
 [`offsetPlane`]: https://zoo.dev/docs/kcl-std/functions/std-offsetPlane
 [`revolve`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-revolve
 [sketch on face]: sketch_on_face.html
-[`sweep`]: https://zoo.dev/docs/kcl-std/sweep
-
+[`sweep`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-sweep
