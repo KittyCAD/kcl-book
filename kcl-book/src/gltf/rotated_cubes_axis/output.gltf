@@ -768,7 +768,12 @@
               1
             ]
           ],
-          "mesh": 0
+          "mesh": 0,
+          "extras": {
+            "KITTYCAD": {
+              "material": 0
+            }
+          }
         },
         {
           "shells": [
@@ -777,7 +782,12 @@
               1
             ]
           ],
-          "mesh": 1
+          "mesh": 1,
+          "extras": {
+            "KITTYCAD": {
+              "material": 1
+            }
+          }
         },
         {
           "shells": [
@@ -3633,6 +3643,46 @@
   "extensionsUsed": [
     "KITTYCAD_boundary_representation"
   ],
+  "materials": [
+    {
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.2,
+          1,
+          0,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 1
+      },
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.2,
+          0.13333334,
+          0,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 1
+      },
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
   "meshes": [
     {
       "primitives": [
@@ -3640,37 +3690,43 @@
           "attributes": {
             "POSITION": 0,
             "NORMAL": 1
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 2,
             "NORMAL": 3
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 4,
             "NORMAL": 5
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 6,
             "NORMAL": 7
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 8,
             "NORMAL": 9
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 10,
             "NORMAL": 11
-          }
+          },
+          "material": 0
         }
       ]
     },
@@ -3680,37 +3736,43 @@
           "attributes": {
             "POSITION": 12,
             "NORMAL": 13
-          }
+          },
+          "material": 1
         },
         {
           "attributes": {
             "POSITION": 14,
             "NORMAL": 15
-          }
+          },
+          "material": 1
         },
         {
           "attributes": {
             "POSITION": 16,
             "NORMAL": 17
-          }
+          },
+          "material": 1
         },
         {
           "attributes": {
             "POSITION": 18,
             "NORMAL": 19
-          }
+          },
+          "material": 1
         },
         {
           "attributes": {
             "POSITION": 20,
             "NORMAL": 21
-          }
+          },
+          "material": 1
         },
         {
           "attributes": {
             "POSITION": 22,
             "NORMAL": 23
-          }
+          },
+          "material": 1
         }
       ]
     },
