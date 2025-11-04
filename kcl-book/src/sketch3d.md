@@ -173,7 +173,7 @@ startSketchOn(XZ)
 
 <!-- KCL: name=sphere,skip3d=true,alt=Revolving a semicircle makes a sphere -->
 
-Note that here, we omitted the `angle` call from the `revolve` because it defaults to 360 degrees.
+Note that here, we omitted the `angle` argument from the `revolve` call because it defaults to 360 degrees.
 
 ## Lofts
 
