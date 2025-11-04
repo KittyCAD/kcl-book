@@ -26,7 +26,20 @@ It should look like this:
 
 Let's analyze this! It looks very similar to the triangle we sketched previously, but we're using `tangentialArc`. You can see it takes a relative `end`, i.e. an X distance and Y distance to move from the current point. It draws a nice smooth arc there.
 
-We wrote this arc using `end`, i.e. an X and Y distance. But we could have defined this arc differently, using a `radius` and `angle` instead. You can replace the `tangentialArc(end = [0, height])` with `tangentialArc(angle = 180, radius = height)` instead, and it should draw the same thing. 
+We wrote this arc using `end`, i.e. an X and Y distance. But we could have defined this arc differently, using a `radius` and `angle` instead (or a `diameter` and `angle`). You can replace the `tangentialArc(end = [0, height])` with `tangentialArc(angle = 180, radius = height)` instead, and it should draw the same thing. 
+
+```kcl
+height = 4
+width = 8
+startSketchOn(XZ)
+  |> startProfile(at = [0, 0])
+  |> xLine(length = width)
+  |> tangentialArc(diameter = height, angle = 180deg)
+  |> xLine(length = -width)
+  |> tangentialArc(endAbsolute = profileStart())
+```
+
+Here, the angle `180deg` is measuring a counterclockwise angle. To make the arc go the other direction (clockwise), you'd use `-180deg`.
 
 The second `tangentialArc` call takes an absolute point. We tell it to draw an arc from the current point to the start of the profile. This should remind you of how straight lines can use either `end` (relative) or `endAbsolute`.
 
@@ -53,7 +66,7 @@ It should look like this:
 
 ![A spiral made from many tangential arcs](images/static/spiral.png)
 
-This works because each tangentialArc is drawing half a circle, away from the previous arc, and the circle is getting slightly larger each time.
+This works because each tangentialArc is drawing half a circle, away from the previous arc, and the circle is getting slightly larger each time. The `180` is a counterclockwise angle, so each time we draw a new arc, it bends around the circle counterclockwise.
 
 ## Circles
 
