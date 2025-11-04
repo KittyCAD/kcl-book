@@ -73,7 +73,7 @@ This works because each tangentialArc is drawing half a circle, away from the pr
 And lastly, let's look at the humble circle.
 
 ```kcl=basic_circle
-startSketchOn(XY)
+startSketchOn(XZ)
   |> circle(center = [0, 0], radius = 10)
 ```
 

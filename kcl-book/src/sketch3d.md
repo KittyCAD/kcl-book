@@ -151,7 +151,7 @@ You can make a sphere by revolving a semicircle its full 360 degrees. First, let
 
 ```kcl=semicircle
 radius = 10
-startSketchOn(XY)
+startSketchOn(XZ)
   |> startProfile(at = [0, 0])
   |> yLine(length = radius * 2)
   |> arc(angleStart = 90, angleEnd = 270, radius = radius)
@@ -159,19 +159,21 @@ startSketchOn(XY)
 
 <!-- KCL: name=semicircle,skip3d=true,alt=Sketching a semicircle-->
 
-Then we can `close()` it and add a call to `revolve(axis = Y, angle = 360)` to revolve it into a sphere:
+Then we can `close()` it and add a call to `revolve(axis = Y)` to revolve it 360 degrees into a sphere:
 
 ```kcl=sphere
 radius = 10
-startSketchOn(XY)
+startSketchOn(XZ)
   |> startProfile(at = [0, 0])
   |> yLine(length = radius * 2)
   |> arc(angleStart = 90, angleEnd = 270, radius = radius)
   |> close()
-  |> revolve(axis = Y, angle = 360)
+  |> revolve(axis = Y)
 ```
 
 <!-- KCL: name=sphere,skip3d=true,alt=Revolving a semicircle makes a sphere -->
+
+Note that here, we omitted the `angle` call from the `revolve` because it defaults to 360 degrees.
 
 ## Lofts
 
