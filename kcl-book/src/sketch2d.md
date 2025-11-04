@@ -64,7 +64,11 @@ Our third line heads back to the start of the profile, i.e. `[0, 0]`. We do this
 
 Because this is the same point that our profile starts at, this line has looped our profile back to its start.
 
-If we stopped our program here, you could see all three lines:
+We could have also used a relative line here, and looped back to the start with `line(end = [-3, -4])`. That would achieve the same thing. But this requires manual calculation. You, the programmer, have to look at all the previous lines and figure out how where the last line starts, and then "undo" all that distance by putting a line with the negative X and Y distances (so that the line goes back to the origin). In our example, this was easy, but in real-world designs this might be very tough! And even when it's easy, using an absolute point here communicates our intent better. We're just want to draw a line that returns to the start point. We don't really care about the distance here.
+
+It doesn't really matter which one you use, although note that Zoo Design Studio will usually prefer relative lines for almost everything. Closing a sketch is the one exception where Zoo Design Studio will use an absolute line.
+
+Now, if we stopped our program here, you could see all three lines:
 
 ![Result of running program 1](images/static/triangle_open.png)
 
