@@ -11,8 +11,8 @@
 
 # Modeling with KCL
 
-- [Sketching 2D shapes](./sketch2d.md)
-- [Sketching curved lines](./sketch2d_curves.md)
+- [Sketching 2D shapes](./sketch2d_constraints.md)
+- [Sketching curved lines](./sketch2d_curves_constraints.md)
 - [Creating 3D shapes](./sketch3d.md)
 - [Tags, Fillets and Chamfers](./tags.md)
 - [Sketch on face](./sketch_on_face.md)
@@ -27,8 +27,13 @@
 - [Reduce and geometry](./reduce_geometry.md)
 
 # KCL projects
+
 - [Checking your work](./checking.md)
 - [Types and Units](./units_of_measurement.md)
 - [Modules](./modules.md)
 - [Interop with other CAD programs](./interop.md)
 
+# Old sketch syntax
+
+- [Legacy: Sketching 2D shapes](./sketch2d.md)
+- [Legacy: Sketching curved lines](./sketch2d_curves.md)
