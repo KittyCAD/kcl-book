@@ -1,19 +1,10 @@
-# Sketching 2D shapes
+<!-- # Sketching 2D shapes -->
 
 <!-- toc -->
 
-Let's use KCL to sketch some basic 2D shapes. **Sketching** is a core workflow for mechanical engineers, designers, and hobbyists. The basic steps of sketching are:
+Let's use KCL to sketch some basic 2D shapes. **Sketching** is a core workflow for mechanical engineers, designers, and hobbyists. You can either sketch _fixed geometry_, where you manually position your lines, points and curves, or you can use _unconstrained_ geometry, then _add constraints_ later to pin them down into a fixed position. We'll walk through both these options. Let's start with fixed geometry. Then we'll use constraints to think more like an engineer.
 
-1. Choose a plane to sketch on
-2. Start sketching at a certain point
-3. Draw a line from the current point to somewhere
-4. Add new lines, joining on from the previous lines
-5. Eventually, one line loops back to the starting point.
-6. Close the sketch, creating a 2D shape.
-
-You can do each of these steps in KCL. Let's see how!
-
-## Your first triangle
+## Fixed geometry: your first triangle
 
 Let's sketch a really simple triangle. We'll sketch a right-angled triangle, with side lengths 3 and 4.
 
@@ -21,130 +12,199 @@ Just copy this code into the KCL editor:
 
 
 ```kcl
-startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> line(end = [3, 0])
-  |> line(end = [0, 4])
-  |> line(endAbsolute = [0, 0])
-  |> close()
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
+myTriangle = sketch(on = YZ) {
+  line(start = [0, 0], end = [0, 3])
+  line(start = [0, 3], end = [4, 3])
+  line(start = [4, 3], end = [0, 0])
+}
 ```
 
-Your screen should look something like this:
+When you're done, use the Camera Cube in the corner and select the "Right" face. The camera should swivel around and face your triangle head-on. Your screen should look something like this:
 
-![Result of running program 1](images/static/triangle_closed.png)
+![Result of running program 1](images/static/first_triangle_constrained.png)
 
 Congratulations, you've sketched your first triangle! Rendering your first triangle is a [big deal in graphics programming](https://rampantgames.com/blog/?p=7745), and sketching your first triangle is a big deal in KCL. 
-
 Let's break this code down line-by-line and see how it corresponds to each step of sketching from above. Note that each step in creating this triangle uses the pipeline syntax `|>`. This means every function call is being piped into the next function call. 
 
-### 1: Choose a plane
+### 1: Set KCL settings
 
-In KCL, there's six basic built-in planes you can use: XY, YZ, XZ, and negative versions of each (-XY, -YZ and -XZ). You can use one of these standard planes, or define your own (we'll get to that later). Those six standard planes can be used just like normal variables you define, except they're pre-defined by KCL in its standard library. You can pass them into functions, like the [`startSketchOn`] function. So, line 1, `startSketchOn(XY)` is where you choose a plane, and start sketching on it.
+This step is optional, but it's good practice. KCL lets you set a few settings at the top of your file, with `@settings(...)`. Zoo Design Studio will usually set this line for you when you make a new file, and then you can change it later. In `@settings(defaultLengthUnit = mm, kclVersion = 1.0)`, we're choosing two settings:
 
-`startSketchOn` takes one argument, the plane to sketch on. It's the special unlabeled first parameter. We'll go over some other planes you can sketch on in the chapter about [sketch on face].
+ 1. Set the default unit to millimeters. This means that when you write a point like `[4, 3]` it's treated as 4 millimeters and 3 millimeters. You could write them manually, via `[4mm, 3mm]` instead. But it's good to set these defaults, so everyone knows that `[4, 3]` means 4x3 millimeters, not inches or yards or meters. You could replace `mm` with `cm`, `m`, `in`, `ft`, or `yd` instead.
+ 2. Set the KCL version to `1.0`. This way, in the future, we could add new features in KCL 1.2 without affecting your old code.
 
-### 2: Start sketching
+### 2: Choose a plane
 
-Sketches contain profiles -- basically, a sequence of lines, laid out top-to-tail (i.e. one line starts where the previous line ends). We have to start the profile somewhere, so we use `startProfile(at = [0, 0])`. The [`startProfile`] takes two parameters:
+In KCL, there's six basic built-in planes you can use. There's XY, YZ, XZ, and negative versions of each (-XY, -YZ and -XZ). These negative planes are in the exact same place as their matching positive planes, but treat the Z axis (in other words, the axis considered "up") as the opposite direction.
 
-1. The sketch we're adding a profile with. This is one of those special unlabeled first parameters, so we don't need a label. We're setting it to the sketch from `startSketchOn(XY)`, which is being piped in via the `|>`. If you don't set this first parameter, it defaults to `%`, i.e. the previous pipeline expression. And that's exactly what we want! So we're leaving it unset.
-2. The `at` parameter indicates where the profile starts. For this example, we'll start at the origin of the XY plane, i.e. the point `[0, 0]`.
+![Difference between XY and -XY planes](images/static/xy_vs_neg_xy.png)
 
-### 3: Add paths
+You can use one of these standard planes, or define your own (we'll get to that later). Those six standard planes can be used just like normal variables you define, except they're pre-defined by KCL in its standard library. You can pass them into functions, like the [`sketch`] function. So, line 3, `sketch(on = YZ)` is where you choose a plane, and start sketching on it.
 
-A profile is a sequence of paths. A path is some sort of curve between two points, possibly straight lines, circular arcs, parabolae, or something else. For this triangle, we're adding 3 paths, which are all straight lines. The [`line`] call says to draw a line starting at the previous end point. Currently, this is `[0, 0]` from the [`startProfile`] call. So this line starts at `[0, 0]`. Where does it end? Well, the `line` call says that `end = [3, 0]`, which means "extend this line 3 units along the X axis, and 0 units along the Y axis". This is a _relative_ distance, because it's telling you how far to move from the previous point. So, this line goes from `[0, 0]` to `[3, 0]`.
+`sketch` takes one argument, the plane to sketch on. You can also start sketching on faces of your parts, or on custom planes, but we'll talk about that a bit later, in the chapter on [sketch on face].
 
-### 4: Add more lines, joining on from previous lines.
+### 3: Start a sketch block
 
-The next call is `line(end = [0, 4])`. It draws a line from the previous line's end (`[3, 0]`), extending a distance of 0 along X and 4 along Y. So it goes from `[3, 0]` to `[3, 4]`. 
+The `sketch` keyword starts a _sketch block_. A sketch block contains geometry, and information about geometry. The sketch block's contents go inside curly braces. Our first sketch block will be very simple, with 3 lines. But you'll see more complex examples later.
 
-### 5: Join back to the start
+### 4: Add geometry
 
-Our third line heads back to the start of the profile, i.e. `[0, 0]`. We do this by calling `line(endAbsolute = [0, 0])`. Note that this uses `endAbsolute =`, not `end =` like the previous lines. The `end =` arguments were _relative_ distances: they said how far away the new point is, along both X and Y axes, from the previous point. This one is different: this is an _absolute_ point, not a _relative_ distance. The array `[0, 0]` isn't saying to move 0 along X and 0 along Y. It's saying, draw a line that ends at the specific point `[0, 0]`, i.e. the origin of the plane.
+Sketches contain geometry like lines, arcs, circles and points. In our example sketch, we added three straight lines, each with a start and end. These lines are created by the `line` function, which takes two parameters: a `start` and an `end`. We make a line like this: `line(start = [0, 0], end = [0, 3])`.
 
-Because this is the same point that our profile starts at, this line has looped our profile back to its start.
+## Working with constraints
 
-We could have also used a relative line here, and looped back to the start with `line(end = [-3, -4])`. That would achieve the same thing. But this requires manual calculation. You, the programmer, have to look at all the previous lines and figure out how where the last line starts, and then "undo" all that distance by putting a line with the negative X and Y distances (so that the line goes back to the origin). In our example, this was easy, but in real-world designs this might be very tough! And even when it's easy, using an absolute point here communicates our intent better. We're just want to draw a line that returns to the start point. We don't really care about the distance here.
+For simple geometry, like a single triangle, manually positioning the endpoints of lines works just fine. But when you're making more complex shapes, it's hard to choose the positions of every point. Mechanical engineers rarely work out every point's true location in 3D space. Instead, they start with a few pieces of information -- some initial guesses -- and then they add more requirements in, letting their CAD suite tweak the geometry to meet these requirements. In other words, they _constrain_ their initial guesses.
 
-It doesn't really matter which one you use, although note that Zoo Design Studio will usually prefer relative lines for almost everything. Closing a sketch is the one exception where Zoo Design Studio will use an absolute line.
+Let's start with a goal: sketching a rhombus. There's many ways to define a rhombus, but we'll use this definition: "a parallelogram in which the diagonals are perpendicular". Now, we could use a pen and paper to do some high-school geometry and work out where all 4 points of our rhombus go. But that's a waste of time. Let's just put some initial guesses in, and use KCL's built-in constraint solver to ensure we build a rhombus.
 
-Now, if we stopped our program here, you could see all three lines:
-
-![Result of running program 1](images/static/triangle_open.png)
-
-Note that the _relative_ lines (i.e. the first two line calls, with `end =`) have arrows showing where they're going. This last line, which ends at an _absolute_ point, does not.
-
-### 6: Close the sketch
-
-The last function being called is [`close`]. It takes one argument, the sketch to close. As in the previous functions, it's an unlabeled first parameter, so you could write `close(%)`, but `close()` will do the exact same thing.
-
-Once we add the `close()` call, the rendering changes from just 3 lines (like in the second image in this page) to a filled-in shape (like in the first image on this page).
-
-## Enhancements
-
-This code totally achieved our goal: it sketches a right-angled triangle with sides of length 3 and 4. Mission accomplished.
-
-Of course, in programming, there's usually several different ways to achieve a goal. KCL is no different! Let's look at some different ways we could have sketched this shape.
-
-### Closing shapes
-
-One important principle in programming is "don't repeat yourself" (DRY). Look back at this code: it uses the point `[0, 0]` twice. Once when we start the sketch, and once when we close the sketch. There's nothing necessarily wrong with this, but if you want to change the triangle later, you'll have to change this in two different places. And if you make a typo in one of the places, the model will break, because the sketch will be starting and finishing at a different point. This program doesn't have a bug currently, but by repeating this value twice, we introduce a _potential_ bug in the future. I'd call this program _brittle_ -- it's not broken, but it could break in the future. If we could define the point `[0, 0]` just once, the program would be more resilient, i.e. less likely to break if you change something in the future.
-
-Here's a few ways to make this code less repetitive, less brittle, and DRY-er.
-
-Firstly, you could replace `[0, 0]` with a variable like `start`, and use it in both places.
-
+To start, we know our rhomubus will have 4 lines. So let's put in some rough guesses.
 
 ```kcl
-start = [0, 0]
-startSketchOn(XY)
-  |> startProfile(at = start)
-  |> line(end = [3, 0])
-  |> line(end = [0, 4])
-  |> line(endAbsolute = start)
-  |> close()
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
+sketch(on = YZ) {
+  line1 = line(start = [var 1mm, var 1mm], end = [var 0mm, var 4mm])
+  line2 = line(start = [var 0mm, var 4mm], end = [var 3mm, var 3mm])
+  line3 = line(start = [var 4mm, var 4mm], end = [var 3mm, var 0mm])
+  line4 = line(start = [var 3mm, var 0mm], end = [var 1mm, var 1mm])
+}
 ```
 
-Next, we could use a helper function [`profileStart`] instead.
+This looks pretty similar to our earlier triangle example, with two big differences.
+
+First, we're assigning each line to a _variable_. We've got 4 lines and 4 variables: `line1`, `line2`, `line3` and `line4`. This isn't strictly necessary yet -- each `line` call works just fine on its own, without being assigned to a variable, as you saw in the triangle example earlier. But assigning our geometry to variables lets us give the line a name. You can now refer to `line1` or `line2` later in your sketch block.
+
+Secondly, we're using the _var_ keyword. This means each line's endpoint is no longer an exact location! If we used `start = [1mm, 1mm]`, that means the line has to start at _exactly_ the point (1, 1), no changes allowed. But if you write `start = [var 1mm, var 1mm]`, then KCL is allowed to reposition your line later. That's exactly what we want. (1, 1) is just a starting guess for where the corner of our rhombus will be. We'll let the computer do the hard work of calculating the exact geometry for us. So we tell KCL it's OK to reposition this point's X and Y axis, by using `var` with each one.
+
+So far, our geometry looks like this:
+
+![Starting our rhombus](images/static/rhom0.png)
+
+That doesn't look very much like a rhombus. Let's add some _constraints_ -- some requirements we know. Firstly, we know that all 4 edges should share corners. In other words, line1 should end where line2 begins, line 2 should end where line 3 begins, and so on. Let's add some constraints.
 
 ```kcl
-startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> line(end = [3, 0])
-  |> line(end = [0, 4])
-  |> line(endAbsolute = profileStart())
-  |> close()
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
+sketch(on = YZ) {
+  line1 = line(start = [var 1mm, var 1mm], end = [var 0mm, var 4mm])
+  line2 = line(start = [var 0mm, var 4mm], end = [var 3mm, var 3mm])
+  line3 = line(start = [var 4mm, var 4mm], end = [var 3mm, var 0mm])
+  line4 = line(start = [var 3mm, var 0mm], end = [var 1mm, var 1mm])
+
+  // The 4 lines should form a shape, i.e. their endpoints should touch.
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+}
 ```
 
-The `profileStart` function takes in the current profile, and returns its start value. It takes a single unlabeled parameter, which we're setting to % (the left-hand side of the |>). Like always, if the special unlabeled argument is set to %, you can just omit the %, because that's the default.
+There, now our 4 lines form a quadrilateral.
 
-### X and Y lines
+![We made a quadrilateral](images/static/rhom1.png)
 
-The first line of our triangle is parallel to the X axis, and the second line is parallel to the Y axis. This means we could simplify our code somewhat by using the [`xLine`] and [`yLine`] functions:
+What else do we know about a rhombus? Well, we know the opposite lines have to be parallel. So let's tell KCL that line1 and line 3 are parallel, via `parallel([line4, line2])`. Same for line 2 and line 4.
 
 ```kcl
-startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> xLine(length = 3)
-  |> yLine(length = 4)
-  |> line(endAbsolute = profileStart())
-  |> close()
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
+sketch(on = YZ) {
+  line1 = line(start = [var 1mm, var 1mm], end = [var 0mm, var 4mm])
+  line2 = line(start = [var 0mm, var 4mm], end = [var 3mm, var 3mm])
+  line3 = line(start = [var 4mm, var 4mm], end = [var 3mm, var 0mm])
+  line4 = line(start = [var 3mm, var 0mm], end = [var 1mm, var 1mm])
+
+  // The 4 lines should form a shape, i.e. their endpoints should touch.
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+
+  // Opposite edges are parallel.
+  parallel([line1, line3])
+  parallel([line2, line4])
+}
 ```
 
-`xLine` takes an unlabeled first parameter for the sketch (which, as before, we're setting to % and can therefore omit) and then a `length` parameter, which tells KCL to draw a flat line, parallel to the X axis, with the given length. Basically,`xLine(length = n)` is a neater way to write a horizontal line like `line(end = [n, 0])`. You can use whichever one you prefer. The `yLine` function works the same way, but for vertical lines.
+Lastly, their internal diagonals should be perpendicular. Firstly, let's define its diagonals:
 
-These examples use _relative_ xLine and yLine -- i.e. lines that end a certain _distance away from the previous point_. If you want to instead draw a line to a specific point along the X axis (like `x = 3`), you could use `xLine(endAbsolute = 3)`.
+```kcl
+// Add a diagonal, which goes from one corner to the opposite corner.
+diagonal1 = line(start = [var 1.02mm, var 1.71mm], end = [var 3.18mm, var 3.66mm], construction = true)
+coincident([diagonal1.start, line1.start])
+coincident([diagonal1.end, line2.end])
 
+// Add the next diagonal, across the other pair of corners.
+diagonal2 = line(start = [var 0.2mm, var 4.78mm], end = [var 3.99mm, var 0.59mm], construction = true)
+coincident([diagonal2.start, line2.start])
+coincident([diagonal2.end, line3.end])
+```
+
+We've marked these two diagonal lines as _construction geometry_. That means we don't want them to show up in the final render of our shape. We're only adding it to our sketch block for constraining other, real geometry. But it shouldn't actually make a selectable edge elsewhere in our design. If you view the sketch in Zoo Design Studio, construction geometry is drawn with dashed lines. Real geometry uses normal, full lines.
+
+![Added the construction geometry diagonals](images/static/rhom2.png)
+
+Let's add a constraint on the diagonals:
+
+```kcl
+// The two diagonals are perpendicular.
+perpendicular([diagonal1, diagonal2])
+```
+
+Now our shape is properly constrained to be a rhombus! Here's the final result:
+
+```kcl
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
+starting = sketch(on = YZ) {
+  line1 = line(start = [var 0.74mm, var 0.98mm], end = [var 0.13mm, var 3.79mm])
+  line2 = line(start = [var 0.13mm, var 3.79mm], end = [var 2.98mm, var 3.33mm])
+  line3 = line(start = [var 2.98mm, var 3.33mm], end = [var 3.58mm, var 0.51mm])
+  line4 = line(start = [var 3.58mm, var 0.51mm], end = [var 0.74mm, var 0.98mm])
+
+  // The 4 lines should form a shape, i.e. their endpoints should touch.
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+
+  // Opposite edges are parallel.
+  parallel([line1, line3])
+  parallel([line2, line4])
+
+  // Add a diagonal, which goes from one corner to the opposite corner.
+  diagonal1 = line(start = [var 0.74mm, var 0.98mm], end = [var 2.98mm, var 3.33mm], construction = true)
+  coincident([diagonal1.start, line1.start])
+  coincident([diagonal1.end, line2.end])
+
+  // Add the next diagonal, across the other pair of corners.
+  diagonal2 = line(start = [var 0.13mm, var 3.79mm], end = [var 3.58mm, var 0.51mm], construction = true)
+  coincident([diagonal2.start, line2.start])
+  coincident([diagonal2.end, line3.end])
+
+  // The two diagonals are perpendicular.
+  perpendicular([diagonal1, diagonal2])
+}
+```
+
+![The final rhombus](images/static/rhom3.png)
+
+Now when KCL runs this program, it'll take the initial guesses for each point (marked with `var`) and apply the constraints to figure out the final locations of all our geometry. This _really_ helps simplify complicated 2D shapes.
 
 ## Conclusion
 
-We've written our first triangle. We learned:
+We've learned how to use KCL to do some basic 2D shape definitions:
 
- - Sketches are on some plane, and KCL includes standard planes XY, YZ and XZ (and their negative versions, which point the third axis in the opposite direction).
- - Sketches contain profiles, which are made of sequential paths. In our example, there's one profile, a triangle, made of three paths (3 straight lines).
- - Lines start at the end of the previous point (the first line starts at the `startProfile(at=)` point)
- - Lines can end either a certain distance away along X and Y (a _relative_ end), or at a particular point along the plane (an _absolute_ end)
- - The `close` function turns a sequence of paths that form a loop into a single 2D shape.
+ - Sketches are on some plane, and KCL includes standard planes XY, YZ and XZ (and their negative versions, which point the third axis down instead of up).
+ - Start a sketch with a sketch block like `sketch(on = XY) { ... }`.
+ - Sketches call functions like `line()` to make geometry.
+ - Geometry can use fixed, exact points like `[2, 2]`, or they can vary the point's exact location later (like `[var 2, var 2]`).
+ - You can assign geometry to variables, like `myLine = line(start = [2, 2], end = [3, 3])`.
+ - Constraints reposition geometry, like `parallel([line1, line2])`.
+
+Next, we'll look at how to build curved lines, like arcs and circles. We'll use new constraints on them to make more realistic shapes.
 
 [`close`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-close
 [`line`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-line
