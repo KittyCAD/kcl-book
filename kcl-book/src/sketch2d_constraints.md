@@ -25,8 +25,7 @@ When you're done, use the Camera Cube in the corner and select the "Right" face.
 
 ![Result of running program 1](images/static/first_triangle_constrained.png)
 
-Congratulations, you've sketched your first triangle! Rendering your first triangle is a [big deal in graphics programming](https://rampantgames.com/blog/?p=7745), and sketching your first triangle is a big deal in KCL. 
-Let's break this code down line-by-line and see how it corresponds to each step of sketching from above. Note that each step in creating this triangle uses the pipeline syntax `|>`. This means every function call is being piped into the next function call. 
+Congratulations, you've sketched your first triangle! Rendering your first triangle is a [big deal in graphics programming](https://rampantgames.com/blog/?p=7745), and sketching your first triangle is a big deal in KCL. Let's break this code down line-by-line and see what it's actually doing. 
 
 ### 1: Set KCL settings
 
@@ -37,7 +36,7 @@ This step is optional, but it's good practice. KCL lets you set a few settings a
 
 ### 2: Choose a plane
 
-In KCL, there's six basic built-in planes you can use. There's XY, YZ, XZ, and negative versions of each (-XY, -YZ and -XZ). These negative planes are in the exact same place as their matching positive planes, but treat the Z axis (in other words, the axis considered "up") as the opposite direction.
+In KCL, there are six basic built-in planes you can use. There's XY, YZ, XZ, and negative versions of each (-XY, -YZ and -XZ). These negative planes are in the exact same place as their matching positive planes, but treat the Z axis (in other words, the axis considered "up") as the opposite direction.
 
 ![Difference between XY and -XY planes](images/static/xy_vs_neg_xy.png)
 
@@ -57,9 +56,9 @@ Sketches contain geometry like lines, arcs, circles and points. In our example s
 
 For simple geometry, like a single triangle, manually positioning the endpoints of lines works just fine. But when you're making more complex shapes, it's hard to choose the positions of every point. Mechanical engineers rarely work out every point's true location in 3D space. Instead, they start with a few pieces of information -- some initial guesses -- and then they add more requirements in, letting their CAD suite tweak the geometry to meet these requirements. In other words, they _constrain_ their initial guesses.
 
-Let's start with a goal: sketching a rhombus. There's many ways to define a rhombus, but we'll use this definition: "a parallelogram in which the diagonals are perpendicular". Now, we could use a pen and paper to do some high-school geometry and work out where all 4 points of our rhombus go. But that's a waste of time. Let's just put some initial guesses in, and use KCL's built-in constraint solver to ensure we build a rhombus.
+Let's start with a goal: sketching a rhombus. There are many ways to define a rhombus, but we'll use this definition: "a parallelogram in which the diagonals are perpendicular". Now, we could use a pen and paper to do some high-school geometry and work out where all 4 points of our rhombus go. But that's a waste of time. Let's just put some initial guesses in, and use KCL's built-in constraint solver to ensure we build a rhombus.
 
-To start, we know our rhomubus will have 4 lines. So let's put in some rough guesses.
+To start, we know our rhombus will have 4 lines. So let's put in some rough guesses.
 
 ```kcl
 @settings(defaultLengthUnit = mm, kclVersion = 1.0)
@@ -76,7 +75,7 @@ This looks pretty similar to our earlier triangle example, with two big differen
 
 First, we're assigning each line to a _variable_. We've got 4 lines and 4 variables: `line1`, `line2`, `line3` and `line4`. This isn't strictly necessary yet -- each `line` call works just fine on its own, without being assigned to a variable, as you saw in the triangle example earlier. But assigning our geometry to variables lets us give the line a name. You can now refer to `line1` or `line2` later in your sketch block.
 
-Secondly, we're using the _var_ keyword. This means each line's endpoint is no longer an exact location! If we used `start = [1mm, 1mm]`, that means the line has to start at _exactly_ the point (1, 1), no changes allowed. But if you write `start = [var 1mm, var 1mm]`, then KCL is allowed to reposition your line later. That's exactly what we want. (1, 1) is just a starting guess for where the corner of our rhombus will be. We'll let the computer do the hard work of calculating the exact geometry for us. So we tell KCL it's OK to reposition this point's X and Y axis, by using `var` with each one.
+Secondly, we're using the _var_ keyword. This means each line's endpoint is no longer an exact location! If we used `start = [1mm, 1mm]`, that means the line has to start at _exactly_ the point (1, 1), no changes allowed. But if you write `start = [var 1mm, var 1mm]`, then KCL is allowed to reposition your line later. That's exactly what we want. (1, 1) is just a starting guess for where the corner of our rhombus will be. We'll let the computer do the hard work of calculating the exact geometry for us. So we tell KCL it's OK to reposition this point's X and Y axes, by using `var` with each one.
 
 So far, our geometry looks like this:
 
@@ -105,7 +104,7 @@ There, now our 4 lines form a quadrilateral.
 
 ![We made a quadrilateral](images/static/rhom1.png)
 
-What else do we know about a rhombus? Well, we know the opposite lines have to be parallel. So let's tell KCL that line1 and line 3 are parallel, via `parallel([line4, line2])`. Same for line 2 and line 4.
+What else do we know about a rhombus? Well, we know the opposite lines have to be parallel. So let's tell KCL that line1 and line 3 are parallel, via `parallel([line1, line3])`. Same for line 2 and line 4.
 
 ```kcl
 @settings(defaultLengthUnit = mm, kclVersion = 1.0)
@@ -142,7 +141,7 @@ coincident([diagonal2.start, line2.start])
 coincident([diagonal2.end, line3.end])
 ```
 
-We've marked these two diagonal lines as _construction geometry_. That means we don't want them to show up in the final render of our shape. We're only adding it to our sketch block for constraining other, real geometry. But it shouldn't actually make a selectable edge elsewhere in our design. If you view the sketch in Zoo Design Studio, construction geometry is drawn with dashed lines. Real geometry uses normal, full lines.
+We've marked these two diagonal lines as _construction geometry_. That means we don't want them to show up in the final render of our shape. We're only adding these lines to our sketch block for constraining other, real geometry. But it shouldn't actually make a selectable edge elsewhere in our design. If you view the sketch in Zoo Design Studio, construction geometry is drawn with dashed lines. Real geometry uses normal, full lines.
 
 ![Added the construction geometry diagonals](images/static/rhom2.png)
 
@@ -195,7 +194,7 @@ Now when KCL runs this program, it'll take the initial guesses for each point (m
 
 ## Conclusion
 
-We've learned how to use KCL to do some basic 2D shape definitions:
+We've learned how to use KCL to define 2D shapes:
 
  - Sketches are on some plane, and KCL includes standard planes XY, YZ and XZ (and their negative versions, which point the third axis down instead of up).
  - Start a sketch with a sketch block like `sketch(on = XY) { ... }`.
