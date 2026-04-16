@@ -2,84 +2,107 @@
 
 <!-- toc -->
 
-In the previous chapter, we sketched a basic triangle. In this chapter, we'll look at some more interesting kinds of sketches you can do, using more interesting kinds of paths.
+In the previous chapter, we sketched basic shapes, like a triangle and a rhombus. In this chapter, we'll look at some more interesting kinds of sketches you can do, using other KCL standard library functions.
 
-## Pills
+## Fixed arcs
 
-Let's sketch a pill shape, like a rectangle but with rounded edges. We can use tangential arcs for this. The [`tangentialArc`] function sketch a curved line -- specifically, an arc, or a subset of a circle -- starting from the previous line's end. It draws it at a smooth angle from the previous line, i.e. _tangent_ to the previous line.
-
-
-```kcl
-height = 4
-width = 8
-startSketchOn(XZ)
-  |> startProfile(at = [0, 0])
-  |> xLine(length = width)
-  |> tangentialArc(end = [0, height])
-  |> xLine(length = -width)
-  |> tangentialArc(endAbsolute = profileStart())
-```
-
-It should look like this:
-
-![A pill-shape made from xLines and tangentialArcs](images/static/pill_sketch.png)
-
-Let's analyze this! It looks very similar to the triangle we sketched previously, but we're using `tangentialArc`. You can see it takes a relative `end`, i.e. an X distance and Y distance to move from the current point. It draws a nice smooth arc there.
-
-We wrote this arc using `end`, i.e. an X and Y distance. But we could have defined this arc differently, using a `radius` and `angle` instead (or a `diameter` and `angle`). You can replace the `tangentialArc(end = [0, height])` with `tangentialArc(angle = 180, radius = height)` instead, and it should draw the same thing. 
+Let's sketch a pill shape, like a rectangle but with rounded edges. We'll need arcs for this! Let's start with a basic sketch with fixed size and position. We'll need two straight lines and two circular arcs.
 
 ```kcl
 height = 4
-width = 8
-startSketchOn(XZ)
-  |> startProfile(at = [0, 0])
-  |> xLine(length = width)
-  |> tangentialArc(diameter = height, angle = 180deg)
-  |> xLine(length = -width)
-  |> tangentialArc(endAbsolute = profileStart())
+width = 10
+pill = sketch(on = XY) {
+  bot = line(start = [0, 0], end = [width, 0])
+  top = line(start = [0, height], end = [width, height])
+  left = arc(start = [0, height], end = [0, 0], center = [0, height/2])
+  right = arc(start = [width, 0], end = [width, height], center = [width, height/2])
+}
 ```
 
-Here, the angle `180deg` is measuring a counterclockwise angle. To make the arc go the other direction (clockwise), you'd use `-180deg`.
+![A pill shape made from fixed arcs and lines](images/static/fixed_pill.png)
 
-The second `tangentialArc` call takes an absolute point. We tell it to draw an arc from the current point to the start of the profile. This should remind you of how straight lines can use either `end` (relative) or `endAbsolute`.
+In KCL, arcs always go counter-clockwise from their start to their end. This pill shape was very straightforward to code, but sketching it required me to use a pen and paper to figure out exactly where every point on the 2D plane was. The start and end of every arc and line had to be carefully calculated. Let's try letting KCL's constraint solver do the work for us instead. 
 
-## Spirals
+# Constrained arcs
 
-We can use tangential arcs to make a spiral too.
-
+We'll start again with two straight lines and two circular arcs, using some arbitrary values for each point's initial guess. I'm going to use Zoo Design Studio's UI to get these initial values, but you could guess them yourself, or do an approximate sketch on paper.
 
 ```kcl
-height = 100
-startSketchOn(XZ)
-  |> startProfile(at = [0, 0])
-  |> tangentialArc(angle = 180, radius = height)
-  |> tangentialArc(angle = 180, radius = height * 1.1)
-  |> tangentialArc(angle = 180, radius = height * 1.2)
-  |> tangentialArc(angle = 180, radius = height * 1.3)
-  |> tangentialArc(angle = 180, radius = height * 1.4)
-  |> tangentialArc(angle = 180, radius = height * 1.5)
-  |> tangentialArc(angle = 180, radius = height * 1.6)
-  |> tangentialArc(angle = 180, radius = height * 1.7)
+pill = sketch(on = YZ) {
+  line1 = line(start = [var -4.15mm, var 5.79mm], end = [var 0.72mm, var 5.85mm])
+  line2 = line(start = [var 0.92mm, var 4.16mm], end = [var -4.11mm, var 4.19mm])
+  arc1 = arc(start = [var -4.9mm, var 5mm], end = [var -4.53mm, var 4.2mm], center = [var -3.93mm, var 4.97mm])
+  arc2 = arc(start = [var 2.07mm, var 4.39mm], end = [var 1.96mm, var 5.77mm], center = [var 1.28mm, var 5.02mm])
+}
 ```
 
-It should look like this:
+Our first job is to connect these 4 segments together:
 
-![A spiral made from many tangential arcs](images/static/spiral.png)
+```kcl
+// Connect the 4 segments together
+coincident([arc1.start, line1.start])
+coincident([line1.end, arc2.end])
+coincident([arc2.start, line2.start])
+coincident([line2.end, arc1.end])
+```
 
-This works because each tangentialArc is drawing half a circle, away from the previous arc, and the circle is getting slightly larger each time. The `180` is a counterclockwise angle, so each time we draw a new arc, it bends around the circle counterclockwise.
+We know the pill should have parallel straight lines of equal length, so we'll add those constraints:
+
+```kcl
+parallel([line1, line2])
+equalLength([line1, line2])
+```
+
+We also want the two circular arcs to be the same radius, and to meet smoothly at the straight lines. So we'll add:
+
+```
+equalRadius([arc2, arc1])
+tangent([line1, arc1])
+tangent([line1, arc2])
+```
+
+Great! Our final shape should look like this:
+
+![A pill shape made from arcs](images/static/pill_sketch.png)
+
+```kcl
+pill = sketch(on = YZ) {
+  line1 = line(start = [var -4.18mm, var 5.88mm], end = [var 1.34mm, var 5.85mm])
+  line2 = line(start = [var 1.32mm, var 4.12mm], end = [var -4.19mm, var 4.15mm])
+  arc1 = arc(start = [var -4.18mm, var 5.88mm], end = [var -4.19mm, var 4.15mm], center = [var -4.18mm, var 5.01mm])
+  arc2 = arc(start = [var 1.32mm, var 4.12mm], end = [var 1.34mm, var 5.85mm], center = [var 1.33mm, var 4.99mm])
+  coincident([arc1.start, line1.start])
+  coincident([line1.end, arc2.end])
+  coincident([arc2.start, line2.start])
+  coincident([line2.end, arc1.end])
+  parallel([line1, line2])
+  equalLength([line1, line2])
+  equalRadius([arc2, arc1])
+  tangent([line1, arc1])
+  tangent([line1, arc2])
+}
+```
+
+This defines a nice pill shape. We could fix its position in 3D space by adding a `coincident()` constraint between the start of a line, and the origin (referred to in KCL as a built-in constant, `ORIGIN`). Or we could constrain the distance from some point to the origin with the built-in [`distance`], [`verticalDistance`] and [`horizontalDistance`] functions.
+
+
 
 ## Circles
 
 And lastly, let's look at the humble circle.
 
 ```kcl=basic_circle
-startSketchOn(XZ)
-  |> circle(center = [0, 0], radius = 10)
+myCircleSketch = sketch(on = XZ) {
+  circle1 = circle(start = [var 0mm, var 4mm], center = [var 0mm, var 0mm])
+}
 ```
 
 <!-- KCL: name=basic_circle,skip3d=true,alt=A simple circle-->
 
-The [`circle`] call takes `center` and `radius` arguments. Note that `circle` closes itself without any need for a `close()` call. That's because a circle is inherently closed -- it always starts and ends its own profile.
+The [`circle`] call takes `center` and `start` arguments. The `start` argument is just any point along the circle's circumference. It's helpful in the Zoo point-and-click sketching UI, because it lets you easily snap constraints like a distance to it. The circle's radius is defined implicitly by the distance from `center` to `start` point. 
 
 [`tangentialArc`]: <https://zoo.dev/docs/kcl-std/tangentialArc>
-[`circle`]: <https://zoo.dev/docs/kcl-std/functions/std-sketch-circle>
+[`verticalDistance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-verticalDistance>
+[`horizontalDistance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-horizontalDistance>
+[`distance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-distance>
+[`circle`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-circle>
