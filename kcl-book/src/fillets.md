@@ -1,4 +1,4 @@
-# Tags, Fillets and Chamfers
+# Fillets, Chamfers and Edges
 
 <!-- toc -->
 
@@ -351,23 +351,6 @@ angleC = segAng(extrude001.sketch.tags.line3)
 ```
 
 You can open up the Variables panel and view the relevant angles! There are other helpers too, like [`segStart`] and [`segEnd`] to find a line's start and end, respectively. Take a look at the KCL standard library docs to find them all.
-
-## Tags (deprecated)
-
-So far, we've been able to refer to geometric features (like edges) by using variables. But there's a second, more niche system KCL supports for referencing geometry, called _tags_. When Zoo launched, tags were used a lot more. These days, you probably won't ever need to use tags, because they've been mostly replaced by variables. There are still a _few_ cases where you'll need tags, but we're trying to replace them all with variables.
-
-
-So, we'll explain them in this section, for reference purposes. You can probably skip this part of the book and move on to the next chapter. If you ever need to know about tags, come back and read this.
-
-OK! Tags are very much like variables: a way to reference geometry. Except, you can use tags where you can't use a variable declaration. For example, say you're extruding a sketch, and you want to refer to the top or bottom face. When we call `mySolid = extrude(...)`, the variable `mySolid` refers to the _entire_ solid. How do we refer to some specific part of the solid, like the top face (at the end of the extrude)? Or the bottom face (i.e. the start of the extrude)?
-
-We can define _tags_, which are basically variables you declare _inside_ the function call instead of outside it. In this example, you could use `mySolid = extrude(myRegion, tagEnd = $topOfSolid)`. That declares a new tag called `topOfSolid`. Now you can use that tag later to refer to that specific face.
-
-The `$` means you're declaring a tag. So, `$top` _declares_ a tag called `top`. If you later use just `top`, you're _referring_ to a tag that already exists.
-
-Here's another example. Say you want to chamfer a cube, adding a new face. The `chamfer()` call returns the entire solid, so we don't have a clear way to refer to the new chamfered face. So, you can use `chamfer(tag = $newFace)` to tag the new face created via chamfering, and refer to it later.
-
-Again: generally you won't need to use this method, but if you need to, now you know how it works.
 
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`fillet`]: https://zoo.dev/docs/kcl-std/functions/std-solid-fillet

@@ -125,9 +125,25 @@ extrude002 = extrude(region002, length = 1)
 
 Great! These built-in face identifiers are always available on solids. We've learned how to sketch on the top, bottom and side faces. That covers all possible faces, right? Right? Not exactly! There's one more kind of face we haven't talked about yet. 
 
+## Tags
+
+When you [`chamfer`] an edge, it creates a new face, which can also be sketched on! But before we do, we've got to take a quick detour and talk about tags.
+
+When Zoo launched, tags were used a lot. These days, you probably won't ever need to use tags very much, if at all, because they've been mostly replaced by variables. There are still a _few_ cases where you'll need tags, and sketching on a chamfered face is one of them. We're trying to phase them out, but we haven't finished that job yet.
+
+So far, we've been able to refer to geometric features (like edges and faces) by using variables. But tags let you refer to geometry that isn't assigned to a variable. For example, take the chamfered face created by a `chamfer(myRegion)` call. When we call `mySolid = chamfer(myRegion, length = 1)` the variable `mySolid` refers to the _entire_ solid, including the chamfered face. How do we refer to some specific face, like the chamfered face? 
+
+The solution: we use `mySolid = chamfer(myRegion, length = 1, tag = $myFace)`. That tags the face, so we can refer to it later as `myFace`. You can think of this like declaring a variable inside the function, when it executes. The `$` means you're declaring a tag. So, `$myFace` _declares_ a tag called `myFace`. If you later use just `myFace`, you're _referring_ to a tag that already exists.
+
+Here's another example. Say you extrude a square into a cube. As discussed above, the top of the cube can be referred to with the standard face `END`. You can sketch on that top face via `sketch(on = faceOf(extrude001, face = END))`. Say you extrude a cylinder from the cube. How do you sketch on the top face of the cylinder? Does `END` refer to the cylinder, or the cube?
+
+You can use `extrude(mySketch, tagEnd = $endOfCylinder)` to disambiguate these. Again, this defines a tag as part of the extrude, which refers to a particular face. Then you can use that tag later when you need to use the face.
+
+Generally you won't need to use this method, but there are some niches where it's helpful.
+
 ## Sketch on chamfer
 
-When you [`chamfer`] an edge, it creates a new face, which can also be sketched on! Consider this chamfered cube from the previous chapter:
+Now that we understand tags, we can use them to sketch on a chamfer! When you [`chamfer`] an edge, it creates a new face, which can also be sketched on! Consider this chamfered cube from the previous chapter:
 
 ```kcl=chamfered_cube
 // Same as previous examples
@@ -193,7 +209,7 @@ extrude001 = extrude(region001, length = 0.4)
 
 <!-- KCL: name=sketch_on_chamfered_cube,alt=Chamfered cube with cylinder sketched on the chamfered face-->
 
-So far, we've sketched on standard planes (like XY), on faces based on edges, and on standard faces like END. There's one more place you can start sketching on: a custom plane. Let's learn how.
+So far, we've sketched on standard planes (like XY), on faces based on edges, and on standard faces like END. There's one more place you can start sketching on: a custom plane. We'll learn how in the next chapter.
 
 ## Defining new planes
 
