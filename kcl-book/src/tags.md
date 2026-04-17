@@ -8,112 +8,121 @@ When you manufacture a part, you often want to smooth off its sharp edges, so th
 Let's say we're modeling a cube, like this:
 
 ```kcl=cube_no_fillets
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0])
-  |> line(end = [0, length])
-  |> line(end = [-length, 0])
-  |> line(end = [0, -length])
-  |> close()
-  |> extrude(length = length)
+// Sketch a square
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+
+// Extrude a cube.
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
 ```
 
 It produces a cube like this:
 
 <!-- KCL: name=cube_no_fillets,alt=A cube -->
 
-What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four `line` calls. How can we refer back to them? Usually, to use some data in an operation, we just put that data into a variable, and pass it into a function. That won't work here, because the data is in a pipeline. So what do we do?
-
-## Tagging edges
-
-Simple: we _tag_ the line. A _tag_ is a reference to some data. Let's declare our first tag. We'll modify the above program by adding a tag to one of the lines, like this:
-
-```kcl
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $side)     // <- Add the `tag` argument here!
-  |> line(end = [0, length])
-  |> line(end = [-length, 0])
-  |> line(end = [0, -length])
-  |> close()
-  |> extrude(length = length)
-```
-
-You declare a tag with a dollar sign, followed by its name, like `$side`. This is a new data type, called a TagDeclarator. TagDeclarators can be passed around just like any other kind of data (number, string, etc). Tagging a line is very similar to declaring a variable. Both tags and variables store data, which can be referenced later. Many KCL functions have an optional `tag` argument, including all the path-creating functions we've seen, like `line`, `tangentialArc`, `xLine`, etc.
-
-Let's use this tag to make a fillet. Add the line `|> fillet(radius = 5, tags = [side])` to the end of the previous program:
-
+What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four `line` calls, which were all assigned to variables. So we use those variables to refer back to an edge, and apply a fillet to it.
 ```kcl=cube_one_fillet
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $side)
-  |> line(end = [0, length])
-  |> line(end = [-length, 0])
-  |> line(end = [0, -length])
-  |> close()
-  |> extrude(length = length)
-  |> fillet(radius = 5, tags = [side])
+// Sketch a square
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+
+// Extrude a cube.
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Fillet one edge
+filletCube = fillet(extrudeCube, tags = line1, radius = 0.2)
 ```
 
-The [`fillet`] function accepts an argument `tags`, which expects an array of one or more tags. Note that we passed in `side`, not `$side`. The latter would be declaring a new tag, but we actually want to _reference_ an _existing_ tag. So we didn't use the `$`.
+The [`fillet`] function accepts an argument `tags`, which expects edges to fillet. You can pass in a single edge, like we did, or an array of edges like `[line1, line2]`.
 
 That program should produce a cube with one filleted edge, like this:
 
 <!-- KCL: name=cube_one_fillet,alt=A cube with one filleted edge -->
 
-Nice! We could tag and fillet all four sides if we wanted to:
+Nice! We could fillet all four sides if we wanted to:
 
 ```kcl=cube_four_fillets
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $a)
-  |> line(end = [0, length], tag = $b)
-  |> line(end = [-length, 0], tag = $c)
-  |> line(end = [0, -length], tag = $d)
-  |> close()
-  |> extrude(length = length)
-  |> fillet(radius = 5, tags = [a, c, b, d])
+// Sketch a square
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+
+// Extrude a cube.
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Fillet one edge
+filletCube = fillet(extrudeCube, tags = [line1, line2, line3, line4], radius = 0.2)
 ```
 
 <!-- KCL: name=cube_four_fillets,alt=A cube with four filleted edges-->
 
 ## Relationships between edges
 
-We've seen how to tag edges, and reference those tags later to alter edges. What about edges we don't create directly? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via `line` calls. They're created by the CAD engine in the `extrude` call. If we didn't explicitly create them with a sketch function, how do we tag them? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we tagged the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
+So far, we've assigned geometry (like a line) to a variable when we create it, and then use that variable to refer to it later (for fillets). What about edges we don't create directly, and therefore can't assign to a variable? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via `line` calls. They're created by the CAD engine in the `extrude` call. If we didn't explicitly create them with a sketch function, how do we store them in a variable? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we can refer to the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
 
 
 ```kcl=cube_two_opposite_fillets
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $side)
-  |> line(end = [0, length])
-  |> line(end = [-length, 0])
-  |> line(end = [0, -length])
-  |> close()
-  |> extrude(length = length)
-  |> fillet(radius = 5, tags = [side, getOppositeEdge(side)])
+// This is all the same as previous examples.
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Note that here we're using `getOppositeEdge`.
+filletCube = fillet(extrudeCube, tags = [line1, getOppositeEdge(line1)], radius = 0.2)
 ```
 
 <!-- KCL: name=cube_two_opposite_fillets,alt=Cube with one filleted edge on the bottom and the opposite top edge too-->
 
-We can fillet all four top edges by tagging all four bottom edges, and then using [`getOppositeEdge`] on each:
+We can fillet all four top edges by using [`getOppositeEdge`] on each:
 
 ```kcl=cube_eight_fillets
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $a)
-  |> line(end = [0, length], tag = $b)
-  |> line(end = [-length, 0], tag = $c)
-  |> line(end = [0, -length], tag = $d)
-  |> close()
-  |> extrude(length = length)
-  |> fillet(radius = 5, tags = [a, c, b, d, getOppositeEdge(a), getOppositeEdge(c), getOppositeEdge(b), getOppositeEdge(d)])
+// Sketch a square
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+
+// Extrude a cube
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Fillet edges
+filletCube = fillet(
+  extrudeCube,
+  tags = [
+    getOppositeEdge(line1),
+    getOppositeEdge(line2),
+    getOppositeEdge(line3),
+    getOppositeEdge(line4)
+  ],
+  radius = 0.2,
+)
 ```
 
 <!-- KCL: name=cube_eight_fillets,alt=Cube with all top and bottom edge fillets-->
@@ -121,49 +130,61 @@ cube = startSketchOn(XY)
 So, we've filleted the bottom horizontal edges, and the top horizontal edges. What about the vertical side edges, which connect the top and bottom face? We can use [`getNextAdjacentEdge`] and [`getPreviousAdjacentEdge`] to reference them:
 
 ```kcl=cube_next_prev_fillets
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $a)
-  |> line(end = [0, length], tag = $b)
-  |> line(end = [-length, 0], tag = $c)
-  |> line(end = [0, -length], tag = $d)
-  |> close()
-  |> extrude(length = length)
-  |> fillet(
-       radius = 2,
-       tags = [
-         a,
-         getNextAdjacentEdge(a),
-         getPreviousAdjacentEdge(a)
-       ],
-     )
+// Sketch a square
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+
+// Extrude a cube
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Fillet edges
+filletCube = fillet(
+  extrudeCube,
+  tags = [
+    line1,
+    getNextAdjacentEdge(line1),
+    getPreviousAdjacentEdge(line1),
+  ],
+  radius = 0.2,
+)
 ```
 
 <!-- KCL: name=cube_next_prev_fillets,alt=Cube with two side fillets and one bottom-->
 
-Here, we filleted the bottom side `a` just like we did before. But we've also filleted the sides adjacent to it. We can use a similar trick to fillet all four vertical side edges:
+Here, we filleted the bottom side, `line1` just like we did before. But we've also filleted the sides adjacent to it. One side is "before" line1, one side is "after" line1, in Zoo's internal tracking of edges. We can use a similar trick to fillet all four vertical side edges:
 
 
 ```kcl=cube_next_prev_fillets_all_sides
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $a)
-  |> line(end = [0, length], tag = $b)
-  |> line(end = [-length, 0], tag = $c)
-  |> line(end = [0, -length], tag = $d)
-  |> close()
-  |> extrude(length = length)
-  |> fillet(
-       radius = 2,
-       tags = [
-         getNextAdjacentEdge(a),
-         getPreviousAdjacentEdge(a),
-         getNextAdjacentEdge(c),
-         getPreviousAdjacentEdge(c),
-       ],
-     )
+// Sketch a square
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+
+// Extrude a cube
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Fillet edges
+filletCube = fillet(
+  extrudeCube,
+  tags = [
+    getNextAdjacentEdge(line1),
+    getPreviousAdjacentEdge(line1),
+    getNextAdjacentEdge(line2),
+    getPreviousAdjacentEdge(line3),
+  ],
+  radius = 0.2,
+)
 ```
 
 <!-- KCL: name=cube_next_prev_fillets_all_sides,alt=Cube with two side fillets and one bottom fillet-->
@@ -173,38 +194,45 @@ cube = startSketchOn(XY)
 A [`chamfer`] is just like a fillet, except that fillets smooth away an edge to make it round, but chamfers just make a single cut across an edge. Here's an example of the difference. Compare this chamfered cube with the filleted cubes above:
 
 ```kcl=chamfered_cube
-length = 20
-cube = startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $a)
-  |> line(end = [0, length], tag = $b)
-  |> line(end = [-length, 0], tag = $c)
-  |> line(end = [0, -length], tag = $d)
-  |> close()
-  |> extrude(length = length)
-  |> chamfer(
-       length = 2,
-       tags = [
-         getOppositeEdge(a),
-       ],
-     )
+// Same as previous examples
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width)
+
+// Apply a chamfer
+chamferedCube = chamfer(extrudeCube, tags = [getOppositeEdge(line1)], length = 0.2)
 ```
 
 <!-- KCL: name=chamfered_cube,alt=A chamfered cube-->
 
-So we've learned to use tags to reference the lines we create, then use helper functions like [`getOppositeEdge`] to reference other geometry elsewhere in the model. But tags aren't just used for altering edges. They provide a valuable way to query and measure your models. Let's see how.
+So we've learned to use variables from sketch blocks to reference the lines we create, then use helper functions like [`getOppositeEdge`] to reference other geometry elsewhere in the model. But these variables aren't just used for altering edges. They provide a valuable way to query and measure your models. Let's see how.
 
-## Measuring with tags
+## Measuring geometry
 
-Let's say you've got a triangle, like this:
+Let's say you've got a solid triangle, like this:
 
 ```kcl
-length = 20
-startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0])
-  |> line(end = [length, length * 2])
-  |> line(endAbsolute = profileStart())
+// Make a triangle
+sketch001 = sketch(on = YZ) {
+  line1 = line(start = [var 5.29mm, var -4.11mm], end = [var -4.31mm, var -4.11mm])
+  line2 = line(start = [var -4.31mm, var -4.11mm], end = [var 0.49mm, var 5.14mm])
+  coincident([line1.end, line2.start])
+  line3 = line(start = [var 0.49mm, var 5.14mm], end = [var 5.29mm, var -4.11mm])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line1.start])
+  equalLength([line2, line3])
+  horizontal(line1)
+}
+
+// Extrude it
+region001 = region(point = [0.49mm, -4.1075mm], sketch = sketch001)
+extrude001 = extrude(region001, length = 1)
 ```
 
 Let's ask a simple question. How long is each side of the triangle?
@@ -214,16 +242,25 @@ It sounds simple, but to actually calculate it, you'd have to break out a pencil
 However, tags give us a simple way to refer to each line, and then query them for properties like length with the [`segLen`] function. Let's update our program:
 
 ```kcl
-length = 20
-startSketchOn(XY)
-  |> startProfile(at = [-length, -length])
-  |> line(end = [length, 0], tag = $a)
-  |> line(end = [length, length * 2], tag = $b)
-  |> line(endAbsolute = profileStart(), tag = $c)
+// Make a triangle
+sketch001 = sketch(on = YZ) {
+  line1 = line(start = [var 5.29mm, var -4.11mm], end = [var -4.31mm, var -4.11mm])
+  line2 = line(start = [var -4.31mm, var -4.11mm], end = [var 0.49mm, var 5.14mm])
+  coincident([line1.end, line2.start])
+  line3 = line(start = [var 0.49mm, var 5.14mm], end = [var 5.29mm, var -4.11mm])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line1.start])
+  equalLength([line2, line3])
+  horizontal(line1)
+}
+// Extrude it
+region001 = region(point = [0.49mm, -4.1075mm], sketch = sketch001)
+extrude001 = extrude(region001, length = 1)
 
-lenA = segLen(a)
-lenB = segLen(b)
-lenC = segLen(c)
+// Measure its side lengths
+side1Len = segLen(line1)
+side2Len = segLen(line2)
+side3Len = segLen(line3)
 ```
 
 Now you can open up the Variables pane and look at the `lenA`, `lenB` and `lenC` variables to find each side's length. That's pretty useful! And if you want to use those lengths elsewhere in your code, you can! You could start drawing lines where the end is `[lenA, 0]` for example, or plug those lengths into other calculations. 
@@ -231,20 +268,40 @@ Now you can open up the Variables pane and look at the `lenA`, `lenB` and `lenC`
 KCL has several other helper functions, like [`segAng`], which helps you find the angle between two lines. Let's measure the angles in a right-angle triangle:
 
 ```kcl
-startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> xLine(length = 20)
-  |> yLine(length = 10, tag = $b)
-  |> line(endAbsolute = profileStart(), tag = $c)
+// Make a triangle
+sketch001 = sketch(on = YZ) {
+  line1 = line(start = [var 4.87mm, var -3.93mm], end = [var -4.13mm, var -3.97mm])
+  line2 = line(start = [var -4.13mm, var -3.97mm], end = [var -4.16mm, var 3.03mm])
+  line3 = line(start = [var -4.16mm, var 3.03mm], end = [var 4.87mm, var -3.93mm])
+  perpendicular([line2, line1])
+  coincident([line3.start, line2.end])
+  coincident([line2.start, line1.end])
+  coincident([line1.start, line3.end])
+  distance([line2.start, line2.end]) == 7
+  distance([line1.start, line1.end]) == 9
+}
+region001 = region(point = [0.3702057mm, -3.9475671mm], sketch = sketch001)
+extrude001 = extrude(region001, length = 1)
 
-angleB = segAng(b)
-angleC = segAng(c)
+angleA = segAng(line1)
+angleB = segAng(line2)
+angleC = segAng(line3)
 ```
 
 You can open up the Variables panel and view the relevant angles! There are other helpers too, like [`segStart`] and [`segEnd`] to find a line's start and end, respectively. Take a look at the KCL standard library docs to find them all.
 
+## Tags (deprecated)
 
-KCL's tagging system is simple, but powerful. It lets you build up a model (like a cube) from a simple flat shape (your square) and a transformation (like extrusion). Although the transformations create a lot of geometry (for instance, this single extrude call creates 8 edges and five faces), you don't need verbose, complicated labels for all of these features. Instead, you can tag the geometry you've explicitly created, and use simple functions like [`getOppositeEdge`] to reference related geometry. This is much easier than trying to label every edge and face in a model. In the next chapter, we'll explore more interesting uses of tags, like starting new sketches from existing 3D models.
+So far, we've been able to refer to geometric features (like edges) by using variables. But there's a second, more niche system KCL supports for referencing geometry, called _tags_. When Zoo launched, tags were used a lot more. These days, you probably won't ever need to use tags, because they've been mostly replaced by variables. There are still a _few_ cases where you'll need tags, but we're trying to replace them all with variables.
+
+
+So, we'll explain them in this section, for reference purposes. You can probably skip this part of the book and move on to the next chapter. If you ever need to know about tags, come back and read this.
+
+OK! Tags are very much like variables: a way to reference geometry. Except, you can use tags where you can't use a variable declaration. For example, say you're extruding a sketch, and you want to refer to the top or bottom face. When we call `mySolid = extrude(...)`, the variable `mySolid` refers to the _entire_ solid. How do we refer to some specific part of the solid, like the top face (at the end of the extrude)? Or the bottom face (i.e. the start of the extrude)?
+
+We can define _tags_, which are basically variables you declare _inside_ the function call instead of outside it. In this example, you could use `mySolid = extrude(myRegion, tagEnd = $topOfSolid)`. That declares a new tag called `topOfSolid`. Now you can use that tag later to refer to that specific face.
+
+The `$` means you're declaring a tag. So, `$top` _declares_ a tag called `top`. If you later use just `top`, you're _referring_ to a tag that already exists.
 
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`fillet`]: https://zoo.dev/docs/kcl-std/functions/std-solid-fillet
