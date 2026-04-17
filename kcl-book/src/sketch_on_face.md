@@ -204,10 +204,25 @@ triangle = sketch(on = faceToSketchOn) {
 }
 region001 = region(point = [-0.2834107mm, 0.3980702mm], sketch = triangle)
 extrude001 = extrude(region001, length = 0.4)
-
 ```
 
 <!-- KCL: name=sketch_on_chamfered_cube,alt=Chamfered cube with cylinder sketched on the chamfered face-->
+
+## Updating bodies, or creating new bodies?
+
+When you extrude a sketch from a face, you could be trying to do one of two things:
+
+ - Mutating the original body, by adding a new extrusion to it
+ - Creating a totally new body, which just happens to be touching the previous body.
+
+Here's an example. Say you extrude a square into a cube, and then you extrude a cylinder out of the cube. Should the cylinder be its own separate body? Or should there be a single body, with a cube volume and a cylindrical volume? Here's a visual:
+
+![The two kinds of extruded sketch-on-face](images/static/extrude_method.png)
+
+By default, extruding a sketch which was sketched on a face will _merge_ the extrusion into the original body. In other words, the example on the left. But you can choose to make a _new_ body instead (the example on the right). You can choose between this by setting the _extrude method_.
+
+ - Use `extrude(method = MERGE)` (the default) to update the original solid.
+ - Use `extrude(method = NEW)` (an optional override) to create a new solid instead.
 
 Now we've learned how to sketch on all sorts of things:
 
