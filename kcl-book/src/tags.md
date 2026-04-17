@@ -235,7 +235,11 @@ edge = getCommonEdge(faces = [
 fillet(extrudeCube, tags = edge, radius = 0.2)
 ```
 
-The `getCommonEdge` function takes a list of faces, and returns the edge that is shared between them -- their _common_ edge. This is a pretty useful function, because usually it's easier to reference and name faces rather than edges.
+`getCommonEdge` takes a list of faces, and returns the edge that is shared between them -- their _common_ edge. This is a pretty useful function, because usually it's easier to reference and name faces rather than edges.
+
+Notice in this example that the list of `faces` looks like a list of edges. We're passing in `line1` and `line2`, which we used to reference edges in the above examples. That's because KCL recognizes that `extrude` creates a face out of each edge (imagine each edge being dragged upwards, to create a face).
+
+There are other ways to refer to faces, but we'll see them later in this book.
 
 ## Chamfers
 
