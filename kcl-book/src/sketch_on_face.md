@@ -209,125 +209,16 @@ extrude001 = extrude(region001, length = 0.4)
 
 <!-- KCL: name=sketch_on_chamfered_cube,alt=Chamfered cube with cylinder sketched on the chamfered face-->
 
-So far, we've sketched on standard planes (like XY), on faces based on edges, and on standard faces like END. There's one more place you can start sketching on: a custom plane. We'll learn how in the next chapter.
-
-## Defining new planes
-
-We've previously sketched on standard planes like XY (remember, there are six -- XY, YZ, XZ, -XY, -YZ and -XZ). But you can easily define your own planes too! There's two ways:
-
-### Offset planes
-
-You can use the [`offsetPlane`] function to copy any other plane, but moved some direction up or down the third axis. For example, let's draw a small circle on XY, a medium circle on a plane 10 units above it, and a big circle 20 units above it.
-
-```kcl=three_offset_planes
-r = 10
-sketch001 = sketch(on = XY) {
-  circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
-  coincident([circle1.center, ORIGIN])
-  line1 = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
-  coincident([line1.start, circle1.start])
-  coincident([line1.end, circle1.center])
-  distance([line1.start, line1.end]) == r
-  vertical(line1)
-}
-
-// Note the `offsetPlane` call!
-sketch002 = sketch(on = offsetPlane(XY, offset = 10)) {
-  circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
-  coincident([circle1.center, ORIGIN])
-  line1 = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
-  coincident([line1.start, circle1.start])
-  coincident([line1.end, circle1.center])
-  distance([line1.start, line1.end]) == r * 2
-  vertical(line1)
-}
-
-// Another `offsetPlane` call, offset even further!
-sketch003 = sketch(on = offsetPlane(XY, offset = 20)) {
-  circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
-  coincident([circle1.center, ORIGIN])
-  line1 = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
-  coincident([line1.start, circle1.start])
-  coincident([line1.end, circle1.center])
-  distance([line1.start, line1.end]) == r * 3
-  vertical(line1)
-}
-```
-
-<!-- KCL: name=three_offset_planes,alt=Circles on the XY plane and 10 above it and 20 above it-->
-
-Offset planes are a quick and easy way to create new planes by using some other plane as a template. But what if you want to create a plane that actually points in a different direction, i.e. has different axes? What if you wanted to create a plane that was pointing at an unusual angle from the global X Y and Z axes? Let's try it.
-
-### Custom planes
-
-You can define your own plane with your own axes like this:
-
-```kcl
-customPlane = {
-  origin = { x = 0, y = 1, z = 0},
-  xAxis = { x = 1, y = 0, z = 0 },
-  yAxis = { x = 0, y = 0, z = 1 },
-}
-```
-
-Note the custom plane has a few properties:
-
- - An origin, which is a 3D point in space, using the global coordinate system (i.e. it's relative to the overall scene)
- - X and Y axes, which are defined as vectors
-
-The plane's Z axis is the cross product of its X and Y axes. It's uniquely determined, so you don't need to specify it.
-
-Now let's use this custom plane in a sketch. We'll build two identical cylinders, but one is on the standard XY plane, and one is on the custom plane we defined above.
-
-```kcl=custom_plane
-customPlane = {
-  origin = {
-    x = 0,
-    y = 0,
-    z = 0
-  },
-  xAxis = { x = 1, y = 0.5, z = 0 },
-  yAxis = { x = 0, y = 0.5, z = 1 }
-}
-
-sketch001 = sketch(on = customPlane) {
-  circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
-  coincident([circle1.center, ORIGIN])
-  line1 = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
-  coincident([line1.start, circle1.start])
-  coincident([line1.end, circle1.center])
-  distance([line1.start, line1.end]) == 1
-  vertical(line1)
-}
-```
-
-<!-- KCL: name=custom_plane,alt=One cylinder on XY plane and another on a custom plane-->
-
-Great! Custom planes give you a lot of power and flexibility. You can draw sketches in any orientation now. But they can be a bit verbose and complicated to define, so you should use [`offsetPlane`] if you've already defined a plane on the same X and Y axis. You can even combine `offsetPlane` and custom planes, like this:
-
-```kcl
-// Make a custom plane.
-customPlane = {
-  origin = { x = 0, y = 1, z = 0},
-  xAxis = { x = 1, y = 0, z = 0 },
-  yAxis = { x = 0, y = 0, z = 1 },
-}
-// Now offset it 20 up its normal axis.
-newPlane = offsetPlane(customPlane, offset = 20)
-```
-
 Now we've learned how to sketch on all sorts of things:
 
  - Standard planes like XY or -XZ
  - Tagged faces of existing solids
  - Top or bottom faces of solids, using [`START`] and [`END`]
  - Chamfered faces cut out of solids, by tagging the [`chamfer`] call
- - Custom planes (truly custom, or just offset from an existing plane)
 
-This gives you a lot of flexibility in building your solids. Now it's time to learn what else we can do with these solids. The next chapter will teach you how to combine and transform them!
+There's one more thing we can sketch on: custom planes. Let's learn more about planes in the next chapter.
 
 [`END`]: <https://zoo.dev/docs/kcl-std/consts/std-END>
 [`START`]: <https://zoo.dev/docs/kcl-std/consts/std-START>
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`faceOf`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-faceOf
-[`offsetPlane`]: <https://zoo.dev/docs/kcl-std/functions/std-offsetPlane>

@@ -16,6 +16,7 @@
 - [Creating 3D shapes](./sketch3d.md)
 - [Fillets, Chamfers and Edges](./fillets.md)
 - [Sketch on face](./sketch_on_face.md)
+- [Planes](./planes.md)
 - [Transforming 3D solids](./transform_3d.md)
 - [Combining 3D solids](./csg.md)
 - [Patterns](./patterns.md)
