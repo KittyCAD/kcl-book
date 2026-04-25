@@ -169,11 +169,9 @@ Replacing specific KCL code for a specific design with a parametric function giv
 
 Functions can also be used to avoid writing the same code over and over again, in a single model. Sketch blocks can be quite long, because each constraint is typically on its own line, and complex models have a lot of constraints. Even just drawing a simple cube takes 16 lines of code: 4 to create lines, 4 to join those lines together via `coincident` constraints, and then 8 more to make the quadrilateral into a square of the chosen side length.
 
-<!-- KCL: name=cube_textures,skip3d=true,alt=Three cubes with different textures-->
-
 If we wanted to make 3 cubes, we shouldn't copy and paste this code 3 times. That would be annoying to read. We could use the `clone()` function to copy the cube, and then use transform functions like `translate()` or `appearance()` to tweak the cube. But we could also make a reusable `cube` helper function, like this.
 
-```kcl
+```kcl=two_cubes_purple_blue
 /// Helper function to make a 3D cube with the given length and position along X.
 fn cube(sideLen, offset) {
   sketch001 = sketch(on = XY) {
@@ -208,6 +206,8 @@ cube(sideLen = 2, offset = 2)
 cube(sideLen = 1, offset = 5)
   |> appearance(color = "#d205e1", metalness = 70, roughness = 40)
 ```
+
+<!-- KCL: name=two_cubes_purple_blue,alt=Two cubes created with the same cube function call.-->
 
 This is neater than copying and pasting the code to make 3 separate cubes, and it lets us have more control over the cube than using `clone()` and `translate()`. If we wanted to, say, tweak the height of each cube, we could add a new parameter `height` to our `cube` function. Or we could just alter the extrude length in the function body.
 
