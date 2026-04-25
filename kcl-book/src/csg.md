@@ -154,7 +154,7 @@ cubeBlue = clone(cubeGreen)
   |> appearance(color = "#222299")
 
 // Apply a CSG operation.
-both = subtact(cubeGreen, tools = [cubeBlue])
+both = subtract(cubeGreen, tools = [cubeBlue])
 ```
 
 <!-- KCL: name=two_cubes_subtraction,skip3d=true,alt=Green cube with blue cube subtracted-->
@@ -202,8 +202,8 @@ both = subtract(cubeGreen, tools = [cubeBlue, cubeBlue2])
 
 There's a few arguments you can set for these functions:
 
- - **tolerance** is a measure of how accurate the underlying 3D combination algorithms are. A tolerance of 0.1 means the algorithm is very inaccurate, but very fast. A tolerance of 0.000000001 makes the algorithm much more accurate, but slower. This is set to a sensible default, but you might need to change it for models with very precise, very small features.
- - **legacyMethod** lets you opt back into an older version of Zoo's geometry engine which used a different algorithm for CSG. We don't recommend setting this, and it will be removed at some point in the future.
+ - `tolerance` is a measure of how accurate the underlying 3D combination algorithms are. A tolerance of 0.1 means the algorithm is very inaccurate, but very fast. A tolerance of 0.000000001 makes the algorithm much more accurate, but slower. This is set to a sensible default, but you might need to change it for models with very precise, very small features.
+ - `legacyMethod` lets you opt back into an older version of Zoo's geometry engine which used a different algorithm for CSG. We don't recommend setting this, and it will be removed at some point in the future.
 
 [Wikipedia's article on boolean operations]: https://en.wikipedia.org/wiki/Set_(mathematics)#Basic_operations
 [`intersect`]: https://zoo.dev/docs/kcl-std/functions/std-solid-intersect
