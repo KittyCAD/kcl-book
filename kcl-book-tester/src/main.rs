@@ -91,7 +91,7 @@ fn render_snapshot(program: String, name: &str, book_dir: Utf8PathBuf, mode: Mod
 
     // Render PNG
     let mut cmd = Command::new("zoo")
-        .args(["kcl", "snapshot", "-", png_dst.as_ref()])
+        .args(["kcl", "snapshot", "--angle", "iso", "-", png_dst.as_ref()])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()
