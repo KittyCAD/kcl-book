@@ -63,6 +63,13 @@ and it contains two closed shapes (a triangle and a square) as well as other lin
 
 Once you have a region of 2D space, you can turn that 2D space into 3D. We use the [`extrude`] function to take a region and say, "extrude it up into the 3rd dimension". `extrude` takes a distance, which is how far along the third axis to extrude. Every plane has a _normal_, or an axis which is _tangent_ to the plane. For the plane XZ, this is the Y axis. This normal, or tangent, or axis perpendicular to the plane, is the direction that extrudes go along.
 
+### Advanced extrude options
+
+ - `bidirectionalLength = <number>`: In addition to extruding up by `length`, also extrude _down_ by this much.
+ - `symmetric = true`: Instead of extruding up by `length`, extrude up half the length, and down half the length.
+ - `to = <target>`: Set a target (you can use a point, axis, plane, edge, face, sketch or solid), and this will extrude until it makes the solid reach the target (or as close as it can possibly get).
+ - `twistAngle = 30deg`: While extruding, twist the sketch around its center. Or choose some other point to twist around, via `twistCenter`. Change the twist speed with `twistAngleStep`.
+
 ## Sweep
 
 An extrude takes some 2D region and drags it up in a straight line along the normal axis. A _sweep_ is like an extrude, but the shape isn't just moved along a straight line: it could be moved along any path. Let's reuse our previous pill-shape example, but this time we'll sweep it instead of extruding it. First, we have to define a path that the sweep will take. Let's add one:
