@@ -9,19 +9,38 @@ Remember in school, when you learned about Venn diagrams? How you can take the _
 
 ![Union, intersection and complement on 2D circles](images/static/boolean_2d_ops.png)
 
-We can perform similar operations on 3D solids in KCL. Let's see how. Here's two cubes.
+We can perform similar operations on 3D solids in KCL. They're sometimes called "3D booleans", because they perform the standard boolean set operations, but on 3D bodies. They're also known as "constructive solid geometry" operations (CSG) because they let you take existing solid geometory, and construct new geometries from them.
+
+Let's see how these operations work. Here's two cubes.
 
 ```kcl=two_cubes
-length = 20
-cubeGreen = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> extrude(length = length)
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
+
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cubeGreen = extrude(region001, length = 5)
   |> appearance(color = "#229922")
 
-cubeBlue = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> translate(x = 10, z = 10)
-  |> extrude(length = length)
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
   |> appearance(color = "#222299")
 ```
 
@@ -30,25 +49,40 @@ cubeBlue = startSketchOn(XY)
 That's what it looks like _before_ we apply any CSG operations. Now let's see what happens when we use KCL's [`union`], [`intersect`] and [`subtract`] functions on these. Firstly, let's do a union. This should create a new solid which combines both input solids. 
 
 ```kcl=two_cubes_union
-length = 20
-cubeGreen = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> extrude(length = length)
-  |> appearance(color = "#229922")
+// This part is unchanged from previous examples.
+sketch001 = sketch(on = XY) {
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-cubeBlue = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> translate(x = 10, z = 10)
-  |> extrude(length = length)
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cubeGreen = extrude(region001, length = 5)
+  |> appearance(color = "#229922")
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
   |> appearance(color = "#222299")
 
-// Boolean operations on the two cubes
+// Apply a CSG operation.
 both = union([cubeGreen, cubeBlue])
 ```
 
 <!-- KCL: name=two_cubes_union,skip3d=true,alt=Two gray cubes just like the previous picture-->
 
-Of course, this [`union`] of our two cubes has the exact same dimensions and position as the two cubes. So it looks the exact same. What's the point of doing this? Well, for a start, we can use transforms like `appearance` or `rotate` on the single unified shape. Previously we needed to transform each part separately, which can get annoying. Now that it's a single shape, transformations will apply to the whole thing -- both the first cube's volume, and the second cube's.
+This [`union`] of our two cubes has the exact same dimensions and position as the two cubes, but they've been combined into one solid body. The resulting solid inherits the green appearance of the first body in the union (if you swapped the order to `[cubeBlue, cubeGreen]` instead, the final solid would be blue).
+
+What's the point of doing this? Now we can use transforms like `appearance` or `rotate` on the single unified solid. Previously we needed to transform each part separately, which can get annoying. Now that it's a single body, transformations will apply to the whole thing -- both the first cube's volume, and the second cube's.
 
 **Note**: Instead of writing `union([cubeGreen, cubeBlue])` you can use the shorthand `cubeGreen + cubeBlue` or `cubeGreen | cubeBlue`. This is a nice little shorthand you can use if you want to.
 
@@ -56,19 +90,32 @@ Let's try an intersection. This combines both cubes, but leaves only the volume 
 
 
 ```kcl=two_cubes_intersection
-length = 20
-cubeGreen = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> extrude(length = length)
-  |> appearance(color = "#229922")
+// This part is unchanged from previous examples.
+sketch001 = sketch(on = XY) {
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-cubeBlue = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> translate(x = 10, z = 10)
-  |> extrude(length = length)
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cubeGreen = extrude(region001, length = 5)
+  |> appearance(color = "#229922")
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
   |> appearance(color = "#222299")
 
-// Boolean operations on the two cubes
+// Apply a CSG operation.
 both = intersect([cubeGreen, cubeBlue])
 ```
 
@@ -81,27 +128,82 @@ This keeps only the small cube shape from where the previous two intersected. Th
 Lastly, let's try a `subtract` call:
 
 ```kcl=two_cubes_subtraction
-length = 20
-cubeGreen = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> extrude(length = length)
-  |> appearance(color = "#229922")
+// This part is unchanged from previous examples.
+sketch001 = sketch(on = XY) {
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-cubeBlue = startSketchOn(XY)
-  |> polygon(radius = length, numSides = 4, center = [0, 0])
-  |> translate(x = 10, z = 10)
-  |> extrude(length = length)
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cubeGreen = extrude(region001, length = 5)
+  |> appearance(color = "#229922")
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
   |> appearance(color = "#222299")
 
-// Boolean operations on the two cubes
-both = subtract(cubeGreen, tools=[cubeBlue])
+// Apply a CSG operation.
+both = subtact(cubeGreen, tools = [cubeBlue])
 ```
 
 <!-- KCL: name=two_cubes_subtraction,skip3d=true,alt=Green cube with blue cube subtracted-->
 
-Note that the syntax for `subtract` is a little different. The first argument is the solid which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes.
+Note that the syntax for `subtract` is a little different. The first argument is the solid which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes. Let's try a subtraction with multiple tools:
 
-**NOTE**: Currently only one tool can be passed in, but we're nearly finished supporting multiple tools here.
+```kcl=two_cubes_subtraction_multi_tool
+// This part is unchanged from previous examples.
+sketch001 = sketch(on = XY) {
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
+
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cubeGreen = extrude(region001, length = 5)
+  |> appearance(color = "#229922")
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
+  |> appearance(color = "#222299")
+
+
+// Add another blue cube.
+cubeBlue2 = clone(cubeBlue)
+  |> translate(x = -6)
+
+// Cut both blue cubes out of the green cube.
+both = subtract(cubeGreen, tools = [cubeBlue, cubeBlue2])
+```
+
+<!-- KCL: name=two_cubes_subtraction_multi_tool,skip3d=true,alt=Green cube with blue cube subtracted-->
+
+## Advanced options
+
+There's a few arguments you can set for these functions:
+
+ - **tolerance** is a measure of how accurate the underlying 3D combination algorithms are. A tolerance of 0.1 means the algorithm is very inaccurate, but very fast. A tolerance of 0.000000001 makes the algorithm much more accurate, but slower. This is set to a sensible default, but you might need to change it for models with very precise, very small features.
+ - **legacyMethod** lets you opt back into an older version of Zoo's geometry engine which used a different algorithm for CSG. We don't recommend setting this, and it will be removed at some point in the future.
 
 [Wikipedia's article on boolean operations]: https://en.wikipedia.org/wiki/Set_(mathematics)#Basic_operations
 [`intersect`]: https://zoo.dev/docs/kcl-std/functions/std-solid-intersect
