@@ -20,10 +20,29 @@ You can use `map` to create geometry too! For example, let's make 3 cubes, next 
 
 ```kcl=three_map_cubes
 fn cube(@offset) {
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(radius = 10, numSides = 4, center = [0, offset])
-    |> extrude(length = 10)
+  sideLen = 10
+  sketch001 = sketch(on = XY) {
+    line1 = line(start = [var 0mm, var 0mm], end = [var 3.08mm, var 0mm])
+    line2 = line(start = [var 3.08mm, var 0mm], end = [var 3.08mm, var -3.01mm])
+    line3 = line(start = [var 3.08mm, var -3.01mm], end = [var 0mm, var -3.01mm])
+    line4 = line(start = [var 0mm, var -3.01mm], end = [var 0mm, var 0mm])
+    coincident([line1.end, line2.start])
+    coincident([line2.end, line3.start])
+    coincident([line3.end, line4.start])
+    coincident([line4.end, line1.start])
+    parallel([line2, line4])
+    parallel([line3, line1])
+    perpendicular([line1, line2])
+    horizontal(line3)
+    coincident([line1.start, ORIGIN])
+    equalLength([line1, line2, line3, line4])
+    fixed([line1.start, ORIGIN])
+    distance([line1.start, line1.end]) == sideLen
+  }
+  hide(sketch001)
+  return region(sketch = sketch001, point = [0.4, -0.4])
+    |> extrude(length = sideLen)
+    |> translate(x = offset)
 }
 
 offsets = [0, 25, 50]
@@ -49,20 +68,39 @@ This object has two fields, `offset` and `color`. You could access them by calli
 fn cube(@params) {
   offset = params.x
   color = params.color
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(radius = 10, numSides = 4, center = [0, offset])
-    |> extrude(length = 10)
+  sideLen = 10
+  sketch001 = sketch(on = XY) {
+    line1 = line(start = [var 0mm, var 0mm], end = [var 3.08mm, var 0mm])
+    line2 = line(start = [var 3.08mm, var 0mm], end = [var 3.08mm, var -3.01mm])
+    line3 = line(start = [var 3.08mm, var -3.01mm], end = [var 0mm, var -3.01mm])
+    line4 = line(start = [var 0mm, var -3.01mm], end = [var 0mm, var 0mm])
+    coincident([line1.end, line2.start])
+    coincident([line2.end, line3.start])
+    coincident([line3.end, line4.start])
+    coincident([line4.end, line1.start])
+    parallel([line2, line4])
+    parallel([line3, line1])
+    perpendicular([line1, line2])
+    horizontal(line3)
+    coincident([line1.start, ORIGIN])
+    equalLength([line1, line2, line3, line4])
+    fixed([line1.start, ORIGIN])
+    distance([line1.start, line1.end]) == sideLen
+  }
+  hide(sketch001)
+  return region(sketch = sketch001, point = [0.4, -0.4])
+    |> extrude(length = sideLen)
+    |> translate(x = offset)
     |> appearance(color = color)
 }
 
 offsets = [
-  { x = 0, color = "#99ff99" },  // Dark green
-  { x = 25, color = "#00ff00" }, // Bright green
-  { x = 50, color = "#002200" }, // Pale green
+  { x = 0, color = "#99ff99" },
+  { x = 25, color = "#00ff00" },
+  { x = 50, color = "#002200" }
 ]
 
-map(offsets, f = cube)
+threeCubes = map(offsets, f = cube)
 ```
 
 <!-- KCL: name=three_map_cubes_color,skip3d=true,alt=Three mapped cubes of different colors-->
@@ -117,8 +155,6 @@ What are some other things we can do with `reduce`? We could calculate the produ
 ```kcl
 reduce(inputArray, initial = 1, f = fn(@i, accum) { return i * accum})
 ```
-
-In the next chapter we'll cover one of the most powerful uses for `reduce`: dynamically building up geometry.
 
 [`map`]: https://zoo.dev/docs/kcl-std/functions/std-array-map
 [`reduce`]: https://zoo.dev/docs/kcl-std/functions/std-array-reduce
