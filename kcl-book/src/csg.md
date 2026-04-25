@@ -159,7 +159,9 @@ both = subtract(cubeGreen, tools = [cubeBlue])
 
 <!-- KCL: name=two_cubes_subtraction,skip3d=true,alt=Green cube with blue cube subtracted-->
 
-Note that the syntax for `subtract` is a little different. The first argument is the solid which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes. Let's try a subtraction with multiple tools:
+Note that the syntax for `subtract` is a little different. The first argument is the solid which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes.
+
+Let's try a subtraction with multiple tools:
 
 ```kcl=two_cubes_subtraction_multi_tool
 // This part is unchanged from previous examples.
@@ -197,6 +199,96 @@ both = subtract(cubeGreen, tools = [cubeBlue, cubeBlue2])
 ```
 
 <!-- KCL: name=two_cubes_subtraction_multi_tool,skip3d=true,alt=Green cube with blue cube subtracted-->
+
+And one with multiple targets. We'll make two green cubes (our target), and a blue cube (our tool). Then we'll subtract the blue cube from both green cubes:
+
+```kcl=two_cubes_sub_multi_target
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+
+// Target 1
+cubeGreen = extrude(region001, length = 5)
+  |> appearance(color = "#229922")
+
+// Target 2
+cubeGreen2 = clone(cubeGreen)
+  |> translate(x = 6, y = 2)
+
+// Tool
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
+  |> appearance(color = "#222299")
+
+// Do the subtraction
+both = subtract([cubeGreen, cubeGreen2], tools = [cubeBlue])
+```
+
+<!-- KCL: name=two_cubes_sub_multi_target,skip3d=true,alt=Green cube with blue cube subtracted-->
+
+Lastly, we can do a subtraction with multiple tools, and multiple targets. We'll make two green cubes (targets) and two blue (the tools):
+
+```kcl=subtract_multi_multi
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+
+// Make two green cubes and two blue cubes.
+cubeGreen = extrude(region001, length = 5)
+  |> appearance(color = "#229922")
+
+cubeGreen2 = clone(cubeGreen)
+  |> translate(x = 6, y = 2)
+
+cubeBlue = clone(cubeGreen)
+  |> translate(x = 3, z = 2, y = 1)
+  |> appearance(color = "#222299")
+
+cubeBlue2 = clone(cubeBlue)
+  |> translate(x = -1, y = -4, z = -1)
+  |> rotate(yaw = 40deg)
+
+// Subtract both blue from both green.
+both = subtract([cubeGreen, cubeGreen2], tools = [cubeBlue, cubeBlue2])
+```
+
+<!-- KCL: name=subtract_multi_multi,skip3d=true,alt=Green cube with blue cube subtracted-->
 
 ## Advanced options
 
