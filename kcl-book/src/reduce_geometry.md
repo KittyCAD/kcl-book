@@ -1,5 +1,7 @@
 # Reduce and geometry
 
+**NOTE**: This chapter covers the old syntax for our previous sketch library (that didn't support constraint solvers). If you're new to KCL, you should probably skip this chapter and read the new chapter on sketch blocks. If you've already got old KCL code that used the old syntax for sketching, don't worry, you can keep using the old syntax, and this chapter will explain it. But new users shouldn't worry about this, unless they're working with old code.
+
 <!-- toc -->
 
 The `reduce` function lets us iterate over an array, consuming its contents and _reducing_ them down to one single item. Reduce is a very powerful, flexible tool. It can be complex too, but that complexity lets us do some very interesting things.

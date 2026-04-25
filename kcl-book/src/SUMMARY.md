@@ -25,7 +25,6 @@
 
 - [Functions and parametric design](./declaring_functions.md)
 - [Iterating with map and reduce](./map_reduce.md)
-- [Reduce and geometry](./reduce_geometry.md)
 
 # KCL projects
 
@@ -38,3 +37,4 @@
 
 - [Legacy: Sketching 2D shapes](./sketch2d.md)
 - [Legacy: Sketching curved lines](./sketch2d_curves.md)
+- [Legacy: Reduce and geometry](./reduce_geometry.md)
