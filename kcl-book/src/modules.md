@@ -12,59 +12,62 @@ Say we have a KCL file like this, which defines a cube function, a sphere functi
 
 ```kcl=cubes_and_spheres
 fn cube() {
-  sideLength = 10
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(numSides = 4, radius = sideLength, center = [0, 0])
-    |> extrude(length = sideLength)
+  sideLen = 10
+  sketch001 = sketch(on = XY) {
+    line1 = line(start = [var 0mm, var 0mm], end = [var 3.08mm, var 0mm])
+    line2 = line(start = [var 3.08mm, var 0mm], end = [var 3.08mm, var -3.01mm])
+    line3 = line(start = [var 3.08mm, var -3.01mm], end = [var 0mm, var -3.01mm])
+    line4 = line(start = [var 0mm, var -3.01mm], end = [var 0mm, var 0mm])
+    coincident([line1.end, line2.start])
+    coincident([line2.end, line3.start])
+    coincident([line3.end, line4.start])
+    coincident([line4.end, line1.start])
+    parallel([line2, line4])
+    parallel([line3, line1])
+    perpendicular([line1, line2])
+    horizontal(line3)
+    coincident([line1.start, ORIGIN])
+    equalLength([line1, line2, line3, line4])
+    fixed([line1.start, ORIGIN])
+    distance([line1.start, line1.end]) == sideLen
+  }
+  hide(sketch001)
+  return region(sketch = sketch001, point = [0.4, -0.4])
+    |> extrude(length = sideLen)
 }
 
 fn sphere() {
-  radius = 10
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> yLine(length = radius * 2)
-    |> arc(angleStart = 90, angleEnd = 270, radius = radius)
-    |> close()
-    |> revolve(axis = Y)
+  sphereRadius = 2cm
+  sketch001 = sketch(on = XY) {
+    line1 = line(start = [var -9.84mm, var 0mm], end = [var 10.19mm, var 0mm])
+    distance([line1.start, line1.end]) == sphereRadius
+    horizontal([line1.start, ORIGIN])
+    horizontal([line1.end, ORIGIN])
+    arc1 = arc(start = [var -3.87mm, var 9.09mm], end = [var -9.76mm, var 1.56mm], center = [var 0mm, var 0mm])
+    coincident([arc1.center, ORIGIN])
+    coincident([arc1.end, line1.start])
+    coincident([arc1.start, line1.end])
+  }
+  hidden001 = hide(sketch001)
+  region001 = region(point = [0mm, 0.0025mm], sketch = sketch001)
+  return revolve(region001, angle = 360deg, axis = X)
 }
 
 // Draw ten spheres and ten cubes.
-map([1..10], f = fn(@i) { return cube() |> translate( x = i * 20)})
-map([1..10], f = fn(@i) { return sphere() |> translate(y = i * 20) })
+map(
+  [1..10],
+  f = fn(@i) { return cube() |> translate(x = i * 20) },
+)
+
+map(
+  [1..10],
+  f = fn(@i) { return sphere() |> translate(y = i * 20)},
+)
 ```
 
 <!-- KCL: name=cubes_and_spheres,alt=Several cubes and spheres-->
 
-We can split this file into two separate files, `cubes.kcl` and `spheres.kcl`. Here's `cubes.kcl`:
-
-```kcl
-fn cube() {
-  sideLength = 10
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(numSides = 4, radius = sideLength, center = [0, 0])
-    |> extrude(length = sideLength)
-}
-
-map([1..10], f = fn(@i) { return cube() |> translate( x = i * 20)})
-```
-
-And here's `spheres.kcl`:
-
-```kcl
-fn sphere() {
-  radius = 10
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> yLine(length = radius * 2)
-    |> arc(angleStart = 90, angleEnd = 270, radius = radius)
-    |> close()
-    |> revolve(axis = Y)
-}
-
-map([1..10], f = fn(@i) { return sphere() |> translate(y = i * 20) })
-```
+We can split this file into two separate files, `cubes.kcl` and `spheres.kcl`. We'll put the `sphere` function and the `map` that makes ten spheres into `spheres.kcl`. Then the `cube` function and the `map` that makes ten cubes into `cubes.kcl`.
 
 To tell `main.kcl` to execute these two files, we use the `import` keyword with each file's filepath.
 
@@ -73,9 +76,10 @@ import "cubes.kcl"
 import "spheres.kcl"
 ```
 
-If you open this file, you'll see the same image as before (10 spheres and 10 cubes). But grouping related code into its own file can make it easier to read.
+If you open this file, you'll see the same image as before (10 spheres and 10 cubes). There's two advantages to the multi-file approach:
 
-The other big change in our new code is that _each module executes in parallel_. This means the cubes and spheres will be drawn simultaneously, instead of drawing all the cubes and then all the spheres. Splitting your big KCL files into smaller modules can therefore be really helpful for speeding up large models.
+ 1. Grouping related code into its own file can make it easier to read.
+ 2. In KCL, _each module executes in parallel_. This means the cubes and spheres will be drawn simultaneously, taking roughly half the time. Splitting big KCL files into smaller modules really speed up large projects.
 
 Each of your `.kcl` files is a KCL module. Files can be imported from the same directory. If you want to import from another directory, you can only import `main.kcl` from that directory. Import statements have to be at the top of a file -- they can't be nested within something like a function definition.
 
@@ -97,20 +101,21 @@ Here, we export 3 different variables from `car_constants.kcl`. Next, let's impo
 ```kcl
 // car_wheel.kcl
 import wheelDepth, wheelDiameter from "car_constants.kcl"
-startSketchOn(XY)
-|> circle(radius = wheelDiameter / 2, center = [5, 5])
+
+makeWheel(diameter = wheelDiameter)
 |> extrude(length = wheelDepth)
 ```
 
-You can export any variable, not just simple numbers. For example, we could `export fn cube(@sideLength)` from `cube.kcl`, and then import it in `main.kcl` and use it to draw several cubes. Alternatively, `cube.kcl` could export an _actual cube_, not just a function to create one. Here's an example showing both of these:
+You can export any variable, not just simple numbers. For example, we could `export fn cube(sideLength)` from `cube.kcl`, and then import it in `main.kcl` and use it to draw several cubes. Alternatively, `cube.kcl` could export an _actual cube_, not just a function to create one. Here's an example showing both of these:
 
 ```kcl
 // cube.kcl
-export fn cube(sideLength) {
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(numSides = 4, radius = sideLength, center = [0, 0])
-    |> extrude(length = sideLength)
+fn cube(sideLength) {
+  sketch001 = sketch(on = XY) {
+    // Code omitted for brevity; same as previous cube examples
+  }
+  return region(sketch = sketch001, point = [0.4, -0.4])
+    |> extrude(length = sideLen)
 }
 
 export mySpecificCube = cube(sideLength = 20)
@@ -134,10 +139,8 @@ Here's a little time-saving feature for KCL exports. The last expression or vari
 
 ```kcl
 export fn cube(sideLength) {
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(numSides = 4, radius = sideLength, center = [0, 0])
-    |> extrude(length = sideLength)
+  // Code omitted for brevity.
+  // Same as previous example.
 }
 
 // This is the last expression in the module, so it's the _default export_.
