@@ -1,6 +1,6 @@
 # Sketching 2D shapes
 
-**NOTE**: This chapter covers the old syntax for our previous sketch library (that didn't support constraint solvers). If you're new to KCL, you should probably skip this chapter and read the new chapter on sketch blocks. If you've already got old KCL code that used the old syntax for sketching, don't worry, you can keep using the old syntax, and this chapter will explain it. But new users shouldn't worry about this, unless they're working with old code.
+**WARNING**: This chapter covers the old syntax for our previous sketch library (that didn't support constraint solvers). If you're new to KCL, you should probably skip this chapter and read the new chapter on sketch blocks. If you've already got old KCL code that used the old syntax for sketching, don't worry, you can keep using the old syntax, and this chapter will explain it. But new users shouldn't worry about this, unless they're working with old code.
 
 <!-- toc -->
 

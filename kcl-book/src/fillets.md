@@ -26,7 +26,7 @@ It produces a cube like this:
 
 <!-- KCL: name=cube_no_fillets,alt=A cube -->
 
-What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four `line` calls, which were all assigned to variables. When we extruded the square into a cube, the variables were copied into the solid, under `.sketch.tags`. So we can reference the edge created from `line1` via `.sketch.tags.line1`, and apply a fillet to it.
+What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four `line` function calls, which were all assigned to variables (`line1`, `line2`, etc). When we extruded the square into a cube, the variables were copied into the solid, under `.sketch.tags`. So we can reference the edge created from `line1` via `.sketch.tags.line1`, and apply a fillet to it.
 
 ```kcl=cube_one_fillet
 // Sketch a square
@@ -52,7 +52,7 @@ That program should produce a cube with one filleted edge, like this:
 
 <!-- KCL: name=cube_one_fillet,alt=A cube with one filleted edge -->
 
-Nice! We could fillet all four sides if we wanted to:
+Nice! We could fillet all four bottom sides if we wanted to:
 
 ```kcl=cube_four_fillets
 // Sketch a square
@@ -68,7 +68,7 @@ square = sketch(on = XY) {
 regionCube = region(point = [0.4975mm, 0mm], sketch = square)
 extrudeCube = extrude(regionCube, length = width)
 
-// Fillet one edge
+// Fillet all bottom edges
 filletCube = fillet(
   extrudeCube,
   tags = [
@@ -85,7 +85,7 @@ filletCube = fillet(
 
 ## Relationships between edges
 
-So far, we've assigned geometry (like a line) to a variable when we create it, and then use that variable to refer to it later (for fillets). What about edges we don't create directly, and therefore can't assign to a variable? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via `line` calls. They're created by the CAD engine in the `extrude` call. If we didn't explicitly create them with a sketch function, how do we store them in a variable? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we can refer to the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
+So far, we've assigned geometry (like a line) to a variable when we create it, and then use that variable to refer to it later (e.g. for fillets). What about edges we don't create directly, and therefore can't assign to a variable? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via `line` calls. They're created by the CAD engine in the `extrude` call. If we didn't explicitly create them with a sketch function, how do we store them in a variable? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we can refer to the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
 
 
 ```kcl=cube_two_opposite_fillets
@@ -299,7 +299,7 @@ extrude001 = extrude(region001, length = 1)
 
 Let's ask a simple question. How long is each side of the triangle?
 
-It sounds simple, but to actually calculate it, you'd have to break out a pencil and paper, then do some trigonometry. The problem is, the length doesn't appear anywhere in the `line` call. The lines are defined by their start and end points, and the length is an implicit property of those. Defining lines as a start and end is helpful, but it means important properties, like length, can't be read from our source code.
+It sounds simple, but to actually calculate it, you'd have to break out a pencil and paper, then do some trigonometry. The problem is, the length doesn't appear anywhere in the `line` function call. The lines are defined by their start and end points, and the length is an implicit property of those. Defining lines as a start and end is helpful, but it means important properties, like length, can't be read from our source code.
 
 However, tags give us a simple way to refer to each line, and then query them for properties like length with the [`segLen`] function. Let's update our program:
 
@@ -325,32 +325,9 @@ side2Len = segLen(extrude001.sketch.tags.line2)
 side3Len = segLen(extrude001.sketch.tags.line3)
 ```
 
-Now you can open up the Variables pane and look at the `lenA`, `lenB` and `lenC` variables to find each side's length. That's pretty useful! And if you want to use those lengths elsewhere in your code, you can! You could start drawing lines where the end is `[lenA, 0]` for example, or plug those lengths into other calculations. 
+Now you can open up the Variables pane and look at the `side1Len`, `side2Len` and `side3Len` variables to find each side's length. That's pretty useful! And if you want to use those lengths elsewhere in your code, you can! You could start drawing lines where the end is `[side1Len, 0]` for example, or plug those lengths into other calculations. 
 
-KCL has several other helper functions, like [`segAng`], which helps you find the angle between two lines. Let's measure the angles in a right-angle triangle:
-
-```kcl
-// Make a triangle
-sketch001 = sketch(on = YZ) {
-  line1 = line(start = [var 4.87mm, var -3.93mm], end = [var -4.13mm, var -3.97mm])
-  line2 = line(start = [var -4.13mm, var -3.97mm], end = [var -4.16mm, var 3.03mm])
-  line3 = line(start = [var -4.16mm, var 3.03mm], end = [var 4.87mm, var -3.93mm])
-  perpendicular([line2, line1])
-  coincident([line3.start, line2.end])
-  coincident([line2.start, line1.end])
-  coincident([line1.start, line3.end])
-  distance([line2.start, line2.end]) == 7
-  distance([line1.start, line1.end]) == 9
-}
-region001 = region(point = [0.3702057mm, -3.9475671mm], sketch = sketch001)
-extrude001 = extrude(region001, length = 1)
-
-angleA = segAng(extrude001.sketch.tags.line1)
-angleB = segAng(extrude001.sketch.tags.line2)
-angleC = segAng(extrude001.sketch.tags.line3)
-```
-
-You can open up the Variables panel and view the relevant angles! There are other helpers too, like [`segStart`] and [`segEnd`] to find a line's start and end, respectively. Take a look at the KCL standard library docs to find them all.
+There are other helpers too, like [`segStart`] and [`segEnd`] to find a line's start and end, respectively. Take a look at the KCL [standard library docs] to find them all.
 
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`fillet`]: https://zoo.dev/docs/kcl-std/functions/std-solid-fillet
@@ -362,3 +339,4 @@ You can open up the Variables panel and view the relevant angles! There are othe
 [`segEnd`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segEnd
 [`segLen`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segLen
 [`segStart`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segStart
+[standard library docs]: <https://zoo.dev/docs/kcl-std>

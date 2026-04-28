@@ -23,7 +23,7 @@ cylinders = extrude(region(sketch = circleSketch, point = [0, 0]), length = 4)
 <!-- KCL: name=linear_pattern,alt=Using linear patterns to replicate a cylinder-->
 
 The [`patternLinear3d`] function takes 4 args:
- - A solid to pattern (the unlabeled first arg, which is implicitly set to % and therefore gets the cylinder piped in)
+ - A solid to pattern (the unlabeled first arg, which is implicitly set to % and therefore gets the result of the `extrude()` call, i.e. the cylinder, piped in)
  - The total number of instances you want (i.e. how many total copies of the solid there should be)
  - How far apart each instance of the pattern should be
  - The axis along which to place the copies.
@@ -68,7 +68,7 @@ translate(cube, z = 30)
        instances = 12,
        axis = Y,
        center = [0, 0, 0],
-       arcDegrees = 360,
+       arcDegrees = 360deg,
        rotateDuplicates = false,
      )
 ```
@@ -79,7 +79,7 @@ Here, the center of the pattern is `[0, 0, 0]`. We drew the first cube at the no
 
 **Note**: The `center` argument is optional, and defaults to `[0, 0, 0]`.
 
-Notice that we used `rotateDuplicates = false`. If we set it to `true`, each duplicate will be rotated a little bit as they're copied around the circle, so that they're all facing the center. Like this:
+Notice that we used `rotateDuplicates = false`. If we set it to `true`, each duplicate object is also rotated as it is copied around the circle, so that they're all facing the center. Like this:
 
 ```kcl=circular_cubes_true
 // Sketch a square.
@@ -112,7 +112,7 @@ translate(cube, z = 30)
        instances = 12,
        axis = Y,
        center = [0, 0, 0],
-       arcDegrees = 360,
+       arcDegrees = 360deg,
        rotateDuplicates = true,
      )
 ```
@@ -200,7 +200,7 @@ In other words, when `useOriginal = false` (the default), the total modified sol
 
 ## Transform patterns
 
-Circular and linear patterns cover a lot of really common use-cases for mechanical engineers. But sometimes you want to do more complicated patterns, in more complicated shapes. We can't add a dedicated pattern function for every single shape our users can think of -- that would be ridiculous. Instead, we've got a powerful, flexible interface for patterning solids in any arrangement you can think of. It's called a _transform_ pattern. They're created with the [`patternTransform`] function. It takes a familiar `instances` arg, which controls how many total copies of the shape you want. But it takes a new argument, called `transform`. This is a _custom function_. We'll dive deeper into those in the following chapters, but for now, they're basically just a way to calculate how to transform each replica in the pattern.
+Circular and linear patterns cover a lot of really common use-cases for mechanical engineers. But sometimes you want to do more complicated patterns, in more complicated shapes. We can't add a dedicated pattern function for every single shape our users can think of -- that would be almost unmaintainable (there are infinite possible shapes, after all). Instead, KCL has a powerful, flexible interface for patterning solids in any arrangement you can think of. It's called a _transform_ pattern. They're created with the [`patternTransform`] function. It takes a familiar `instances` argument, which controls how many total copies of the shape you want. But it takes a new argument, called `transform`. This is a _custom function_. We'll dive deeper into those in the following chapters, but for now, they're basically just a way to calculate how to transform each replica in the pattern.
 
 When might you need a pattern transform? Here's one use: to do a 2D pattern, like tiling a grid. Let's use a pattern transform to make a 5 by 5 grid.
 
@@ -227,10 +227,14 @@ squareSketch = sketch(on = XY) {
   distance([line4.start, line4.end]) == width
 }
 
-// Transform function
+// Transform function.
+// This takes in the instance number (called `i`), and returns a transform
+// object that tells KCL how to transform that instance.
 fn grid(@i) {
   column = rem(i, divisor = numColumns)
   row = floor(i / numColumns)
+  // Return a KCL object, with one property, `translate`.
+  // The `translate` property tells KCL how to translate each duplicated solid.
   return {
     translate = [column * gap, row * gap, 0]
   }
@@ -244,16 +248,18 @@ region(point = [0.0450001mm, 5.1274998mm], sketch = squareSketch)
 
 We've defined a _custom function_ called `grid`. This function will get called once for every replica in the pattern, and it tells KCL how each replica should be transformed. Specifically it:
 
- - Takes a single argument called `i`. It's used to indicate which number replica it is. The first copy made will set `i` to 1, the second copy will set `i` to 2, etc etc. The argument `i` is prefixed with `@` to indicate it's this function's special first unlabeled arg, so if you call it, you'd call it like `grid(1)` or `grid(2)`, not `grid(i = 1)`.
+ - Takes a single argument called `i`. It's used to indicate which number replica is currently being processed. The first copy made will set `i` to 1, the second copy will set `i` to 2, etc. The argument `i` is prefixed with `@` to indicate it's this function's special first unlabeled argument, so if you call it, you'd call it like `grid(1)` or `grid(2)`, not `grid(i = 1)`.
  - Returns a list of different properties to transform in each replica.
 
-In this example, we declare a function `grid` which tells `patternTransform` to translate each replica by a certain amount `column * gap` along X axis, `row * gap` along the Y axis, and to stay on the same Z axis (i.e. move exactly 0 along that axis).
+In this example, we define a function `grid` which tells `patternTransform` to translate each replica by a certain amount `column * gap` along the X axis, `row * gap` along the Y axis, and to stay on the same location on the Z axis (i.e. move exactly 0 along that axis).
+
+The `grid` function is called by `patternTransform` as many times as `patternTransform`'s first argument, `instances`. On each call to `grid` the current instance number is passed and bound to `i`. In this example, because `numColumns` is `5` and the code uses `instances = numColumns * numColumns`, there will be `5 * 5 = 25` instances. So the pattern transform will call `grid(0)`, `grid(1)` ... `grid(24)`. 
 
 The specific value of `row` and `column` changes every time the `grid` function is called, because these variables are calculated from the input argument `i`. Remember, `i` represents which number replication we're transforming. To calculate `column` and `row` we're going to use a few new KCL functions we haven't seen before.
 
 Firstly, [`rem`]. The value `rem(i, divisor = n)` will divide i by n and return the remainder. This means that for i = 0, 1, 2, 3, 4, x will equal 0, 1, 2, 3 and 4. But when i = 5 (i.e. the fifth copy is being calculated), x will be 0. We're calling this function 25 times, and over those calls, x will step from 0 to 4, jump back down to 0, and begin stepping up again. This means x is a good way to calculate the columns, which range from column 0 to column 4 (a total of 5 columns).
 
-The [`floor`] function takes a fractional number, and rounds it down to the nearest integer. For example, `floor(3.6)` is 3. This means it's a good way to calculate the row, because the first five times it's called, `row` will always equal 0. It'll round down `(i / n)` from 0/5, 1/5, 2/5, 3/5, 4/5 all down to 0. Then the sixth time it's called, it will receive 5/5, which is 1, and round it down to 1. These neat little mathematical tricks mean we can calculate the row and column from the repetition number `i`.
+The [`floor`] function takes a fractional number, and rounds it down to the nearest integer. For example, `floor(3.6)` is `3`. This means it's a good way to calculate the row, because the first five times it's called, `row` will always equal `0`. It'll round down `(i / n)` from `0/5`, `1/5`, `2/5`, `3/5`, `4/5` all down to `0`. Then the sixth time it's called, it will receive `5/5`, which is 1, and round it down to `1`. These neat little mathematical tricks mean we can calculate the row and column from the repetition number `i`.
 
 The final result speaks for itself:
 
@@ -363,7 +369,7 @@ Pattern transforms are a very powerful tool. They're definitely one of the most 
 
 ## 2D patterns and holes
 
-**NOTE**: 2D patterns are, currently, only supported for our old sketch syntax. We're actively working on porting 2D patterns to our new sketch syntax, so you can use them with constraint solvers. Until then, you can read the rest of this chapter and use it with our old sketch syntax.
+**WARNING**: 2D patterns are, currently, only supported for our old sketch syntax. We're actively working on porting 2D patterns to our new sketch syntax, so you can use them with constraint solvers. Until then, you can read the rest of this chapter and use it with our old sketch syntax.
 
 So far all of the patterns we've used have replicated 3D solids. But you can use patterns to replicate 2D sketches too. The [`patternLinear2d`], [`patternCircular2d`] and [`patternTransform2d`] functions work like their 3D variants, except they take 2D axes and 2D points. Here's a simple example:
 
@@ -373,7 +379,7 @@ manyCircles = startSketchOn(XZ)
   |> patternCircular2d(
        center = [0, 0],
        instances = 12,
-       arcDegrees = 360,
+       arcDegrees = 360deg,
        rotateDuplicates = true,
      )
 ```
@@ -390,7 +396,7 @@ manyCircles = startSketchOn(XZ)
   |> patternCircular2d(
        center = [0, 0],
        instances = 12,
-       arcDegrees = 360,
+       arcDegrees = 360deg,
        rotateDuplicates = true,
      )
 

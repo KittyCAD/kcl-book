@@ -21,7 +21,7 @@ pill = sketch(on = XY) {
 
 ![A pill shape made from fixed arcs and lines](images/static/fixed_pill.png)
 
-In KCL, arcs always go counter-clockwise from their start to their end. This pill shape was very straightforward to code, but sketching it required me to use a pen and paper to figure out exactly where every point on the 2D plane was. The start and end of every arc and line had to be carefully calculated. Let's try letting KCL's constraint solver do the work for us instead. 
+In KCL, arcs are drawn counter-clockwise from their start point to their end point. This pill shape was very straightforward to code, but sketching it required me to use a pen and paper to figure out exactly where every point on the 2D plane was. The start and end of every arc and line had to be carefully calculated. Let's try letting KCL's constraint solver do the work for us instead. 
 
 # Constrained arcs
 
@@ -83,7 +83,7 @@ pill = sketch(on = YZ) {
 }
 ```
 
-This defines a nice pill shape. We could fix its position in 3D space by adding a `coincident()` constraint between the start of a line, and the origin (referred to in KCL as a built-in constant, `ORIGIN`). Or we could constrain the distance from some point to the origin with the built-in [`distance`], [`verticalDistance`] and [`horizontalDistance`] functions.
+This defines a nice pill shape. We could fix its position in 3D space by adding a `coincident` constraint between the start of a line, and the origin (referred to in KCL as a built-in constant, `ORIGIN`). Or we could constrain the distance from some point to the origin with the built-in [`distance`], [`verticalDistance`] and [`horizontalDistance`] functions.
 
 
 
@@ -101,8 +101,9 @@ myCircleSketch = sketch(on = XZ) {
 
 The [`circle`] call takes `center` and `start` arguments. The `start` argument is just any point along the circle's circumference. It's helpful in the Zoo point-and-click sketching UI, because it lets you easily snap constraints like a distance to it. The circle's radius is defined implicitly by the distance from `center` to `start` point. 
 
-[`tangentialArc`]: <https://zoo.dev/docs/kcl-std/tangentialArc>
+[`coincident`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-coincident>
 [`verticalDistance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-verticalDistance>
 [`horizontalDistance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-horizontalDistance>
 [`distance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-distance>
+[`region`]: <https://zoo.dev/docs/kcl-std/functions/std-sketch-region>
 [`circle`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-circle>

@@ -2,7 +2,7 @@
 
 <!-- toc -->
 
-In the previous chapter, we looked at how KCL lets you tag edges. Tags let you query your edges (to find their length, or angle with the previous edge), or apply an edge cut (like a fillet or chamfer). But you can tag more than just edges! In this chapter, we'll learn how to tag faces, and how that lets you build more complicated 3D models.
+In the previous chapter, we looked at how leveraging KCL tags lets you query your edges (to find their length, or angle with the previous edge), or apply an edge cut (like a fillet or chamfer). But you can also tag more than just edges! In this chapter, we'll learn how to tag faces, and how that lets you build more complicated 3D models.
 
 ## Side faces
 
@@ -28,7 +28,7 @@ extrude001 = extrude(region001, length = 1)
 
 <!-- KCL: name=triangle_for_sketching,alt=An extruded triangle -->
 
-When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces. So, each new side face corresponds to an existing edge. And crucially, the faces are linked back to their parent edge. This means the face which grew out of the `line1` can be referred to via `extrude001.sketch.tags.line1`. We can use this to reference this face in our 3D model`.
+When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces (surfaces). So, each new side face corresponds to an existing edge. And crucially, the faces are linked back to their parent edge. This means the face which grew out of the `line1` can be referred to via `extrude001.sketch.tags.line1`. We can use this to reference this face in our 3D model`.
 
 Now, if we want to start a new sketch _on that face_, we can do so, with the `faceOf` function!
 

@@ -13,11 +13,13 @@ r = 10
 sketch001 = sketch(on = XY) {
   circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
   coincident([circle1.center, ORIGIN])
-  line1 = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
-  coincident([line1.start, circle1.start])
-  coincident([line1.end, circle1.center])
-  distance([line1.start, line1.end]) == r
-  vertical(line1)
+  // Construction geometry line, used for the radius constraint.
+  radiusLine = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
+  coincident([radiusLine.start, circle1.start])
+  coincident([radiusLine.end, circle1.center])
+  // Constrain the circle's radius.
+  distance([radiusLine.start, radiusLine.end]) == r
+  vertical(radiusLine)
 }
 
 // Note the `offsetPlane` call!
@@ -146,7 +148,12 @@ p = planeOf(sweep001, face = END)
 
 This plane can be used for sketching on, or altered with `offsetPlane`.
 
-That's three different ways to create planes: offsetting, manually defining with axes, and taking the plane of a face. And, of course, you can always use the six standard planes. That gives you a lot of different planes to build solids on. In the next chapter, we'll look at how to manipulate and change those solids.
+We've covered three different ways to create planes:
+ - Offsetting from an existing plane
+ - Manually defining a plane with axes and an origin
+ - Using the plane of a face.
+
+Combined with the six standard planes, you have a wide range of planes that you can use to sketch on, or build solids with. In the next chapter, we'll look at how to manipulate and change those solids.
 
 [`offsetPlane`]: <https://zoo.dev/docs/kcl-std/functions/std-offsetPlane>
 [`planeOf`]: <https://zoo.dev/docs/kcl-std/functions/std-planeOf>

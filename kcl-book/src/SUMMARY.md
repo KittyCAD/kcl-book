@@ -33,8 +33,8 @@
 - [Modules](./modules.md)
 - [Interop with other CAD programs](./interop.md)
 
-# Old sketch syntax
+# Legacy sketch syntax
 
-- [Legacy: Sketching 2D shapes](./sketch2d.md)
-- [Legacy: Sketching curved lines](./sketch2d_curves.md)
-- [Legacy: Reduce and geometry](./reduce_geometry.md)
+- [Sketching 2D shapes](./sketch2d.md)
+- [Sketching curved lines](./sketch2d_curves.md)
+- [Reduce and geometry](./reduce_geometry.md)
