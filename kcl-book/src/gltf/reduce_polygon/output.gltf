@@ -9,10 +9,10 @@
       "min": [
         0,
         0,
-        -0.007818315178155899
+        -0.007818309590220451
       ],
       "max": [
-        0.00623489823192358,
+        0.006234900094568729,
         0.0010000000474974513,
         -0
       ]
@@ -31,14 +31,14 @@
       "componentType": 5126,
       "type": "VEC3",
       "min": [
-        0.00400968873873353,
+        0.004009690135717392,
         0,
-        -0.017567593604326248
+        -0.01756758987903595
       ],
       "max": [
-        0.00623489823192358,
+        0.006234900094568729,
         0.0010000000474974513,
-        -0.007818315178155899
+        -0.007818309590220451
       ]
     },
     {
@@ -57,12 +57,12 @@
       "min": [
         -0.004999999888241291,
         0,
-        -0.021906431764364243
+        -0.021906429901719093
       ],
       "max": [
-        0.00400968873873353,
+        0.004009690135717392,
         0.0010000000474974513,
-        -0.017567593604326248
+        -0.01756758987903595
       ]
     },
     {
@@ -79,14 +79,14 @@
       "componentType": 5126,
       "type": "VEC3",
       "min": [
-        -0.0140096889808774,
+        -0.014009689912199974,
         0,
-        -0.021906431764364243
+        -0.021906429901719093
       ],
       "max": [
         -0.004999999888241291,
         0.0010000000474974513,
-        -0.017567593604326248
+        -0.01756758987903595
       ]
     },
     {
@@ -103,14 +103,14 @@
       "componentType": 5126,
       "type": "VEC3",
       "min": [
-        -0.016234898939728737,
+        -0.016234900802373886,
         0,
-        -0.017567593604326248
+        -0.01756758987903595
       ],
       "max": [
-        -0.0140096889808774,
+        -0.014009689912199974,
         0.0010000000474974513,
-        -0.007818315178155899
+        -0.007818309590220451
       ]
     },
     {
@@ -127,14 +127,14 @@
       "componentType": 5126,
       "type": "VEC3",
       "min": [
-        -0.016234898939728737,
+        -0.016234900802373886,
         0,
-        -0.007818315178155899
+        -0.007818309590220451
       ],
       "max": [
         -0.009999999776482582,
         0.0010000000474974513,
-        0.0000000000000000026645352822614332
+        0
       ]
     },
     {
@@ -153,12 +153,12 @@
       "min": [
         -0.009999999776482582,
         0,
-        -0
+        0
       ],
       "max": [
         0,
         0.0010000000474974513,
-        0.0000000000000000026645352822614332
+        0
       ]
     },
     {
@@ -175,14 +175,14 @@
       "componentType": 5126,
       "type": "VEC3",
       "min": [
-        -0.016234898939728737,
+        -0.016234900802373886,
         0,
-        -0.021906431764364243
+        -0.021906429901719093
       ],
       "max": [
-        0.00623489823192358,
+        0.006234900094568729,
         0,
-        0.0000000000000000026645352822614332
+        0
       ]
     },
     {
@@ -199,14 +199,14 @@
       "componentType": 5126,
       "type": "VEC3",
       "min": [
-        -0.016234898939728737,
+        -0.016234900802373886,
         0.0010000000474974513,
-        -0.021906431764364243
+        -0.021906429901719093
       ],
       "max": [
-        0.00623489823192358,
+        0.006234900094568729,
         0.0010000000474974513,
-        0.0000000000000000026645352822614332
+        0
       ]
     },
     {
@@ -224,7 +224,7 @@
   "buffers": [
     {
       "byteLength": 1728,
-      "uri": "data:application/octet-stream;base64,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"
+      "uri": "data:application/octet-stream;base64,AAAAAG8SgzoAAACAHCZIPwAAAAAHnR8/AAAAAAAAAAAAAACAHCZIPwAAAAAHnR8/Ik7MO28SgzpeGAC8HCZIPwAAAAAHnR8/Ik7MO28SgzpeGAC8HCZIPwAAAAAHnR8/AAAAAAAAAAAAAACAHCZIPwAAAAAHnR8/Ik7MOwAAAABeGAC8HCZIPwAAAAAHnR8/Ik7MO28SgzpeGAC84JR5PwAAAACH3GO+Ik7MOwAAAABeGAC84JR5PwAAAACH3GO+uGODO28Sgzro6Y+84JR5PwAAAACH3GO+uGODO28Sgzro6Y+84JR5PwAAAACH3GO+Ik7MOwAAAABeGAC84JR5PwAAAACH3GO+uGODOwAAAADo6Y+84JR5PwAAAACH3GO+uGODO28Sgzro6Y+8AibePgAAAADlpWa/uGODOwAAAADo6Y+8AibePgAAAADlpWa/Cteju28SgzoddbO8AibePgAAAADlpWa/Cteju28SgzoddbO8AibePgAAAADlpWa/uGODOwAAAADo6Y+8AibePgAAAADlpWa/CtejuwAAAAAddbO8AibePgAAAADlpWa/Cteju28SgzoddbO8AibevgAAAADlpWa/CtejuwAAAAAddbO8AibevgAAAADlpWa/5ohlvG8Sgzro6Y+8AibevgAAAADlpWa/5ohlvG8Sgzro6Y+8AibevgAAAADlpWa/CtejuwAAAAAddbO8AibevgAAAADlpWa/5ohlvAAAAADo6Y+8AibevgAAAADlpWa/5ohlvG8Sgzro6Y+84JR5vwAAAACH3GO+5ohlvAAAAADo6Y+84JR5vwAAAACH3GO+Dv+EvG8SgzpeGAC84JR5vwAAAACH3GO+Dv+EvG8SgzpeGAC84JR5vwAAAACH3GO+5ohlvAAAAADo6Y+84JR5vwAAAACH3GO+Dv+EvAAAAABeGAC84JR5vwAAAACH3GO+Dv+EvG8SgzpeGAC8HCZIvwAAAAAHnR8/Dv+EvAAAAABeGAC8HCZIvwAAAAAHnR8/CtcjvG8SgzoAAAAAHCZIvwAAAAAHnR8/CtcjvG8SgzoAAAAAHCZIvwAAAAAHnR8/Dv+EvAAAAABeGAC8HCZIvwAAAAAHnR8/CtcjvAAAAAAAAAAAHCZIvwAAAAAHnR8/CtcjvG8SgzoAAAAAAAAAAAAAAAAAAIA/CtcjvAAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAG8SgzoAAACAAAAAAAAAAAAAAIA/AAAAAG8SgzoAAACAAAAAAAAAAAAAAIA/CtcjvAAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAACAAAAAAAAAAAAAAIA/CtcjvAAAAAAAAAAAAAAAgAAAgL8AAACA5ohlvAAAAADo6Y+8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACA5ohlvAAAAADo6Y+8AAAAgAAAgL8AAACACtcjvAAAAAAAAAAAAAAAgAAAgL8AAACADv+EvAAAAABeGAC8AAAAgAAAgL8AAACAuGODOwAAAADo6Y+8AAAAgAAAgL8AAACA5ohlvAAAAADo6Y+8AAAAgAAAgL8AAACACtejuwAAAAAddbO8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACA5ohlvAAAAADo6Y+8AAAAgAAAgL8AAACAuGODOwAAAADo6Y+8AAAAgAAAgL8AAACAIk7MOwAAAABeGAC8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACAuGODOwAAAADo6Y+8AAAAgAAAgL8AAACACtcjvG8SgzoAAAAAAAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAA5ohlvG8Sgzro6Y+8AAAAAAAAgD8AAAAA5ohlvG8Sgzro6Y+8AAAAAAAAgD8AAAAADv+EvG8SgzpeGAC8AAAAAAAAgD8AAAAACtcjvG8SgzoAAAAAAAAAAAAAgD8AAAAAuGODO28Sgzro6Y+8AAAAAAAAgD8AAAAACteju28SgzoddbO8AAAAAAAAgD8AAAAA5ohlvG8Sgzro6Y+8AAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAAuGODO28Sgzro6Y+8AAAAAAAAgD8AAAAA5ohlvG8Sgzro6Y+8AAAAAAAAgD8AAAAAIk7MO28SgzpeGAC8AAAAAAAAgD8AAAAAuGODO28Sgzro6Y+8AAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAA"
     }
   ],
   "bufferViews": [
@@ -303,7 +303,12 @@
               1
             ]
           ],
-          "mesh": 0
+          "mesh": 0,
+          "extras": {
+            "KITTYCAD": {
+              "material": 0
+            }
+          }
         }
       ],
       "shells": [
@@ -674,7 +679,7 @@
           "end": 1,
           "t": [
             0,
-            0.01
+            0.009999997463304678
           ]
         },
         {
@@ -698,7 +703,7 @@
           "end": 2,
           "t": [
             0,
-            0.01
+            0.009999997463304678
           ]
         },
         {
@@ -722,7 +727,7 @@
           "end": 4,
           "t": [
             0,
-            0.009999999999999997
+            0.01000000100312495
           ]
         },
         {
@@ -746,7 +751,7 @@
           "end": 5,
           "t": [
             0,
-            0.009999999999999997
+            0.01000000100312495
           ]
         },
         {
@@ -758,7 +763,7 @@
           "end": 6,
           "t": [
             0,
-            0.009999999999999998
+            0.010000002322084731
           ]
         },
         {
@@ -782,7 +787,7 @@
           "end": 7,
           "t": [
             0,
-            0.009999999999999998
+            0.010000002322084731
           ]
         },
         {
@@ -794,7 +799,7 @@
           "end": 8,
           "t": [
             0,
-            0.010000000000000002
+            0.010000002322084731
           ]
         },
         {
@@ -818,7 +823,7 @@
           "end": 9,
           "t": [
             0,
-            0.010000000000000002
+            0.010000002322084731
           ]
         },
         {
@@ -830,7 +835,7 @@
           "end": 10,
           "t": [
             0,
-            0.009999999999999997
+            0.01000000100312495
           ]
         },
         {
@@ -854,7 +859,7 @@
           "end": 11,
           "t": [
             0,
-            0.009999999999999997
+            0.01000000100312495
           ]
         },
         {
@@ -866,7 +871,7 @@
           "end": 12,
           "t": [
             0,
-            0.01
+            0.009999997463304678
           ]
         },
         {
@@ -890,7 +895,7 @@
           "end": 13,
           "t": [
             0,
-            0.01
+            0.009999997463304678
           ]
         },
         {
@@ -902,7 +907,7 @@
           "end": 0,
           "t": [
             0,
-            0.009999999999999992
+            0.01
           ]
         },
         {
@@ -914,7 +919,7 @@
           "end": 3,
           "t": [
             0,
-            0.009999999999999992
+            0.01
           ]
         }
       ],
@@ -925,14 +930,14 @@
           -0
         ],
         [
-          0.006234898018587336,
+          0.0062349,
           0,
-          -0.007818314824680298
+          -0.00781831
         ],
         [
-          0.006234898018587336,
+          0.0062349,
           0.001,
-          -0.007818314824680298
+          -0.00781831
         ],
         [
           0,
@@ -940,54 +945,54 @@
           -0
         ],
         [
-          0.004009688679024192,
+          0.00400969,
           0,
-          -0.01756759394649853
+          -0.01756759
         ],
         [
-          0.004009688679024192,
+          0.00400969,
           0.001,
-          -0.01756759394649853
+          -0.01756759
         ],
         [
-          -0.004999999999999998,
+          -0.005,
           0,
-          -0.021906431337674115
+          -0.02190643
         ],
         [
-          -0.004999999999999998,
+          -0.005,
           0.001,
-          -0.021906431337674115
+          -0.02190643
         ],
         [
-          -0.01400968867902419,
+          -0.01400969,
           0,
-          -0.01756759394649853
+          -0.01756759
         ],
         [
-          -0.01400968867902419,
+          -0.01400969,
           0.001,
-          -0.01756759394649853
+          -0.01756759
         ],
         [
-          -0.016234898018587327,
+          -0.0162349,
           0,
-          -0.007818314824680296
+          -0.00781831
         ],
         [
-          -0.016234898018587327,
+          -0.0162349,
           0.001,
-          -0.007818314824680296
+          -0.00781831
         ],
         [
-          -0.009999999999999992,
+          -0.01,
           0,
-          0.000000000000000002664535259100376
+          0
         ],
         [
-          -0.009999999999999992,
+          -0.01,
           0.001,
-          0.000000000000000002664535259100376
+          0
         ]
       ],
       "surfaces": [
@@ -995,9 +1000,9 @@
           "type": "plane",
           "plane": {
             "xAxis": [
-              0.6234898018587336,
+              0.6234898019256387,
               0,
-              -0.7818314824680298
+              -0.7818314824146747
             ],
             "yAxis": [
               -0,
@@ -1005,9 +1010,9 @@
               0
             ],
             "origin": [
-              0.003117449009293668,
+              0.00311745,
               0.0005,
-              -0.003909157412340149
+              -0.00390916
             ]
           }
         },
@@ -1015,9 +1020,9 @@
           "type": "plane",
           "plane": {
             "xAxis": [
-              0.22252093395631437,
+              0.22252093066922807,
               0,
-              0.9749279121818236
+              0.9749279129320796
             ],
             "yAxis": [
               0,
@@ -1025,9 +1030,9 @@
               0
             ],
             "origin": [
-              0.005122293348805764,
+              0.00512229,
               0.0005,
-              -0.012692954385589416
+              -0.01269295
             ]
           }
         },
@@ -1035,9 +1040,9 @@
           "type": "plane",
           "plane": {
             "xAxis": [
-              0.9009688679024191,
+              0.9009688679523392,
               0,
-              0.4338837391175581
+              0.4338837390138984
             ],
             "yAxis": [
               0,
@@ -1045,9 +1050,9 @@
               0
             ],
             "origin": [
-              -0.000495155660487903,
+              -0.00049516,
               0.0005,
-              -0.019737012642086323
+              -0.01973701
             ]
           }
         },
@@ -1055,9 +1060,9 @@
           "type": "plane",
           "plane": {
             "xAxis": [
-              0.9009688679024191,
+              0.9009688679523392,
               0,
-              -0.433883739117558
+              -0.4338837390138984
             ],
             "yAxis": [
               0,
@@ -1065,9 +1070,9 @@
               -0
             ],
             "origin": [
-              -0.009504844339512094,
+              -0.00950484,
               0.0005,
-              -0.019737012642086323
+              -0.01973701
             ]
           }
         },
@@ -1075,9 +1080,9 @@
           "type": "plane",
           "plane": {
             "xAxis": [
-              0.22252093395631367,
+              0.22252093066922807,
               0,
-              -0.9749279121818238
+              -0.9749279129320796
             ],
             "yAxis": [
               0,
@@ -1085,9 +1090,9 @@
               -0
             ],
             "origin": [
-              -0.01512229334880576,
+              -0.01512229,
               0.0005,
-              -0.012692954385589416
+              -0.01269295
             ]
           }
         },
@@ -1095,9 +1100,9 @@
           "type": "plane",
           "plane": {
             "xAxis": [
-              0.6234898018587334,
+              0.6234898019256387,
               0,
-              0.78183148246803
+              0.7818314824146747
             ],
             "yAxis": [
               0,
@@ -1105,9 +1110,9 @@
               -0
             ],
             "origin": [
-              -0.01311744900929366,
+              -0.01311745,
               0.0005,
-              -0.003909157412340146
+              -0.00390916
             ]
           }
         },
@@ -1125,9 +1130,9 @@
               0
             ],
             "origin": [
-              -0.004999999999999993,
+              -0.005,
               0.0005,
-              0.000000000000000003889182058247729
+              0
             ]
           }
         },
@@ -1182,9 +1187,9 @@
               -0
             ],
             "direction": [
-              0.6234898018587336,
+              0.6234901581604567,
               0,
-              -0.7818314824680298
+              -0.7818311983267544
             ]
           }
         },
@@ -1192,9 +1197,9 @@
           "type": "line",
           "line": {
             "origin": [
-              0.006234898018587336,
+              0.0062349,
               0,
-              -0.007818314824680298
+              -0.00781831
             ],
             "direction": [
               0,
@@ -1212,9 +1217,9 @@
               -0
             ],
             "direction": [
-              0.6234898018587336,
+              0.6234901581604567,
               0,
-              -0.7818314824680298
+              -0.7818311983267544
             ]
           }
         },
@@ -1237,14 +1242,14 @@
           "type": "line",
           "line": {
             "origin": [
-              0.006234898018587336,
+              0.0062349,
               0,
-              -0.007818314824680298
+              -0.00781831
             ],
             "direction": [
-              -0.22252093395631445,
+              -0.2225209776783655,
               0,
-              -0.9749279121818236
+              -0.9749279022025498
             ]
           }
         },
@@ -1252,9 +1257,9 @@
           "type": "line",
           "line": {
             "origin": [
-              0.004009688679024192,
+              0.00400969,
               0,
-              -0.01756759394649853
+              -0.01756759
             ],
             "direction": [
               0,
@@ -1267,14 +1272,14 @@
           "type": "line",
           "line": {
             "origin": [
-              0.006234898018587336,
+              0.0062349,
               0.001,
-              -0.007818314824680298
+              -0.00781831
             ],
             "direction": [
-              -0.22252093395631445,
+              -0.2225209776783655,
               0,
-              -0.9749279121818236
+              -0.9749279022025498
             ]
           }
         },
@@ -1282,14 +1287,14 @@
           "type": "line",
           "line": {
             "origin": [
-              0.004009688679024192,
+              0.00400969,
               0,
-              -0.01756759394649853
+              -0.01756759
             ],
             "direction": [
-              -0.900968867902419,
+              -0.9009687907874128,
               0,
-              -0.43388373911755834
+              -0.43388389924848225
             ]
           }
         },
@@ -1297,9 +1302,9 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.004999999999999998,
+              -0.005,
               0,
-              -0.021906431337674115
+              -0.02190643
             ],
             "direction": [
               0,
@@ -1312,14 +1317,14 @@
           "type": "line",
           "line": {
             "origin": [
-              0.004009688679024192,
+              0.00400969,
               0.001,
-              -0.01756759394649853
+              -0.01756759
             ],
             "direction": [
-              -0.900968867902419,
+              -0.9009687907874128,
               0,
-              -0.43388373911755834
+              -0.43388389924848225
             ]
           }
         },
@@ -1327,14 +1332,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.004999999999999998,
+              -0.005,
               0,
-              -0.021906431337674115
+              -0.02190643
             ],
             "direction": [
-              -0.9009688679024191,
+              -0.9009687907874128,
               0,
-              0.43388373911755823
+              0.43388389924848225
             ]
           }
         },
@@ -1342,9 +1347,9 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.01400968867902419,
+              -0.01400969,
               0,
-              -0.01756759394649853
+              -0.01756759
             ],
             "direction": [
               0,
@@ -1357,14 +1362,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.004999999999999998,
+              -0.005,
               0.001,
-              -0.021906431337674115
+              -0.02190643
             ],
             "direction": [
-              -0.9009688679024191,
+              -0.9009687907874128,
               0,
-              0.43388373911755823
+              0.43388389924848225
             ]
           }
         },
@@ -1372,14 +1377,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.01400968867902419,
+              -0.01400969,
               0,
-              -0.01756759394649853
+              -0.01756759
             ],
             "direction": [
-              -0.22252093395631375,
+              -0.2225209776783655,
               0,
-              0.9749279121818238
+              0.9749279022025498
             ]
           }
         },
@@ -1387,9 +1392,9 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.016234898018587327,
+              -0.0162349,
               0,
-              -0.007818314824680296
+              -0.00781831
             ],
             "direction": [
               0,
@@ -1402,14 +1407,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.01400968867902419,
+              -0.01400969,
               0.001,
-              -0.01756759394649853
+              -0.01756759
             ],
             "direction": [
-              -0.22252093395631375,
+              -0.2225209776783655,
               0,
-              0.9749279121818238
+              0.9749279022025498
             ]
           }
         },
@@ -1417,14 +1422,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.016234898018587327,
+              -0.0162349,
               0,
-              -0.007818314824680296
+              -0.00781831
             ],
             "direction": [
-              0.6234898018587334,
+              0.6234901581604567,
               0,
-              0.7818314824680299
+              0.7818311983267544
             ]
           }
         },
@@ -1432,9 +1437,9 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.009999999999999992,
+              -0.01,
               0,
-              0.000000000000000002664535259100376
+              0
             ],
             "direction": [
               0,
@@ -1447,14 +1452,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.016234898018587327,
+              -0.0162349,
               0.001,
-              -0.007818314824680296
+              -0.00781831
             ],
             "direction": [
-              0.6234898018587334,
+              0.6234901581604567,
               0,
-              0.7818314824680299
+              0.7818311983267544
             ]
           }
         },
@@ -1462,14 +1467,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.009999999999999992,
+              -0.01,
               0,
-              0.000000000000000002664535259100376
+              0
             ],
             "direction": [
               1,
               0,
-              -0.00000000000000026645352591003776
+              -0
             ]
           }
         },
@@ -1477,14 +1482,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.009999999999999992,
+              -0.01,
               0.001,
-              0.000000000000000002664535259100376
+              0
             ],
             "direction": [
               1,
               0,
-              -0.00000000000000026645352591003776
+              -0
             ]
           }
         }
@@ -1494,6 +1499,27 @@
   "extensionsUsed": [
     "KITTYCAD_boundary_representation"
   ],
+  "materials": [
+    {
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.9,
+          0.9,
+          0.9,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 1
+      },
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
   "meshes": [
     {
       "primitives": [
@@ -1501,55 +1527,64 @@
           "attributes": {
             "POSITION": 0,
             "NORMAL": 1
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 2,
             "NORMAL": 3
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 4,
             "NORMAL": 5
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 6,
             "NORMAL": 7
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 8,
             "NORMAL": 9
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 10,
             "NORMAL": 11
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 12,
             "NORMAL": 13
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 14,
             "NORMAL": 15
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 16,
             "NORMAL": 17
-          }
+          },
+          "material": 0
         }
       ]
     }

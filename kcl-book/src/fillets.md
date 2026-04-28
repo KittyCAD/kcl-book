@@ -104,7 +104,9 @@ extrudeCube = extrude(regionCube, length = width)
 filletCube = fillet(
   extrudeCube,
   tags = [
+    // Fillet the bottom edge
     extrudeCube.sketch.tags.line1,
+    // Fillet the top edge
     getOppositeEdge(extrudeCube.sketch.tags.line1)
   ],
   radius = 0.2,
@@ -131,10 +133,12 @@ extrudeCube = extrude(regionCube, length = width)
 filletCube = fillet(
   extrudeCube,
   tags = [
+    // Fillet the bottom four edges
     extrudeCube.sketch.tags.line1,
     extrudeCube.sketch.tags.line2,
     extrudeCube.sketch.tags.line3,
     extrudeCube.sketch.tags.line4,
+    // Fillet the top four edges
     getOppositeEdge(extrudeCube.sketch.tags.line1),
     getOppositeEdge(extrudeCube.sketch.tags.line2),
     getOppositeEdge(extrudeCube.sketch.tags.line3),
@@ -147,7 +151,7 @@ filletCube = fillet(
 
 <!-- KCL: name=cube_eight_fillets,alt=Cube with all top and bottom edge fillets-->
 
-So, we've filleted the bottom horizontal edges, and the top horizontal edges. What about the vertical side edges, which connect the top and bottom face? We can use [`getNextAdjacentEdge`] and [`getPreviousAdjacentEdge`] to reference them:
+So, we've filleted the bottom horizontal edges, and the top horizontal edges. What about the side (vertical) edges, which connect the top and bottom face? We can use [`getNextAdjacentEdge`] and [`getPreviousAdjacentEdge`] to reference them:
 
 ```kcl=cube_next_prev_fillets
 // Sketch a square
@@ -167,8 +171,11 @@ extrudeCube = extrude(regionCube, length = width)
 filletCube = fillet(
   extrudeCube,
   tags = [
+    // Bottom edge
     extrudeCube.sketch.tags.line1,
+    // One side edge
     getNextAdjacentEdge(extrudeCube.sketch.tags.line1),
+    // The other side edge
     getPreviousAdjacentEdge(extrudeCube.sketch.tags.line1),
   ],
   radius = 0.2,

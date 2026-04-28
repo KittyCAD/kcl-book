@@ -99,6 +99,10 @@ myCircleSketch = sketch(on = XZ) {
 
 <!-- KCL: name=basic_circle,skip3d=true,alt=A simple circle-->
 
+> **NOTE**: This screenshot, like most screenshots that follow, is from an isometric perspective. It may look like an ellipse, but it's actually a circle. It would look like a circle from a heads-on angle.
+
+<!-- TODO: Add attribute for camera angle -->
+
 The [`circle`] call takes `center` and `start` arguments. The `start` argument is just any point along the circle's circumference. It's helpful in the Zoo point-and-click sketching UI, because it lets you easily snap constraints like a distance to it. The circle's radius is defined implicitly by the distance from `center` to `start` point. 
 
 [`coincident`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-coincident>

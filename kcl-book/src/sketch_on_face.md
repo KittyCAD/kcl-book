@@ -76,11 +76,11 @@ region002 = region(point = [-2.9530332mm, 0.3234568mm], sketch = sketch003)
 extrude002 = extrude(region002, length = 2)
 ```
 
-<!-- KCL: name=triangle_with_cylinder_sketched,alt=Previous triangle now has a cylinder sketched on one side face-->
+<!-- KCL: name=triangle_with_cylinder_sketched,alt=Previous triangle now has another triangular prism sketched on one side face-->
 
 Great! We extruded a solid (the triangle), and could sketch on one of its faces, even extruding that sketch.
 
-**Note**: When you sketch on a face, the sketch uses the _global coordinate system_. This means when you use 2D points in your sketches, they're relative to the overall global scene, and _not_ the face you're sketching on.
+>**Note**: When you sketch on a face, the sketch uses the _global coordinate system_. This means when you use 2D points in your sketches, they're relative to the overall global scene, and _not_ the face you're sketching on.
 
  Sketching on faces is a really common pattern when designing real-world objects. A LEGO brick is a good example -- first you'd sketch the rectangular brick, then you'd sketch on its top face, adding the little bumps on top. But wait a second. How would we specify the top face of the brick? That face isn't created from any particular edge. So we can't tag its `line` call and then reuse that tag for the face. What should we do?
 
@@ -121,7 +121,7 @@ extrude002 = extrude(region002, length = 1)
 
 ```
 
-<!-- KCL: name=triangle_top_and_bottom_sketches,alt=Solid with a cylinder extruded on top and a cube extruded below-->
+<!-- KCL: name=triangle_top_and_bottom_sketches,alt=Solid with another triangle extruded from it-->
 
 Great! These built-in face identifiers are always available on solids. We've learned how to sketch on the top, bottom and side faces. That covers all possible faces, right? Right? Not exactly! There's one more kind of face we haven't talked about yet. 
 
@@ -224,7 +224,9 @@ By default, extruding a sketch which was sketched on a face will _merge_ the ext
  - Use `extrude(method = MERGE)` (the default) to update the original solid.
  - Use `extrude(method = NEW)` (an optional override) to create a new solid instead.
 
-Now we've learned how to sketch on all sorts of things:
+What's the practical difference between these? If you use `MERGE`, you've got one body. That means the single unified body will be translated, or rotated, or have its color changed, as one cohesive whole. With `NEW`, you've got two bodies, so you can reposition them independently, color them differently, etc. You'll learn how to move, rotate and recolor solids in the chapter on [transforms].
+
+OK! Now we've learned how to sketch on all sorts of things:
 
  - Standard planes like XY or -XZ
  - Tagged faces of existing solids
@@ -237,3 +239,4 @@ There's one more thing we can sketch on: custom planes. Let's learn more about p
 [`START`]: <https://zoo.dev/docs/kcl-std/consts/std-START>
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`faceOf`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-faceOf
+[transforms]: transform_3d.md

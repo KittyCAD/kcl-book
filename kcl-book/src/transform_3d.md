@@ -5,12 +5,11 @@ We've covered many different ways to create 3D solids from 2D sketches, but what
 
 ## Colour
 
-So far, all our models have used the standard shiny grey metal appearance. But you can customize this! Let's change the texture. We'll make three cubes: one with the normal color, one green, and one a shiny metallic green.
+So far, all our models have used the standard shiny grey metal appearance. But you can customize this! Let's change the texture. We'll make two cubes: one cyan, one shiny metallic green.
 
 ```kcl=cube_textures
 // Sketch 2 squares.
 sketch001 = sketch(on = XY) {
-
   // Rectangle 1
   line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
   line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
@@ -24,7 +23,6 @@ sketch001 = sketch(on = XY) {
   parallel([line3, line1])
   perpendicular([line1, line2])
   horizontal(line3)
-  
   // Rectangle 2
   line5 = line(start = [var -10.25mm, var 2.72mm], end = [var -4.81mm, var 2.72mm])
   line6 = line(start = [var -4.81mm, var 2.72mm], end = [var -4.81mm, var 8.16mm])
@@ -52,9 +50,16 @@ sketch001 = sketch(on = XY) {
   ])
 }
 
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cube1 = extrude(region001, length = 5)
+  |> appearance(color = "#00ffbf")
+
+region002 = region(point = [-7.5300003mm, 2.9425003mm], sketch = sketch001)
+cube2 = extrude(region002, length = 5)
+  |> appearance(color = "#147807", metalness = 90, roughness = 60)
 ```
 
-<!-- KCL: name=cube_textures,skip3d=true,alt=Three cubes with different textures-->
+<!-- KCL: name=cube_textures,alt=Two cubes with different textures-->
 
 The [`appearance`] call takes in three arguments, each of which is optional. You can provide:
 
@@ -102,7 +107,7 @@ greenCube = clone(silverCube)
   |> appearance(color = "#00ff00", metalness = 80, roughness = 30)
 ```
 
-<!-- KCL: name=translate_cubes,skip3d=true,alt=Three translated cubes-->
+<!-- KCL: name=translate_cubes,alt=Two translated cubes-->
 
 The [`translate`] call takes three arguments, `x`, `y` and `z`. Each of them is optional. If you provide one, it'll shift the solid along that axis. If you don't provide an axis, it'll remain unchanged.
 
@@ -143,7 +148,7 @@ greenCube = clone(silverCube)
   |> appearance(color = "#00ff00", metalness = 80, roughness = 30)
 ```
 
-<!-- KCL: name=scaled_cubes,skip3d=true,alt=Three scaled cubes-->
+<!-- KCL: name=scaled_cubes,alt=Three scaled cubes-->
 
 The [`scale`] call works similarly. You provide one or more axes -- if you don't provide an axis, it's left unchanged. Numbers less than 1 will shrink the solid (e.g. 0.25 means 1/4th its original size). Numbers larger than 1 will expand the solid (e.g. 4 means 4x its original size).
 
@@ -199,7 +204,7 @@ extrude004 = clone(silverCube)
   |> appearance(color = "#5900ff", metalness = 80, roughness = 30)
 ```
 
-<!-- KCL: name=rotated_cubes,skip3d=true,alt=Four rotated cubes-->
+<!-- KCL: name=rotated_cubes,alt=Four rotated cubes-->
 
 Note that these rotations are all around their own center (not the center of the plane).
 
@@ -246,7 +251,7 @@ extrude004 = clone(silverCube)
   |> rotate(axis = X, angle = angle * 3)
 ```
 
-<!-- KCL: name=rotated_cubes_axis,skip3d=true,alt=Four cubes rotated around the same axis-->
+<!-- KCL: name=rotated_cubes_axis,alt=Four cubes rotated around the same axis-->
 
 ## Using transformations
 

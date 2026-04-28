@@ -49,7 +49,7 @@ offsets = [0, 25, 50]
 cubes = map(offsets, f = cube)
 ```
 
-<!-- KCL: name=three_map_cubes,skip3d=true,alt=Three mapped cubes-->
+<!-- KCL: name=three_map_cubes,alt=Three mapped cubes-->
 
 We created an array of offsets, then called the `cube` function on each offset in the array. The final result is an array of cubes. Calling the `cube` function drew the three cubes, each at their own offset.
 
@@ -103,7 +103,7 @@ offsets = [
 threeCubes = map(offsets, f = cube)
 ```
 
-<!-- KCL: name=three_map_cubes_color,skip3d=true,alt=Three mapped cubes of different colors-->
+<!-- KCL: name=three_map_cubes_color,alt=Three mapped cubes of different colors-->
 
 Remember, `map` takes in an array, and outputs an array. The arrays always have the same length. Item `x` in the input array will be `f(x)` in the output array, where `f` is whichever function you pass in.
 
@@ -155,6 +155,8 @@ What are some other things we can do with `reduce`? We could calculate the produ
 ```kcl
 reduce(inputArray, initial = 1, f = fn(@i, accum) { return i * accum})
 ```
+
+You'll find `map` and `reduce` useful when building geometry procedurally. They're useful programming primitives for building complex programs. It's important to check your work when you're writing code like this, that manipulates values like numbers and arrays, which can't be visualized like KCL sketches or solid geometry. In the next chapter, we'll learn how to check your work and write basic tests in KCL.
 
 [`map`]: https://zoo.dev/docs/kcl-std/functions/std-array-map
 [`reduce`]: https://zoo.dev/docs/kcl-std/functions/std-array-reduce

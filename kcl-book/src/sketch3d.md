@@ -51,6 +51,8 @@ You should see something like this:
 
 <!-- KCL: name=pill_3d,alt=2D pill extruded into 3D -->
 
+> NOTE: If you're reading this book online, the above graphic should be an interactive 3D model. You can use your mouse (or touchpad) to spin the model, zoom in and out, pan around the 3D scene, etc.
+
 We added two different functions to our program: [`region`] and [`extrude`]. They work together: `region` lets you pick out a closed region of 2D space from your sketch, and `extrude` transforms that region into a 3D solid.
 
 We need `region` because a sketch can contain lots of geometry. In the previous chapters, we used calls to `line` and `arc` to create closed shapes, like rhombuses and pills. But a sketch could contain multiple shapes, or free-floating lines that aren't part of any closed shape at all. Here's an example sketch:
@@ -109,7 +111,7 @@ Our variable `pathSketch` has two lines (one straight line, one arc). Note that 
 
 Now we'll add the [`sweep`] call, like `sweep(pillRegion, path = [pathSketch.line1, pathSketch.arc1])`, which will drag our 2D pill sketch along the path we defined. We'll add it to the bottom of our code:
 
-```kcl=path_for_sweep
+```kcl=path_for_sweep_complete
 // This is the same in the previous example program:
 pillSketch = sketch(on = YZ) {
   line1 = line(start = [var -4.18mm, var 5.88mm], end = [var 1.34mm, var 5.85mm])
@@ -141,7 +143,7 @@ pathSketch = sketch(on = XZ) {
 sweep(pillRegion, path = [pathSketch.line1, pathSketch.arc1])
 ```
 
-<!-- KCL: name=swept_along_path,alt=2D pill swept along path into 3D -->
+<!-- KCL: name=path_for_sweep_complete,alt=2D pill swept along path into 3D -->
 
 Sweeps and extrudes are pretty similar! A sweep is basically a generalization of extrudes to allow extruding along more complicated paths. Or conversely, you could say an extrude is just a sweep whose path has to be a straight line along the normal to the plane. 
 
@@ -176,7 +178,9 @@ circleSketch = sketch(on = XZ) {
 
 <!-- KCL: name=circle,skip3d=true,alt=A 2D circle before revolving.-->
 
-The [`revolve`] function takes a shape and revolves it, by dragging it around an axis. Let's revolve our circle around the Y axis (which is perpendicular to XZ, the plane we're sketching on), to make a ring shape.
+Note that we placed the circle at `[20, 0]`, i.e. 20 units away from the global origin.
+
+The [`revolve`] function takes a shape and revolves it, by dragging it around an axis. Let's revolve our circle around the Y axis (which is perpendicular to XZ, the plane we're sketching on), to make a ring shape. Because the circle being revolved is 20 units away from the global origin, the ring produced by the revolve should have a radius of 20.
 
 ```kcl=donut
 circleSketch = sketch(on = XZ) {
@@ -200,6 +204,8 @@ revolve001 = revolve(region001, axis = Y)
 ```
 
 <!-- KCL: name=donut,alt=The circle has been revolved around an axis to make a donut -->
+
+Beautiful. If we'd placed the original circle closer to the origin, the ring would be smaller.
 
 `revolve` has an optional argument called `angle`. In the above example, we didn't provide it, so it defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
 
@@ -378,6 +384,8 @@ loftedSolid = loft([squareRegion, circleRegion, squareRegion2], vDegree = 1)
 
 The following loft is identical, but we set `vDegree = 2`. That's actually the default, so we don't need to set it, but for the sake of example we'll explicitly set it there.
 
+<details><summary>Click here for the same KCL code, but using `vDegree = 2`</summary>
+
 ```kcl=loft_vd2
 // Sketch a square
 square = sketch(on = XY) {
@@ -437,6 +445,8 @@ squareRegion2 = region(point = [0mm, -4.9975mm], sketch = square2)
 // need to set it. We're setting it here for the sake of example.
 loftedSolid = loft([squareRegion, circleRegion, squareRegion2], vDegree = 2)
 ```
+
+</details>
 
 <!-- KCL: name=loft_vd2,alt=Loft with vDegree 2-->
 

@@ -209,7 +209,7 @@ cube(sideLen = 1, offset = 5)
 
 <!-- KCL: name=two_cubes_purple_blue,alt=Two cubes created with the same cube function call.-->
 
-This is neater than copying and pasting the code to make 3 separate cubes, and it lets us have more control over the cube than using `clone()` and `translate()`. If we wanted to, say, tweak the height of each cube, we could add a new parameter `height` to our `cube` function. Or we could just alter the extrude length in the function body.
+This is neater than copying and pasting the code to make 2 separate cubes, and it lets us have more control over the cube than using `clone()` and `translate()`. If we wanted to, say, tweak the height of each cube, we could add a new parameter `height` to our `cube` function. Or we could just alter the extrude length in the function body.
 
 By putting the details of "what does a cube look like" in a single function, we make our code both more readable, and easier to change in the future.
 

@@ -72,15 +72,12 @@ Now let's use this custom plane in a sketch. We'll build two identical cylinders
 
 ```kcl=custom_plane
 customPlane = {
-  origin = {
-    x = 0,
-    y = 0,
-    z = 0
-  },
+  origin = { x = 0, y = 6, z = 0 },
   xAxis = { x = 1, y = 0.5, z = 0 },
   yAxis = { x = 0, y = 0.5, z = 1 }
 }
 
+// Build a cylinder on a custom plane
 sketch001 = sketch(on = customPlane) {
   circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
   coincident([circle1.center, ORIGIN])
@@ -90,6 +87,21 @@ sketch001 = sketch(on = customPlane) {
   distance([line1.start, line1.end]) == 1
   vertical(line1)
 }
+region001 = region(point = [0mm, -0.9975mm], sketch = sketch001)
+extrude001 = extrude(region001, length = 2)
+
+// Build the same cylinder, but on the XY plane.
+sketch002 = sketch(on = XY) {
+  circle1 = circle(start = [var -0.52mm, var 0.56mm], center = [var 0mm, var 0mm])
+  coincident([circle1.center, ORIGIN])
+  line1 = line(start = [var -0.52mm, var 0.56mm], end = [var 0mm, var 0mm], construction = true)
+  coincident([line1.start, circle1.start])
+  coincident([line1.end, circle1.center])
+  distance([line1.start, line1.end]) == 1
+  vertical(line1)
+}
+region002 = region(point = [0mm, -0.9975mm], sketch = sketch002)
+extrude002 = extrude(region002, length = 2)
 ```
 
 <!-- KCL: name=custom_plane,alt=One cylinder on XY plane and another on a custom plane-->
@@ -109,7 +121,7 @@ newPlane = offsetPlane(customPlane, offset = 20)
 
 ## planeOf
 
-There's one last method to create a plane. You can choose some 3D solid in your KCL file, and get the plane that its face lies on using `planeOf(mySolid, face = myFace)`. For example:
+There's one last method to create a plane: via the [`planeOf`] function. You can choose some 3D solid in your KCL file, and get the plane that its face lies on using `planeOf(mySolid, face = myFace)`. For example:
 
 ```kcl
 // Make a square
@@ -146,7 +158,7 @@ sweep001 = sweep(region001, path = [sketch002.line1, sketch002.arc1])
 p = planeOf(sweep001, face = END)
 ```
 
-This plane can be used for sketching on, or altered with `offsetPlane`.
+This plane can be used for sketching on, or altered with [`offsetPlane`].
 
 We've covered three different ways to create planes:
  - Offsetting from an existing plane
@@ -156,6 +168,6 @@ We've covered three different ways to create planes:
 Combined with the six standard planes, you have a wide range of planes that you can use to sketch on, or build solids with. In the next chapter, we'll look at how to manipulate and change those solids.
 
 [`offsetPlane`]: <https://zoo.dev/docs/kcl-std/functions/std-offsetPlane>
-[`planeOf`]: <https://zoo.dev/docs/kcl-std/functions/std-planeOf>
+[`planeOf`]: <https://zoo.dev/docs/kcl-std/functions/std-sketch-planeOf>
 [plane type]: <https://zoo.dev/docs/kcl-std/types/std-types-Plane>
 [right-hand rule]: <https://en.wikipedia.org/wiki/Right-hand_rule>

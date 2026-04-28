@@ -44,7 +44,7 @@ cubeBlue = clone(cubeGreen)
   |> appearance(color = "#222299")
 ```
 
-<!-- KCL: name=two_cubes,skip3d=true,alt=One green and one blue cube-->
+<!-- KCL: name=two_cubes,alt=One green and one blue cube-->
 
 That's what it looks like _before_ we apply any CSG operations. Now let's see what happens when we use KCL's [`union`], [`intersect`] and [`subtract`] functions on these. Firstly, let's do a union. This should create a new solid which combines both input solids. 
 
@@ -78,7 +78,7 @@ cubeBlue = clone(cubeGreen)
 both = union([cubeGreen, cubeBlue])
 ```
 
-<!-- KCL: name=two_cubes_union,skip3d=true,alt=Two gray cubes just like the previous picture-->
+<!-- KCL: name=two_cubes_union,alt=Two gray cubes just like the previous picture-->
 
 This [`union`] of our two cubes has the exact same dimensions and position as the two cubes, but they've been combined into one solid body. The resulting solid inherits the green appearance of the first body in the union (if you swapped the order to `[cubeBlue, cubeGreen]` instead, the final solid would be blue).
 
@@ -119,7 +119,7 @@ cubeBlue = clone(cubeGreen)
 both = intersect([cubeGreen, cubeBlue])
 ```
 
-<!-- KCL: name=two_cubes_intersection,skip3d=true,alt=Intersection of the two cubes-->
+<!-- KCL: name=two_cubes_intersection,alt=Intersection of the two cubes-->
 
 This keeps only the small cube shape from where the previous two intersected. This is a new solid, so it can be transformed just like any other solid. 
 
@@ -157,7 +157,7 @@ cubeBlue = clone(cubeGreen)
 both = subtract(cubeGreen, tools = [cubeBlue])
 ```
 
-<!-- KCL: name=two_cubes_subtraction,skip3d=true,alt=Green cube with blue cube subtracted-->
+<!-- KCL: name=two_cubes_subtraction,alt=Green cube with blue cube subtracted-->
 
 Note that the syntax for `subtract` is a little different. The first argument is the solid (or solids) which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes.
 
@@ -198,7 +198,7 @@ cubeBlue2 = clone(cubeBlue)
 both = subtract(cubeGreen, tools = [cubeBlue, cubeBlue2])
 ```
 
-<!-- KCL: name=two_cubes_subtraction_multi_tool,skip3d=true,alt=Green cube with blue cube subtracted-->
+<!-- KCL: name=two_cubes_subtraction_multi_tool,alt=Green cube with blue cube subtracted-->
 
 And one with multiple targets. We'll make two green cubes (our target), and a blue cube (our tool). Then we'll subtract the blue cube from both green cubes:
 
@@ -242,7 +242,7 @@ cubeBlue = clone(cubeGreen)
 both = subtract([cubeGreen, cubeGreen2], tools = [cubeBlue])
 ```
 
-<!-- KCL: name=two_cubes_sub_multi_target,skip3d=true,alt=Green cube with blue cube subtracted-->
+<!-- KCL: name=two_cubes_sub_multi_target,alt=Green cube with blue cube subtracted-->
 
 Lastly, we can do a subtraction with multiple tools, and multiple targets. We'll make two green cubes (targets) and two blue (the tools):
 
@@ -288,7 +288,7 @@ cubeBlue2 = clone(cubeBlue)
 both = subtract([cubeGreen, cubeGreen2], tools = [cubeBlue, cubeBlue2])
 ```
 
-<!-- KCL: name=subtract_multi_multi,skip3d=true,alt=Green cube with blue cube subtracted-->
+<!-- KCL: name=subtract_multi_multi,alt=Green cube with blue cube subtracted-->
 
 ## Advanced options
 
