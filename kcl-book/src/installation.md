@@ -12,7 +12,7 @@ You'll note that when you write KCL code, the live 3D view updates, showing the 
 
 You can download the [Zoo CLI], which lets you execute KCL programs and download some sort of visualization. You can download your KCL models as 3D files or as 2D images. Use `zoo kcl --help` to learn more.
 
-You can edit KCL in whatever text editor you prefer. If you're using VSCode you can use our [VSCode extension]. For all other editors, our [LSP] is available. We hope to one day supply more developer tools, like a Treesitter grammar, but for now it's not a high priority. We'd happily work with anyone who'd like to contribute an open-source implementation though!
+You can edit KCL in whatever text editor you prefer. If you're using VSCode you can use our [VSCode extension]. For all other editors, our [LSP] and [Tree-sitter grammar] are available. If you're interested in adding support for other editors or developer tools, please let us know! We're happy to work with you for more open-source KCL support.
 
 ## Contributing to KCL
 
@@ -24,3 +24,4 @@ Our [GitHub] for Zoo Design Studio has all of our developer tooling and the lang
 [VSCode extension]: https://marketplace.visualstudio.com/items?itemName=KittyCAD.kcl-language-server
 [Zoo CLI]: https://zoo.dev/docs/cli/manual
 [Zoo Design Studio]: https://zoo.dev/modeling-app
+[Tree-sitter grammar]: https://github.com/KittyCAD/tree-sitter-kcl

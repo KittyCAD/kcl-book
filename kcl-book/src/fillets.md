@@ -26,7 +26,7 @@ It produces a cube like this:
 
 <!-- KCL: name=cube_no_fillets,alt=A cube -->
 
-What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four `line` function calls, which were all assigned to variables (`line1`, `line2`, etc). When we extruded the square into a cube, the variables were copied into the solid, under `.sketch.tags`. So we can reference the edge created from `line1` via `.sketch.tags.line1`, and apply a fillet to it.
+What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four [`line`] function calls, which were all assigned to variables (`line1`, `line2`, etc). When we extruded the square into a cube, the variables were copied into the solid, under `.sketch.tags`. So we can reference the edge created from `line1` via `.sketch.tags.line1`, and apply a fillet to it.
 
 ```kcl=cube_one_fillet
 // Sketch a square
@@ -85,7 +85,7 @@ filletCube = fillet(
 
 ## Relationships between edges
 
-So far, we've assigned geometry (like a line) to a variable when we create it, and then use that variable to refer to it later (e.g. for fillets). What about edges we don't create directly, and therefore can't assign to a variable? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via `line` calls. They're created by the CAD engine in the `extrude` call. If we didn't explicitly create them with a sketch function, how do we store them in a variable? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we can refer to the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
+So far, we've assigned geometry (like a line) to a variable when we create it, and then use that variable to refer to it later (e.g. for fillets). What about edges we don't create directly, and therefore can't assign to a variable? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via [`line`] calls. They're created by the CAD engine in the [`extrude`] call. If we didn't explicitly create them with a sketch function, how do we store them in a variable? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we can refer to the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
 
 
 ```kcl=cube_two_opposite_fillets
@@ -218,7 +218,7 @@ filletCube = fillet(
 
 ## Edges between faces
 
-Sometimes `getNextAdjacentEdge` and similar functions are a bit tricky to use. It can be hard to look at a model and figure out which is the next, or previous, or opposite, edge. There's another way to refer to edges: which faces does this edge touch? For this we use the `getCommonEdge` function.
+Sometimes `getNextAdjacentEdge` and similar functions are a bit tricky to use. It can be hard to look at a model and figure out which is the next, or previous, or opposite, edge. There's another way to refer to edges: which faces does this edge touch? For this we use the [`getCommonEdge`] function.
 
 ```kcl=cube_common_edge
 // This is the same as previous examples
@@ -242,7 +242,7 @@ edge = getCommonEdge(faces = [
 fillet(extrudeCube, tags = edge, radius = 0.2)
 ```
 
-`getCommonEdge` takes a list of faces, and returns the edge that is shared between them -- their _common_ edge. This is a pretty useful function, because usually it's easier to reference and name faces rather than edges.
+[`getCommonEdge`] takes a list of faces, and returns the edge that is shared between them -- their _common_ edge. This is a pretty useful function, because usually it's easier to reference and name faces rather than edges.
 
 Notice in this example that the list of `faces` looks like a list of edges. We're passing in `line1` and `line2`, which we used to reference edges in the above examples. That's because KCL recognizes that `extrude` creates a face out of each edge (imagine each edge being dragged upwards, to create a face).
 
@@ -346,4 +346,7 @@ There are other helpers too, like [`segStart`] and [`segEnd`] to find a line's s
 [`segEnd`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segEnd
 [`segLen`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segLen
 [`segStart`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segStart
+[`line`]: https://zoo.dev/docs/kcl-std/functions/std-solver-line
+[`extrude`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-extrude
+[`getCommonEdge`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-getCommonEdge
 [standard library docs]: <https://zoo.dev/docs/kcl-std>

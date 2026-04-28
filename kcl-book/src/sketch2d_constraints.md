@@ -54,7 +54,7 @@ Line 3, `sketch(on = YZ)`, is where we actually start sketching. This line decla
 
 ### 4: Add geometry
 
-Sketches contain geometry like lines, arcs, circles and points. In our example sketch, we added three straight lines, each with a start and end. These lines are created by the `line` function, which takes two parameters: a `start` and an `end`. We make a line like this: `line(start = [0, 0], end = [0, 3])`.
+Sketches contain geometry like lines, arcs, circles and points. In our example sketch, we added three straight lines, each with a start and end. These lines are created by the [`line`] function, which takes two parameters: a `start` and an `end`. We make a line like this: `line(start = [0, 0], end = [0, 3])`.
 
 ## Working with constraints
 
@@ -77,7 +77,7 @@ sketch(on = YZ) {
 
 This looks pretty similar to our earlier triangle example, with two big differences.
 
-First, we're assigning each line to a _variable_. We've got 4 lines and 4 variables: `line1`, `line2`, `line3` and `line4`. This isn't strictly necessary yet -- each `line` function works just fine on its own, without being assigned to a variable, as you saw in the triangle example earlier. By assigning our geometry to variables, we can give each line a name. We can then refer to `line1` or `line2` later in your sketch block.
+First, we're assigning each line to a _variable_. We've got 4 lines and 4 variables: `line1`, `line2`, `line3` and `line4`. This isn't strictly necessary yet -- each [`line`] function works just fine on its own, without being assigned to a variable, as you saw in the triangle example earlier. By assigning our geometry to variables, we can give each line a name. We can then refer to `line1` or `line2` later in your sketch block.
 
 Secondly, we're using the _var_ keyword, for the `start` and `end` arguments. This means each line's endpoint is no longer an exact location! Instead, it means the `start` and `end` points are initial guesses. If we used `start = [1mm, 1mm]`, that means the line has to start at _exactly_ the point (1, 1), no changes allowed. But if you write `start = [var 1mm, var 1mm]`, then we're telling KCL to reposition our line's start and end later. That's exactly what we want. (1, 1) is just a starting guess for where the corner of our rhombus will be. We'll let the computer do the hard work of calculating the exact geometry for us. So we tell KCL it's OK to reposition this point's X and Y axes, by using `var` with each one.
 
@@ -85,7 +85,7 @@ So far, our geometry looks like this:
 
 ![Starting our rhombus](images/static/rhom0.png)
 
-That doesn't look very much like a rhombus. Let's add some _constraints_ -- some requirements we know. Firstly, we know that all 4 edges should share corners. In other words, line1 should end where line2 begins, line 2 should end where line 3 begins, and so on. Let's add some constraints.
+That doesn't look very much like a rhombus. Let's add some _constraints_ -- some requirements we know. Firstly, we know that all 4 edges should share corners. In other words, line1 should end where line2 begins, line 2 should end where line 3 begins, and so on. Let's add some constraints with the [`coincident`] function.
 
 ```kcl
 @settings(defaultLengthUnit = mm, kclVersion = 1.0)
@@ -160,7 +160,7 @@ We've marked these two diagonal lines as _construction geometry_. That means we 
 
 ![Added the construction geometry diagonals](images/static/rhom2.png)
 
-Let's add a constraint on the diagonals:
+Let's add a [`perpendicular`] constraint on the diagonals:
 
 ```kcl
 // The two diagonals are perpendicular.
@@ -213,13 +213,15 @@ We've learned how to use KCL to define 2D shapes:
 
  - Sketches are on some plane, and KCL includes standard planes XY, YZ and XZ (and their negative versions, which point the third axis down instead of up).
  - Start a sketch with a sketch block like `sketch(on = XY) { ... }`.
- - Sketches call functions like `line()` to make geometry.
+ - Sketches call functions like [`line`] to make geometry.
  - Geometry can use fixed, exact points like `[2, 2]`, or they can vary the point's exact location later (like `[var 2, var 2]`).
  - You can assign geometry to variables, like `myLine = line(start = [2, 2], end = [3, 3])`.
- - Constraints reposition geometry, like `parallel([line1, line2])`.
+ - Constraints like [`parallel`] reposition geometry, e.g. `parallel([line1, line2])`.
 
 Next, we'll look at how to build curved lines, like arcs and circles. We'll use new constraints on them to make more realistic shapes.
 
 [`line`]: https://zoo.dev/docs/kcl-std/functions/std-solver-line
 [`parallel`]: https://zoo.dev/docs/kcl-std/functions/std-solver-parallel
+[`coincident`]: https://zoo.dev/docs/kcl-std/functions/std-solver-coincident
+[`perpendicular`]: https://zoo.dev/docs/kcl-std/functions/std-solver-perpendicular
 [sketch on face]: sketch_on_face.html

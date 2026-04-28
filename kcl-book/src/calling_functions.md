@@ -16,7 +16,7 @@ This is a variable declaration, just like the variables we declared in the previ
 
 Functions have _inputs_ and _outputs_. This function has just one input, an array of numbers. When you _call_ a function, you pass it inputs in between the parentheses/round brackets. Then KCL calculates its output. You can check its output by looking up `smallest` in the Variables panel. Spoiler: it's 0. Which is, as you'd expect, the minimum value in that array.
 
-If you hover your mouse cursor over the function name `min`, you'll find some helpful documentation about the function. You can also look up all the possible functions at <https://docs.zoo.dev>. That page shows every function, and if you click it, you can see the function's name, inputs, outputs and some helpful examples of how to use it.
+If you hover your mouse cursor over the function name `min`, you'll find some helpful documentation about the function. You can also look up all the possible functions at <https://zoo.dev/docs/kcl-std>. That page shows every function, and if you click it, you can see the function's name, inputs, outputs and some helpful examples of how to use it.
 
 All functions take some data inputs and return an output. The inputs can be variables, just like you used in the previous chapter:
 

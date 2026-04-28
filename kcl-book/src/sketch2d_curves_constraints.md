@@ -6,7 +6,7 @@ In the previous chapter, we sketched basic shapes, like a triangle and a rhombus
 
 ## Fixed arcs
 
-Let's sketch a pill shape, like a rectangle but with rounded edges. We'll need arcs for this! Let's start with a basic sketch with fixed size and position. We'll need two straight lines and two circular arcs.
+Let's sketch a pill shape, like a rectangle but with rounded edges. We'll need arcs for this! Let's start with a basic sketch with fixed size and position. We'll need two straight lines and two circular arcs, made with the [`arc`] function.
 
 ```kcl
 height = 4
@@ -46,14 +46,14 @@ coincident([arc2.start, line2.start])
 coincident([line2.end, arc1.end])
 ```
 
-We know the pill should have parallel straight lines of equal length, so we'll add those constraints:
+We know the pill should have [parallel] straight lines of [equal length], so we'll add those constraints:
 
 ```kcl
 parallel([line1, line2])
 equalLength([line1, line2])
 ```
 
-We also want the two circular arcs to be the same radius, and to meet smoothly at the straight lines. So we'll add:
+We also want the two circular arcs to be the [same radius], and to meet [smoothly] at the straight lines. So we'll add:
 
 ```
 equalRadius([arc2, arc1])
@@ -83,7 +83,7 @@ pill = sketch(on = YZ) {
 }
 ```
 
-This defines a nice pill shape. We could fix its position in 3D space by adding a `coincident` constraint between the start of a line, and the origin (referred to in KCL as a built-in constant, `ORIGIN`). Or we could constrain the distance from some point to the origin with the built-in [`distance`], [`verticalDistance`] and [`horizontalDistance`] functions.
+This defines a nice pill shape. We could fix its position in 3D space by adding a `coincident` constraint between the start of a line, and the origin (referred to in KCL as a built-in constant, [`ORIGIN`]). Or we could constrain the distance from some point to the origin with the built-in [`distance`], [`verticalDistance`] and [`horizontalDistance`] functions.
 
 
 
@@ -103,7 +103,7 @@ myCircleSketch = sketch(on = XZ) {
 
 <!-- TODO: Add attribute for camera angle -->
 
-The [`circle`] call takes `center` and `start` arguments. The `start` argument is just any point along the circle's circumference. It's helpful in the Zoo point-and-click sketching UI, because it lets you easily snap constraints like a distance to it. The circle's radius is defined implicitly by the distance from `center` to `start` point. 
+The [`circle`] function takes `center` and `start` arguments. The `start` argument is just any point along the circle's circumference. It's helpful in the Zoo point-and-click sketching UI, because it lets you easily snap constraints like a distance to it. The circle's radius is defined implicitly by the distance from `center` to `start` point. 
 
 [`coincident`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-coincident>
 [`verticalDistance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-verticalDistance>
@@ -111,3 +111,10 @@ The [`circle`] call takes `center` and `start` arguments. The `start` argument i
 [`distance`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-distance>
 [`region`]: <https://zoo.dev/docs/kcl-std/functions/std-sketch-region>
 [`circle`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-circle>
+[`arc`]: <https://zoo.dev/docs/kcl-std/functions/std-solver-arc>
+[parallel]: <https://zoo.dev/docs/kcl-std/functions/std-solver-parallel>
+[tangent]: <https://zoo.dev/docs/kcl-std/functions/std-solver-tangent>
+[smoothly]: <https://zoo.dev/docs/kcl-std/functions/std-solver-tangent>
+[same radius]: <https://zoo.dev/docs/kcl-std/functions/std-solver-equalRadius>
+[equal length]: <https://zoo.dev/docs/kcl-std/functions/std-solver-equalLength>
+[`ORIGIN`]: <https://zoo.dev/docs/kcl-std/consts/std-solver-ORIGIN>

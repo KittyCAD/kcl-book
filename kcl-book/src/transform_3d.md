@@ -63,7 +63,7 @@ cube2 = extrude(region002, length = 5)
 
 The [`appearance`] call takes in three arguments, each of which is optional. You can provide:
 
- - A `color` as a hexadecimal number like `#0044ff`. The first two digits represent red, the next two green, and the last two blue. You can use an [online color picker] to play with the format. 
+ - A `color` as a hexadecimal number like `#0044ff`. The first two digits represent red, the next two green, and the last two blue. You can use an [online color picker] to play with the format. If you open your KCL in Zoo Design Studio, you can use an interactive color picker right there in the code editor.
  - A `metalness` percentage, which is a number between 0 and 100.
  - A `roughness` percentage, which is a number between 0 and 100.
 

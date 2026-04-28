@@ -28,9 +28,9 @@ extrude001 = extrude(region001, length = 1)
 
 <!-- KCL: name=triangle_for_sketching,alt=An extruded triangle -->
 
-When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces (surfaces). So, each new side face corresponds to an existing edge. And crucially, the faces are linked back to their parent edge. This means the face which grew out of the `line1` can be referred to via `extrude001.sketch.tags.line1`. We can use this to reference this face in our 3D model`.
+When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces (surfaces). So, each new side face corresponds to an existing edge. And crucially, the faces are linked back to their parent edge. This means the face which grew out of the `line1` can be referred to via `extrude001.sketch.tags.line1`. We can use this to reference this face in our 3D model.
 
-Now, if we want to start a new sketch _on that face_, we can do so, with the `faceOf` function!
+Now, if we want to start a new sketch _on that face_, we can do so, with the [`faceOf`] function!
 
 ```kcl
 myFace = faceOf(extrude001, face = region001.tags.line3)
@@ -39,7 +39,7 @@ sketch003 = sketch(on = myFace) {
 }
 ```
 
-In all the previous example sketches, we've sketched on a _plane_ (like XY or YZ). But now, we're passing a solid face (of our extruded triangle) instead. The solid has five faces (three side faces, a bottom, and a top), so we use `faceOf` to say which face in particular we want to sketch on. As we discussed above, the face can be referenced via `line1` (the line that it was extruded from). Now we can start sketching on this face, and even extrude that sketch too.
+In all the previous example sketches, we've sketched on a _plane_ (like XY or YZ). But now, we're passing a solid face (of our extruded triangle) instead. The solid has five faces (three side faces, a bottom, and a top), so we use [`faceOf`] to say which face in particular we want to sketch on. As we discussed above, the face can be referenced via `line1` (the line that it was extruded from). Now we can start sketching on this face, and even extrude that sketch too.
 
 
 ```kcl=triangle_with_cylinder_sketched

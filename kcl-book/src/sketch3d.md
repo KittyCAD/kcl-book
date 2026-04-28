@@ -55,7 +55,7 @@ You should see something like this:
 
 We added two different functions to our program: [`region`] and [`extrude`]. They work together: `region` lets you pick out a closed region of 2D space from your sketch, and `extrude` transforms that region into a 3D solid.
 
-We need `region` because a sketch can contain lots of geometry. In the previous chapters, we used calls to `line` and `arc` to create closed shapes, like rhombuses and pills. But a sketch could contain multiple shapes, or free-floating lines that aren't part of any closed shape at all. Here's an example sketch:
+We need `region` because a sketch can contain lots of geometry. In the previous chapters, we used calls to [`line`] and [`arc`] to create closed shapes, like rhombuses and pills. But a sketch could contain multiple shapes, or free-floating lines that aren't part of any closed shape at all. Here's an example sketch:
 
 ![A pill shape made from fixed arcs and lines](images/static/region_demo.png)
 
@@ -70,7 +70,7 @@ Once you have a region of 2D space, you can turn that 2D space into 3D. We use t
 ### Advanced extrude options
 
  - `bidirectionalLength = <number>`: In addition to extruding up by `length`, also extrude _down_ by this much.
- - `symmetric = true`: Instead of extruding up by `length`, extrude up half the length, and down half the length.
+ - `symmetric = true`: Instead of extruding up by `length`, extrude up half the length, and down half the length. So, if you sketch on `XY` and then `extrude(length = 10)`, it'll extrude 10 from `Z=0` to `Z=10`. But if you use `extrude(length = 10, symmetric = true)` it'll go from `Z=-5` to `Z=5`.
  - `to = <target>`: Set a target (you can use a point, axis, plane, edge, face, sketch or solid), and this will extrude until it makes the solid reach the target (or as close as it can possibly get).
  - `twistAngle = 30deg`: While extruding, twist the sketch around its center. Or choose some other point to twist around, via `twistCenter`. Change the twist speed with `twistAngleStep`.
 
@@ -207,7 +207,7 @@ revolve001 = revolve(region001, axis = Y)
 
 Beautiful. If we'd placed the original circle closer to the origin, the ring would be smaller.
 
-`revolve` has an optional argument called `angle`. In the above example, we didn't provide it, so it defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
+[`revolve`] has an optional argument called `angle`. In the above example, we didn't provide it, so it defaulted to 360 degrees. But we can set it to 240 degrees, and get two thirds of a donut:
 
 ```kcl=donut240
 // This part is the same as the previous example:
@@ -279,7 +279,7 @@ Note that here, we omitted the `angle` argument from the `revolve` call because 
 
 ## Lofts
 
-All previous methods -- extrudes, sweeps, revolves -- took a single 2D shape and made a single 3D solid. Lofts are a little different -- they take _multiple_ 2D shapes and join them to make a single 3D shape. A loft interpolates between various sketches, creating a volume that smoothly blends from one shape into another. Let's see an example:
+All previous methods -- extrudes, sweeps, revolves -- took a single 2D shape and made a single 3D solid. Lofts are a little different -- they take _multiple_ 2D shapes and join them to make a single 3D shape. A [`loft`] interpolates between various sketches, creating a volume that smoothly blends from one shape into another. Let's see an example:
 
 ```kcl=loft_basic
 // Sketch a square
@@ -320,7 +320,7 @@ loft([squareRegion, circleRegion])
 
 <!-- KCL: name=loft_basic,alt=Basic loft of a square into a circle-->
 
-Note that we used the [`offsetPlane`] function to start the circle sketch above the XY plane. We'll cover offsetPlane more in the chapter on [sketch on face]. The [`loft`] function has a few other advanced options you can set. One of these is `vDegree`, which affects how smoothly KCL interpolates between the shapes. Take a look at these two examples, which are identical except for vDegree. This example uses `vDegree = 1`:
+Note that we used the [`offsetPlane`] function to start the circle sketch above the XY plane. We'll cover offsetPlane more in the chapter on [planes]. The [`loft`] function has a few other advanced options you can set. One of these is `vDegree`, which affects how smoothly KCL interpolates between the shapes. Take a look at these two examples, which are identical except for vDegree. This example uses `vDegree = 1`:
 
 ```kcl=loft_vd1
 // Sketch a square
@@ -459,3 +459,6 @@ As you can see, the `vDegree` makes a big difference. You can view other options
 [`revolve`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-revolve
 [sketch on face]: sketch_on_face.html
 [`sweep`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-sweep
+[`line`]: https://zoo.dev/docs/kcl-std/functions/std-solver-line
+[`arc`]: https://zoo.dev/docs/kcl-std/functions/std-solver-arc
+[planes]: planes.md

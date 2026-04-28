@@ -369,7 +369,7 @@ Pattern transforms are a very powerful tool. They're definitely one of the most 
 
 ## 2D patterns and holes
 
-**WARNING**: 2D patterns are, currently, only supported for our old sketch syntax. We're actively working on porting 2D patterns to our new sketch syntax, so you can use them with constraint solvers. Until then, you can read the rest of this chapter and use it with our old sketch syntax.
+> **WARNING**: 2D patterns are, currently, only supported for our old sketch syntax. We're actively working on porting 2D patterns to our new sketch syntax, so you can use them with constraint solvers. Until then, you can read the rest of this chapter and use it with our old sketch syntax.
 
 So far all of the patterns we've used have replicated 3D solids. But you can use patterns to replicate 2D sketches too. The [`patternLinear2d`], [`patternCircular2d`] and [`patternTransform2d`] functions work like their 3D variants, except they take 2D axes and 2D points. Here's a simple example:
 
@@ -418,4 +418,4 @@ This could be done with CSG, but it's faster to produce the 2D sketch you want, 
 [`patternTransform2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternTransform2d
 [`rem`]: https://zoo.dev/docs/kcl-std/functions/std-math-rem
 [`floor`]: https://zoo.dev/docs/kcl-std/functions/std-math-floor
-[`subtract2d`]: https://zoo.dev/docs/kcl-std/functions/std-solid-subtract2d
+[`subtract2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-subtract2d

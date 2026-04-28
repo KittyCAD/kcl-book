@@ -125,7 +125,7 @@ This keeps only the small cube shape from where the previous two intersected. Th
 
 **Note**: Instead of writing `intersect([cubeGreen, cubeBlue])` you can use the shorthand `cubeGreen & cubeBlue`. This is a nice little shorthand you can use if you want to.
 
-Lastly, let's try a `subtract` call:
+Lastly, let's try a [`subtract`] call:
 
 ```kcl=two_cubes_subtraction
 // This part is unchanged from previous examples.
@@ -159,7 +159,7 @@ both = subtract(cubeGreen, tools = [cubeBlue])
 
 <!-- KCL: name=two_cubes_subtraction,alt=Green cube with blue cube subtracted-->
 
-Note that the syntax for `subtract` is a little different. The first argument is the solid (or solids) which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes.
+Note that the syntax for [`subtract`] is a little different. The first argument is the solid (or solids) which will have some volume carved out. The second argument is a list of solids to cut out. You can think of these as "tools" -- you're basically passing tools of various shapes which can carve out special volumes.
 
 Let's try a subtraction with multiple tools:
 
@@ -292,7 +292,7 @@ both = subtract([cubeGreen, cubeGreen2], tools = [cubeBlue, cubeBlue2])
 
 ## Advanced options
 
-There's a few arguments you can set for these functions:
+There's a few arguments you can set for these functions. To be honest, you probably won't ever need to set these manually, but they're documented here just in case.
 
  - `tolerance` is a measure of how accurate the underlying 3D combination algorithms are. A tolerance of `0.1` means the algorithm is very inaccurate, but very fast. A tolerance of `0.000000001` makes the algorithm much more accurate, but slower. This is set to a sensible default, but you might need to change it for models with very precise, very small features.
  - `legacyMethod` lets you opt back into an older version of Zoo's geometry engine which used a different algorithm for CSG. We don't recommend setting this, and it will be removed at some point in the future.
