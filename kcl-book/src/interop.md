@@ -4,16 +4,16 @@ KCL tries to work well with the rest of the CAD ecosystem. That means you can us
 
 ## Importing other files into KCL
 
-The `import` statement lets you load models from other CAD files and use them in your KCL. Once imported, they can be translated, rotated, cloned etc. For example, let's import a shape from some CAD file.
+The `import` statement lets you load models from other CAD files and use them in your KCL. Once imported, they can be translated, rotated, cloned etc. For example, let's import a shape from some CAD file. If you place a file named "car motor.step" in the root of your KCL project (i.e. next to `main.kcl`), you can run this:
 
 ```kcl
-import "motor.step" as motor
+import "car motor.step" as motor
 ```
 
 Once you've imported the geometry, it'll be placed in your scene. You can then modify it like any other KCL solid. For example, let's make two motors:
 
 ```kcl
-import "motor.step" as motor
+import "car motor.step" as motor
 
 motor
   |> translate(x=10)

@@ -36,11 +36,17 @@ fn run() -> Result<()> {
     let modeling_app_dir = Utf8PathBuf::from(modeling_app_dir);
     let book_dir = kcl_book_dir(modeling_app_dir);
     let files = read_markdown_files(&book_dir)?;
-    let kcl_programs = files.flat_map(kcl_code_blocks);
+    let code_blocks = files.flat_map(kcl_code_blocks);
 
-    for code_block in kcl_programs {
+    for code_block in code_blocks {
         if let Some(name) = code_block.name {
-            render_snapshot(code_block.contents, &name, book_dir.clone(), mode)?;
+            render_snapshot(
+                code_block.contents,
+                &name,
+                book_dir.clone(),
+                mode,
+                &code_block.file,
+            )?;
         } else {
             check_parses(
                 code_block.contents,
@@ -53,7 +59,7 @@ fn run() -> Result<()> {
 }
 
 fn check_parses(program: String, file: String, block_number: usize) -> Result<()> {
-    println!("Linting {} {}", file, block_number);
+    // println!("Linting {} {}", file, block_number);
     let mut cmd = Command::new("zoo")
         .args(["kcl", "lint", "-"])
         .stdin(Stdio::piped())
@@ -78,7 +84,14 @@ fn check_parses(program: String, file: String, block_number: usize) -> Result<()
 
 /// Runs the KCL program via the `zoo` CLI, and writes the output PNG to the right
 /// location within the book's images dir.
-fn render_snapshot(program: String, name: &str, book_dir: Utf8PathBuf, mode: Mode) -> Result<()> {
+fn render_snapshot(
+    program: String,
+    name: &str,
+    book_dir: Utf8PathBuf,
+    mode: Mode,
+    file: &str,
+) -> Result<()> {
+    let chapter = file.split('/').last().unwrap();
     let mut png_dst = book_dir.clone();
     png_dst.push("images");
     png_dst.push("dynamic");
@@ -86,12 +99,14 @@ fn render_snapshot(program: String, name: &str, book_dir: Utf8PathBuf, mode: Mod
     png_dst.set_extension("png");
     if mode == Mode::New && std::fs::exists(&png_dst)? {
         // PNG already exists, so skip it.
+        eprintln!("    Skipping {chapter}::{name}");
         return Ok(());
     }
+    eprintln!("Modeling {chapter}::{name}");
 
     // Render PNG
     let mut cmd = Command::new("zoo")
-        .args(["kcl", "snapshot", "-", png_dst.as_ref()])
+        .args(["kcl", "snapshot", "--angle", "iso", "-", png_dst.as_ref()])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()

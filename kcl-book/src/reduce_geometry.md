@@ -1,5 +1,7 @@
 # Reduce and geometry
 
+**WARNING**: This chapter covers the old syntax for our previous sketch library (that didn't support constraint solvers). If you're new to KCL, you should probably skip this chapter and read the new chapter on sketch blocks. If you've already got old KCL code that used the old syntax for sketching, don't worry, you can keep using the old syntax, and this chapter will explain it. But new users shouldn't worry about this, unless they're working with old code.
+
 <!-- toc -->
 
 The `reduce` function lets us iterate over an array, consuming its contents and _reducing_ them down to one single item. Reduce is a very powerful, flexible tool. It can be complex too, but that complexity lets us do some very interesting things.
@@ -117,8 +119,7 @@ We write a function `addTooth` which adds a tooth (going up, then back down) to 
 
 <!-- KCL: name=reduce_comb,alt=A comb with a variable number of teeth-->
 
-To wrap up, [`reduce`] is a powerful way to make parametric designs, repeating geometric features as many times as you need. You can design parametric polygons with a variable number of sides, or repeat geometry linearly (like we did for our comb). You can even make parametric gears, take a look at the [KCL samples] for examples.
+To wrap up, [`reduce`] is a powerful way to make parametric designs, repeating geometric features as many times as you need. You can design parametric polygons with a variable number of sides, or repeat geometry linearly (like we did for our comb). 
 
 [`map`]: https://zoo.dev/docs/kcl-std/map
 [`reduce`]: https://zoo.dev/docs/kcl-std/functions/std-array-reduce
-[KCL samples]: https://zoo.dev/docs/kcl-samples/spur-gear

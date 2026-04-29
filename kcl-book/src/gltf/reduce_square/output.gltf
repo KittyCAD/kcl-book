@@ -12,7 +12,7 @@
         -0.009999999776482582
       ],
       "max": [
-        0.0000000000000000006123233952733111,
+        0,
         0.0010000000474974513,
         -0
       ]
@@ -36,7 +36,7 @@
         -0.009999999776482582
       ],
       "max": [
-        0.0000000000000000006123233952733111,
+        0,
         0.0010000000474974513,
         -0.009999999776482582
       ]
@@ -62,7 +62,7 @@
       "max": [
         -0.009999999776482582,
         0.0010000000474974513,
-        -0.000000000000000001776356923772673
+        -0
       ]
     },
     {
@@ -81,7 +81,7 @@
       "min": [
         -0.009999999776482582,
         0,
-        -0.000000000000000001776356923772673
+        -0
       ],
       "max": [
         0,
@@ -108,7 +108,7 @@
         -0.009999999776482582
       ],
       "max": [
-        0.0000000000000000006123233952733111,
+        0,
         0,
         -0
       ]
@@ -132,7 +132,7 @@
         -0.009999999776482582
       ],
       "max": [
-        0.0000000000000000006123233952733111,
+        0,
         0.0010000000474974513,
         -0
       ]
@@ -152,7 +152,7 @@
   "buffers": [
     {
       "byteLength": 864,
-      "uri": "data:application/octet-stream;base64,AAAAAG8SgzoAAACAAACAPwAAAAAAAAAAAAAAAAAAAAAAAACAAACAPwAAAAAAAAAA2bk0IQAAAAAK1yO8AACAPwAAAAAAAAAA2bk0IW8SgzoK1yO8AACAPwAAAAAAAAAAAAAAAG8SgzoAAACAAACAPwAAAAAAAAAA2bk0IQAAAAAK1yO8AACAPwAAAAAAAAAA2bk0IW8SgzoK1yO8AAAAAAAAAAAAAIC/2bk0IQAAAAAK1yO8AAAAAAAAAAAAAIC/CtcjvG8SgzoK1yO8AAAAAAAAAAAAAIC/CtcjvG8SgzoK1yO8AAAAAAAAAAAAAIC/2bk0IQAAAAAK1yO8AAAAAAAAAAAAAIC/CtcjvAAAAAAK1yO8AAAAAAAAAAAAAIC/CtcjvG8SgzoK1yO8AACAvwAAAAAAAAAACtcjvAAAAAAK1yO8AACAvwAAAAAAAAAACtcjvAAAAABvEgOiAACAvwAAAAAAAAAACtcjvG8SgzpvEgOiAACAvwAAAAAAAAAACtcjvG8SgzoK1yO8AACAvwAAAAAAAAAACtcjvAAAAABvEgOiAACAvwAAAAAAAAAACtcjvG8SgzpvEgOiAAAAAAAAAAAAAIA/CtcjvAAAAABvEgOiAAAAAAAAAAAAAIA/AAAAAG8SgzoAAACAAAAAAAAAAAAAAIA/AAAAAG8SgzoAAACAAAAAAAAAAAAAAIA/CtcjvAAAAABvEgOiAAAAAAAAAAAAAIA/AAAAAAAAAAAAAACAAAAAAAAAAAAAAIA/CtcjvAAAAABvEgOiAAAAgAAAgL8AAACACtcjvAAAAAAK1yO8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACACtcjvAAAAAAK1yO8AAAAgAAAgL8AAACA2bk0IQAAAAAK1yO8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACACtcjvG8SgzpvEgOiAAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAACtcjvG8SgzoK1yO8AAAAAAAAgD8AAAAACtcjvG8SgzoK1yO8AAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAA2bk0IW8SgzoK1yO8AAAAAAAAgD8AAAAA"
+      "uri": "data:application/octet-stream;base64,AAAAAG8SgzoAAACAAACAPwAAAAAAAAAAAAAAAAAAAAAAAACAAACAPwAAAAAAAAAAAAAAAG8SgzoK1yO8AACAPwAAAAAAAAAAAAAAAG8SgzoK1yO8AACAPwAAAAAAAAAAAAAAAAAAAAAAAACAAACAPwAAAAAAAAAAAAAAAAAAAAAK1yO8AACAPwAAAAAAAAAAAAAAAG8SgzoK1yO8AAAAAAAAAAAAAIC/AAAAAAAAAAAK1yO8AAAAAAAAAAAAAIC/CtcjvG8SgzoK1yO8AAAAAAAAAAAAAIC/CtcjvG8SgzoK1yO8AAAAAAAAAAAAAIC/AAAAAAAAAAAK1yO8AAAAAAAAAAAAAIC/CtcjvAAAAAAK1yO8AAAAAAAAAAAAAIC/CtcjvG8SgzoK1yO8AACAvwAAAAAAAAAACtcjvAAAAAAK1yO8AACAvwAAAAAAAAAACtcjvG8SgzoAAACAAACAvwAAAAAAAAAACtcjvG8SgzoAAACAAACAvwAAAAAAAAAACtcjvAAAAAAK1yO8AACAvwAAAAAAAAAACtcjvAAAAAAAAACAAACAvwAAAAAAAAAACtcjvG8SgzoAAACAAAAAAAAAAAAAAIA/CtcjvAAAAAAAAACAAAAAAAAAAAAAAIA/AAAAAG8SgzoAAACAAAAAAAAAAAAAAIA/AAAAAG8SgzoAAACAAAAAAAAAAAAAAIA/CtcjvAAAAAAAAACAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAACAAAAAAAAAAAAAAIA/CtcjvAAAAAAAAACAAAAAgAAAgL8AAACACtcjvAAAAAAK1yO8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACACtcjvAAAAAAK1yO8AAAAgAAAgL8AAACAAAAAAAAAAAAK1yO8AAAAgAAAgL8AAACAAAAAAAAAAAAAAACAAAAAgAAAgL8AAACACtcjvG8SgzoAAACAAAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAACtcjvG8SgzoK1yO8AAAAAAAAgD8AAAAACtcjvG8SgzoK1yO8AAAAAAAAgD8AAAAAAAAAAG8SgzoAAACAAAAAAAAAgD8AAAAAAAAAAG8SgzoK1yO8AAAAAAAAgD8AAAAA"
     }
   ],
   "bufferViews": [
@@ -210,7 +210,12 @@
               1
             ]
           ],
-          "mesh": 0
+          "mesh": 0,
+          "extras": {
+            "KITTYCAD": {
+              "material": 0
+            }
+          }
         }
       ],
       "shells": [
@@ -569,7 +574,7 @@
           "end": 0,
           "t": [
             0,
-            0.010000000000000002
+            0.01
           ]
         },
         {
@@ -581,7 +586,7 @@
           "end": 3,
           "t": [
             0,
-            0.010000000000000002
+            0.01
           ]
         }
       ],
@@ -592,12 +597,12 @@
           -0
         ],
         [
-          0.0000000000000000006123233995736766,
+          0,
           0,
           -0.01
         ],
         [
-          0.0000000000000000006123233995736766,
+          0,
           0.001,
           -0.01
         ],
@@ -609,22 +614,22 @@
         [
           -0.01,
           0,
-          -0.010000000000000002
+          -0.01
         ],
         [
           -0.01,
           0.001,
-          -0.010000000000000002
+          -0.01
         ],
         [
-          -0.010000000000000002,
+          -0.01,
           0,
-          -0.0000000000000000017763568394002505
+          -0
         ],
         [
-          -0.010000000000000002,
+          -0.01,
           0.001,
-          -0.0000000000000000017763568394002505
+          -0
         ]
       ],
       "surfaces": [
@@ -642,7 +647,7 @@
               1
             ],
             "origin": [
-              0.0000000000000000003061616997868383,
+              0,
               0.0005,
               -0.005
             ]
@@ -684,7 +689,7 @@
             "origin": [
               -0.01,
               0.0005,
-              -0.005000000000000002
+              -0.005
             ]
           }
         },
@@ -702,9 +707,9 @@
               0
             ],
             "origin": [
-              -0.005000000000000002,
+              -0.005,
               0.0005,
-              -0.0000000000000000005517100402528972
+              -0
             ]
           }
         },
@@ -759,7 +764,7 @@
               -0
             ],
             "direction": [
-              0.00000000000000006123233995736766,
+              0,
               0,
               -1
             ]
@@ -769,7 +774,7 @@
           "type": "line",
           "line": {
             "origin": [
-              0.0000000000000000006123233995736766,
+              0,
               0,
               -0.01
             ],
@@ -789,7 +794,7 @@
               -0
             ],
             "direction": [
-              0.00000000000000006123233995736766,
+              0,
               0,
               -1
             ]
@@ -814,14 +819,14 @@
           "type": "line",
           "line": {
             "origin": [
-              0.0000000000000000006123233995736766,
+              0,
               0,
               -0.01
             ],
             "direction": [
               -1,
               0,
-              -0.0000000000000001734723475976807
+              0
             ]
           }
         },
@@ -831,7 +836,7 @@
             "origin": [
               -0.01,
               0,
-              -0.010000000000000002
+              -0.01
             ],
             "direction": [
               0,
@@ -844,14 +849,14 @@
           "type": "line",
           "line": {
             "origin": [
-              0.0000000000000000006123233995736766,
+              0,
               0.001,
               -0.01
             ],
             "direction": [
               -1,
               0,
-              -0.0000000000000001734723475976807
+              0
             ]
           }
         },
@@ -861,10 +866,10 @@
             "origin": [
               -0.01,
               0,
-              -0.010000000000000002
+              -0.01
             ],
             "direction": [
-              -0.0000000000000001734723475976807,
+              0,
               0,
               1
             ]
@@ -874,9 +879,9 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.010000000000000002,
+              -0.01,
               0,
-              -0.0000000000000000017763568394002505
+              -0
             ],
             "direction": [
               0,
@@ -891,10 +896,10 @@
             "origin": [
               -0.01,
               0.001,
-              -0.010000000000000002
+              -0.01
             ],
             "direction": [
-              -0.0000000000000001734723475976807,
+              0,
               0,
               1
             ]
@@ -904,14 +909,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.010000000000000002,
+              -0.01,
               0,
-              -0.0000000000000000017763568394002505
+              -0
             ],
             "direction": [
               1,
               0,
-              0.000000000000000177635683940025
+              -0
             ]
           }
         },
@@ -919,14 +924,14 @@
           "type": "line",
           "line": {
             "origin": [
-              -0.010000000000000002,
+              -0.01,
               0.001,
-              -0.0000000000000000017763568394002505
+              -0
             ],
             "direction": [
               1,
               0,
-              0.000000000000000177635683940025
+              -0
             ]
           }
         }
@@ -936,6 +941,27 @@
   "extensionsUsed": [
     "KITTYCAD_boundary_representation"
   ],
+  "materials": [
+    {
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.9,
+          0.9,
+          0.9,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 1
+      },
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
   "meshes": [
     {
       "primitives": [
@@ -943,37 +969,43 @@
           "attributes": {
             "POSITION": 0,
             "NORMAL": 1
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 2,
             "NORMAL": 3
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 4,
             "NORMAL": 5
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 6,
             "NORMAL": 7
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 8,
             "NORMAL": 9
-          }
+          },
+          "material": 0
         },
         {
           "attributes": {
             "POSITION": 10,
             "NORMAL": 11
-          }
+          },
+          "material": 0
         }
       ]
     }

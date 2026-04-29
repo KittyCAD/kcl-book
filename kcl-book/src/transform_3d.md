@@ -5,75 +5,109 @@ We've covered many different ways to create 3D solids from 2D sketches, but what
 
 ## Colour
 
-So far, all our models have used the standard shiny grey metal appearance. But you can customize this! Let's change the texture. We'll make three cubes: one with the normal color, one green, and one a shiny metallic green.
+So far, all our models have used the standard shiny grey metal appearance. But you can customize this! Let's change the texture. We'll make two cubes: one cyan, one shiny metallic green.
 
 ```kcl=cube_textures
-offset = 25
+// Sketch 2 squares.
+sketch001 = sketch(on = XY) {
+  // Rectangle 1
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
+  // Rectangle 2
+  line5 = line(start = [var -10.25mm, var 2.72mm], end = [var -4.81mm, var 2.72mm])
+  line6 = line(start = [var -4.81mm, var 2.72mm], end = [var -4.81mm, var 8.16mm])
+  line7 = line(start = [var -4.81mm, var 8.16mm], end = [var -10.25mm, var 8.16mm])
+  line8 = line(start = [var -10.25mm, var 8.16mm], end = [var -10.25mm, var 2.72mm])
+  coincident([line5.end, line6.start])
+  coincident([line6.end, line7.start])
+  coincident([line7.end, line8.start])
+  coincident([line8.end, line5.start])
+  parallel([line6, line8])
+  parallel([line7, line5])
+  perpendicular([line5, line6])
+  horizontal(line7)
 
-greyCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([
+    line1,
+    line2,
+    line3,
+    line4,
+    line5,
+    line6,
+    line7
+  ])
+}
 
-greenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset])
-  |> extrude(length = 10)
-  // The appearance call lets you set a color using hexadecimal notation.
-  |> appearance(color = "#00ff00")
-  
-greenCubeShiny = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset * 2])
-  |> extrude(length = 10)
-  // You can also set the metalness and roughness, as percentages between 0 and 100.
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+cube1 = extrude(region001, length = 5)
+  |> appearance(color = "#00ffbf")
+
+region002 = region(point = [-7.5300003mm, 2.9425003mm], sketch = sketch001)
+cube2 = extrude(region002, length = 5)
+  |> appearance(color = "#147807", metalness = 90, roughness = 60)
 ```
 
-<!-- KCL: name=cube_textures,skip3d=true,alt=Three cubes with different textures-->
+<!-- KCL: name=cube_textures,alt=Two cubes with different textures-->
 
 The [`appearance`] call takes in three arguments, each of which is optional. You can provide:
 
- - A `color` as a hexadecimal number like `#0044ff`. The first two digits represent red, the next two green, and the last two blue. You can use an [online color picker] to play with the format. 
+ - A `color` as a hexadecimal number like `#0044ff`. The first two digits represent red, the next two green, and the last two blue. You can use an [online color picker] to play with the format. If you open your KCL in Zoo Design Studio, you can use an interactive color picker right there in the code editor.
  - A `metalness` percentage, which is a number between 0 and 100.
  - A `roughness` percentage, which is a number between 0 and 100.
 
 This is helpful for making your different solids stand out from each other. We'll be using the `appearance` call in our examples to help make it clear which KCL snippets correspond to which objects in the rendered images.
 
-## Translation
+## Clone and translate
 
 We can transform solids, keeping them _basically_ the same -- the same number of sides, edges, and faces -- but changing some of their other properties.
 
-Firstly, we can [`translate`] them (shifting them around in their coordinate system), like this:
+Firstly, we can [`translate`] them (shifting them around in their coordinate system). To demonstrate this, we'll use the [`clone`] function to create a second copy of a cube, then use [`translate`] to move it left, then [`appearance`] to give it a different color:
 
 ```kcl=translate_cubes
-offset = 25
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
 
-greyCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-brightGreenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset])
-  |> extrude(length = 10)
-  // Shift the shape's position along X, Y and Z.
-  |> translate(x = 4, y = -4, z = 10)
-  |> appearance(color = "#00ff00")
-  
-greenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset * 2])
-  |> extrude(length = 10)
-  // The translation axes are optional.
-  // If you don't set X or Y, its X and Y position will remain the same.
-  |> translate(z = -10)
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
+// This cube has the default silvery appearance.
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+silverCube = extrude(region001, length = 5)
+
+// Clone it, move it left, then make it green.
+greenCube = clone(silverCube)
+  |> translate(x = -10)
+  |> appearance(color = "#00ff00", metalness = 80, roughness = 30)
 ```
 
-<!-- KCL: name=translate_cubes,skip3d=true,alt=Three translated cubes-->
-<!-- KCL: name=translate_cubes,skip3d=true,alt=Three translated cubes-->
+<!-- KCL: name=translate_cubes,alt=Two translated cubes-->
 
 The [`translate`] call takes three arguments, `x`, `y` and `z`. Each of them is optional. If you provide one, it'll shift the solid along that axis. If you don't provide an axis, it'll remain unchanged.
 
@@ -82,34 +116,41 @@ The [`translate`] call takes three arguments, `x`, `y` and `z`. Each of them is 
 Next, we can [`scale`] them, making them bigger or smaller.
 
 ```kcl=scaled_cubes
-offset = 25
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
 
-greyCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-brightGreenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset])
-  |> extrude(length = 10)
-  // Scale all three axes, shrinking the cube
-  |> scale(x = 0.5, y = 0.5, z = 0.5)
-  |> appearance(color = "#00ff00")
-  
-greenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset * 2])
-  |> extrude(length = 10)
-  // Expand the cube along one axis, shrink it across another, and leave
-  // the third axis unchanged.
-  |> scale(z = 0.25, y = 2)
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
+// This cube has the default silvery appearance.
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+silverCube = extrude(region001, length = 5)
+
+// Clone it, move it up, make it 4x longer, and green.
+greenCube = clone(silverCube)
+  |> translate(z = 10)
+  |> scale(y = 4)
+  |> appearance(color = "#00ff00", metalness = 80, roughness = 30)
 ```
 
-<!-- KCL: name=scaled_cubes,skip3d=true,alt=Three scaled cubes-->
+<!-- KCL: name=scaled_cubes,alt=Three scaled cubes-->
 
-The [`scale`] call works similarly. You provide one or more axes -- if you don't provide an axis, it's left unchanged. Numbers less than 1 will shrink the solid (e.g. 0.25 means 1/4th its original size). Numbers larger than 1 will expand the solid (e.g. 4 means 4 times its original size).
+The [`scale`] call works similarly. You provide one or more axes -- if you don't provide an axis, it's left unchanged. Numbers less than 1 will shrink the solid (e.g. 0.25 means 1/4th its original size). Numbers larger than 1 will expand the solid (e.g. 4 means 4x its original size).
 
 ## Rotation
 
@@ -122,87 +163,107 @@ Lastly, we can rotate them. The [`rotate`] call is similar to translate and rota
 Let's see an example:
 
 ```kcl=rotated_cubes
-offset = 25
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
 
-greyCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-brightGreenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-  |> translate(z = offset)
-  |> rotate(roll= 45)
-  |> appearance(color = "#00ff00")
-  
-greenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-  |> translate(z = 2 * offset)
-  |> rotate(pitch = 45)
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
+// This cube has the default silvery appearance.
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+silverCube = extrude(region001, length = 5)
 
-blueCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-  |> translate(z = 3 * offset)
-  |> rotate(yaw = 45)
-  |> appearance(color = "#0000ff", metalness = 90, roughness = 10)
+extrude002 = clone(silverCube)
+  |> translate(z = 10)
+  |> rotate(roll = 45deg)
+  |> appearance(color = "#00ff00", metalness = 80, roughness = 30)
+
+extrude003 = clone(silverCube)
+  |> translate(z = 20)
+  |> rotate(pitch = 45deg)
+  |> appearance(color = "#00ffe1", metalness = 80, roughness = 30)
+
+extrude004 = clone(silverCube)
+  |> translate(z = 30)
+  |> rotate(yaw = 45deg)
+  |> appearance(color = "#5900ff", metalness = 80, roughness = 30)
 ```
 
-<!-- KCL: name=rotated_cubes,skip3d=true,alt=Four rotated cubes-->
+<!-- KCL: name=rotated_cubes,alt=Four rotated cubes-->
 
 Note that these rotations are all around their own center (not the center of the plane).
 
 Roll, pitch and yaw are one valid way to represent a rotation, but there are other ways too. You could also choose an axis, and rotate around that axis. For example, let's put 4 cubes at the same point, and then rotate them each a little bit around the axis.
 
 ```kcl=rotated_cubes_axis
-angle = 15
+// Sketch a square
+sketch001 = sketch(on = XY) {
+  // Sketch a rectangle first.
+  line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
+  line2 = line(start = [var 2.8mm, var -5.39mm], end = [var 2.8mm, var -0.39mm])
+  line3 = line(start = [var 2.8mm, var -0.39mm], end = [var -2.21mm, var -0.39mm])
+  line4 = line(start = [var -2.21mm, var -0.39mm], end = [var -2.21mm, var -5.39mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  parallel([line2, line4])
+  parallel([line3, line1])
+  perpendicular([line1, line2])
+  horizontal(line3)
 
-greyCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-    |> appearance(color = "#33ff00")
+  // Make all sides the same length (i.e. make the rectangles square).
+  distance([line1.start, line1.end]) == 5
+  equalLength([line1, line2, line3, line4])
+}
 
-green1 = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-  |> rotate(axis = [1, 0, 0], angle = angle)
-  |> appearance(color = "#337700")
+angle = 15deg
 
-green2 = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-  |> rotate(axis = [1, 0, 0], angle = angle * 2)
-  |> appearance(color = "#334400")
+// This cube has the default silvery appearance.
+region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+silverCube = extrude(region001, length = 1)
 
-green3 = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-  |> rotate(axis = [1, 0, 0], angle = angle * 3)
-  |> appearance(color = "#332200")
+extrude002 = clone(silverCube)
+  |> appearance(color = "#00ff00", metalness = 80, roughness = 30)
+  |> rotate(axis = X, angle = angle)
+
+extrude003 = clone(silverCube)
+  |> appearance(color = "#00ffe1", metalness = 80, roughness = 30)
+  |> rotate(axis = X, angle = angle * 2)
+
+extrude004 = clone(silverCube)
+  |> appearance(color = "#ffea00", metalness = 80, roughness = 60)
+  |> rotate(axis = X, angle = angle * 3)
 ```
 
-<!-- KCL: name=rotated_cubes_axis,skip3d=true,alt=Four cubes rotated around the same axis-->
+<!-- KCL: name=rotated_cubes_axis,alt=Four cubes rotated around the same axis-->
 
 ## Using transformations
 
 You can combine multiple transformations, for example a translate and scale: `|> translate(x = 10) |> scale (y = 20)`. This can really simplify your mechanical engineering. For example, if you need to produce two cubes, rotated at different angles, which of these approaches sounds easier?
 
-1. Make one cube using `polygon` with 4 sides, and then design the other cube from scratch using `line` calls that join the 4 rotated points
-2. Make one cube using `polygon`, and then make a second cube by copying the first cube and adding a `rotation`call
+1. Make one cube with 4 sides, and then design the other cube from scratch using `line` calls that join the 4 rotated points
+2. Make one cube, and then make a second cube by copying the first cube and adding a `rotation` call
 
 These transformations make your job easier by letting you reuse work from previous designs. Once you know how to sketch a cube, you don't need to recalculate your cube every time it needs to grow, rotate or get moved over. You can just use our simple transformation functions. Recalculating a cube each time is annoying, but possible. For more complicated geometry, with weird curves and many edges, redoing all your calculations to handle different scales and rotations can be _very_ difficult and waste a lot of time! So don't recalculate them. Just reuse your work and transform it.
 
 [`appearance`]: https://zoo.dev/docs/kcl-std/functions/std-solid-appearance
+[`clone`]: https://zoo.dev/docs/kcl-std/functions/std-clone
 [`translate`]: https://zoo.dev/docs/kcl-std/functions/std-transform-translate
 [`scale`]: https://zoo.dev/docs/kcl-std/functions/std-transform-scale
 [`rotate`]: https://zoo.dev/docs/kcl-std/functions/std-transform-rotate

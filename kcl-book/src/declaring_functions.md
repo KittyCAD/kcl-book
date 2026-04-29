@@ -55,19 +55,36 @@ Let's use functions to build a parametric pipe flange. We can start with a speci
 Here's a specific model. It's got 8 unthreaded holes, each with a radius of 4, and the overall model has a radius of 60. It's 10mm thick.
 
 ```kcl=specific_flange
-holes = startSketchOn(XZ)
-  |> circle(radius = 4, center = [50, 0])
-  |> patternCircular2d(
-       center = [0, 0],
-       instances = 8,
-       arcDegrees = 360,
-       rotateDuplicates = true,
-     )
+// Sketch a big circle.
+bigCircleSketch = sketch(on = XZ) {
+  circle1 = circle(start = [var 0mm, var 10mm], center = [var 0mm, var 0mm])
+  coincident([circle1.center, ORIGIN])
+  vertical([circle1.center, circle1.start])
+  distance([circle1.start, circle1.center]) == 60
+}
 
-base = startSketchOn(XZ)
-  |> circle(radius = 60, center = [0, 0])
-  |> subtract2d(tool = holes)
-  |> extrude(length = 10)
+// Extrude it into a "base".
+bigCircle = region(sketch = bigCircleSketch, point = [0, 0])
+thickness = 10mm
+base = extrude(bigCircle, length = thickness, symmetric = true)
+
+// Start sketching a smaller circle
+smallCircleSketch = sketch(on = XZ) {
+  circle1 = circle(start = [var -0.83mm, var 8.27mm], center = [var 0mm, var 7.79mm])
+  vertical([circle1.center, ORIGIN])
+  vertical([circle1.center, circle1.start])
+  distance([circle1.start, circle1.center]) == 4
+}
+
+// Extrude that circle into a small cylinder,
+// then pattern it around, making little pegs.
+pegs = region(point = [0mm, 7.3125mm], sketch = smallCircleSketch)
+  |> extrude(length = thickness * 3, symmetric = true)
+  |> translate(x = 50)
+  |> patternCircular3d(instances = 8, axis = Y, useOriginal = true)
+
+// Remove the pegs from the base.
+baseWithHoles = subtract(base, tools = pegs)
 ```
 
 <!-- KCL: name=specific_flange,alt=The pipe flange-->
@@ -76,42 +93,55 @@ Its specific measurements, like number of holes, radius, thickness etc were chos
 
 ```kcl=parametric_flange
 // Define a parametric flange
-fn flange(numHoles, holeRadius, radius, thickness, holeEdgeGap) {
-  holes = startSketchOn(XZ)
-    |> circle(radius = holeRadius, center = [radius - holeEdgeGap, 0])
-    |> patternCircular2d(
-         center = [0, 0],
-         instances = numHoles,
-         arcDegrees = 360,
-         rotateDuplicates = true,
-       )
+fn flange(numHoles, holeRadius, baseRadius, thickness, holeEdgeGap) {
+  // Sketch a big circle.
+  bigCircleSketch = sketch(on = XZ) {
+    circle1 = circle(start = [var 0mm, var 10mm], center = [var 0mm, var 0mm])
+    coincident([circle1.center, ORIGIN])
+    vertical([circle1.center, circle1.start])
+    distance([circle1.start, circle1.center]) == baseRadius
+  }
 
-  return startSketchOn(XZ)
-    |> circle(radius = radius, center = [0, 0])
-    |> subtract2d(tool = holes)
-    |> extrude(length = thickness)
+  // Extrude it into a "base".
+  bigCircle = region(sketch = bigCircleSketch, point = [0, 0])
+  base = extrude(bigCircle, length = thickness, symmetric = true)
+
+  // Start sketching a smaller circle
+  smallCircleSketch = sketch(on = XZ) {
+    circle1 = circle(start = [var -0.83mm, var 8.27mm], center = [var 0mm, var 7.79mm])
+    vertical([circle1.center, ORIGIN])
+    vertical([circle1.center, circle1.start])
+    distance([circle1.start, circle1.center]) == holeRadius
+  }
+
+  // Extrude that circle into a small cylinder,
+  // then pattern it around, making little pegs.
+  pegs = region(point = [0mm, 7.3125mm], sketch = smallCircleSketch)
+    |> extrude(length = thickness * 3, symmetric = true)
+    |> translate(x = baseRadius - holeEdgeGap)
+    |> patternCircular3d(instances = numHoles, axis = Y, useOriginal = true)
+
+  // Remove the pegs from the base.
+  return subtract(base, tools = pegs)
 }
-```
 
-We can get our original flange by calling the parametric flange with the right parameters:
-```kcl
 // Call our parametric flange function, passing in specific parameter values, to make a specific flange.
-flange(
+originalFlangeAgain = flange(
   numHoles = 8,
   holeRadius = 5,
-  radius = 60,
+  baseRadius = 60,
   thickness = 10,
   holeEdgeGap = 10,
 )
 ```
 
-But we can also make a range of other flanges! Here's one:
+First we defined a function for making a parametric flange. This lets us make many possible flanges. First, we made our original flange again. But we can also make a range of other flanges, by varying the parameters! Here's one:
 
 ```kcl
 flange(
   numHoles = 4,
   holeRadius = 15,
-  radius = 60,
+  baseRadius = 60,
   thickness = 20,
   holeEdgeGap = 20,
 )
@@ -125,7 +155,7 @@ And let's try one more:
 flange(
   numHoles = 20,
   holeRadius = 3,
-  radius = 90,
+  baseRadius = 90,
   thickness = 20,
   holeEdgeGap = 15,
 )
@@ -137,73 +167,51 @@ Replacing specific KCL code for a specific design with a parametric function giv
 
 ## Repeating geometry with functions
 
-Functions can also be used to avoid writing the same code over and over again, in a single model. In an earlier chapter we modeled three cubes in one scene, like this:
+Functions can also be used to avoid writing the same code over and over again, in a single model. Sketch blocks can be quite long, because each constraint is typically on its own line, and complex models have a lot of constraints. Even just drawing a simple cube takes 16 lines of code: 4 to create lines, 4 to join those lines together via `coincident` constraints, and then 8 more to make the quadrilateral into a square of the chosen side length.
 
-```kcl=cube_textures
-offset = 25
+If we wanted to make 3 cubes, we shouldn't copy and paste this code 3 times. That would be annoying to read. We could use the `clone()` function to copy the cube, and then use transform functions like `translate()` or `appearance()` to tweak the cube. But we could also make a reusable `cube` helper function, like this.
 
-greyCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, 0])
-  |> extrude(length = 10)
-
-greenCube = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset])
-  |> extrude(length = 10)
-  // The appearance call lets you set a color using hexadecimal notation.
-  |> appearance(color = "#00ff00")
-  
-greenCubeShiny = startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> polygon(radius = 10, numSides = 4, center = [0, offset * 2])
-  |> extrude(length = 10)
-  // You can also set the metalness and roughness, as percentages between 0 and 100.
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
-```
-
-<!-- KCL: name=cube_textures,skip3d=true,alt=Three cubes with different textures-->
-
-This code works fine, but it's got one small problem. We're repeating the code for "sketch a cube" three times. This makes it a bit annoying to read, and also, if we want to tweak the cubes (making them larger, or rotating them), we'd have to update them in three different places. We could improve this code by making a function for the cube, and calling that function three times.
-
-```kcl
-fn cube(offset) {
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(radius = 10, numSides = 4, center = [0, offset])
-    |> extrude(length = 10)
+```kcl=two_cubes_purple_blue
+/// Helper function to make a 3D cube with the given length and position along X.
+fn cube(sideLen, offset) {
+  sketch001 = sketch(on = XY) {
+    line1 = line(start = [var 0mm, var 0mm], end = [var 3.08mm, var 0mm])
+    line2 = line(start = [var 3.08mm, var 0mm], end = [var 3.08mm, var -3.01mm])
+    line3 = line(start = [var 3.08mm, var -3.01mm], end = [var 0mm, var -3.01mm])
+    line4 = line(start = [var 0mm, var -3.01mm], end = [var 0mm, var 0mm])
+    coincident([line1.end, line2.start])
+    coincident([line2.end, line3.start])
+    coincident([line3.end, line4.start])
+    coincident([line4.end, line1.start])
+    parallel([line2, line4])
+    parallel([line3, line1])
+    perpendicular([line1, line2])
+    horizontal(line3)
+    coincident([line1.start, ORIGIN])
+    equalLength([line1, line2, line3, line4])
+    fixed([line1.start, ORIGIN])
+    distance([line1.start, line1.end]) == sideLen
+  }
+  hide(sketch001)
+  return region(sketch = sketch001, point = [0.4, -0.4])
+    |> extrude(length = sideLen)
+    |> translate(x = offset)
 }
 
-greyCube = cube(offset = 0)
+// Make two cubes, first one:
+cube(sideLen = 2, offset = 2)
+  |> appearance(color = "#26b8ba", metalness = 70, roughness = 40)
 
-greenCube = cube(offset = 25)
-  |> appearance(color = "#00ff00")
-  
-greenCubeShiny = cube(offset = 50)
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
+// And the second one:
+cube(sideLen = 1, offset = 5)
+  |> appearance(color = "#d205e1", metalness = 70, roughness = 40)
 ```
 
-This code produces the exact same model as the above code, but it's shorter and easier to read. It's also more maintainable! If we wanted to change the cubes to be flatter, we only have to change one part of our code, instead of changing all three.
+<!-- KCL: name=two_cubes_purple_blue,alt=Two cubes created with the same cube function call.-->
 
-```kcl=three_short_cubes
-fn cube(offset) {
-  return startSketchOn(XY)
-    |> startProfile(at = [0, 0])
-    |> polygon(radius = 10, numSides = 4, center = [0, offset])
-    // Change the extrude length from 10 to 2, shortening the cubes.
-    |> extrude(length = 2)
-}
+This is neater than copying and pasting the code to make 2 separate cubes, and it lets us have more control over the cube than using `clone()` and `translate()`. If we wanted to, say, tweak the height of each cube, we could add a new parameter `height` to our `cube` function. Or we could just alter the extrude length in the function body.
 
-greyCube = cube(offset = 0)
+By putting the details of "what does a cube look like" in a single function, we make our code both more readable, and easier to change in the future.
 
-greenCube = cube(offset = 25)
-  |> appearance(color = "#00ff00")
-  
-greenCubeShiny = cube(offset = 50)
-  |> appearance(color = "#00ff00", metalness = 90, roughness = 10)
-```
-
-<!-- KCL: name=three_short_cubes,skip3d=true,alt=Three flat cubes with different textures-->
-
-If we hadn't made the cube into a function, we would have had to change every extrude call separately. By putting the details of "what does a cube look like" in a single function, we make our code both more readable, and easier to change in the future.
+**Note**: Currently, Zoo Design Studio doesn't support using point-and-click UI to change geometry created in functions. That's something we hope to support in the future.
 

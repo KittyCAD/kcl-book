@@ -37,20 +37,18 @@ In this example, `msg1` is defined successfully as "hello world", but KCL will e
 
 KCL tracks the units that each distance uses. This can help you accurately translate your engineering requirements or formula into KCL, without pulling out a calculator to convert between inches and centimeters.
 
-For example, you can put a unit like `20cm` or `20in` as the length of a line. Here's three different lines of length 20 centimeters, inches and millimeters.
+For example, you can put a unit like `2cm` or `2mm` as the length of a line. Here's three different lines of length 20 centimeters, inches and millimeters.
 
 ```kcl=lines_units
-startSketchOn(XY)
-  |> startProfile(at = [0, -100])
-  |> xLine(length = 20mm)
-
-startSketchOn(XY)
-  |> startProfile(at = [0, 0])
-  |> xLine(length = 20cm)
-
-startSketchOn(XY)
-  |> startProfile(at = [0, 100])
-  |> xLine(length = 20in)
+sketch001 = sketch(on = XY) {
+  line1 = line(start = [var -13.35mm, var 10.75mm], end = [var 10.94mm, var 10.42mm])
+  line2 = line(start = [var -18.82mm, var 17.12mm], end = [var 25.39mm, var 11.53mm])
+  line3 = line(start = [var -25.48mm, var 24.01mm], end = [var 35.37mm, var 17.12mm])
+  distance([line3.start, line3.end]) == 2mm
+  distance([line2.start, line2.end]) == 2cm
+  distance([line1.start, line1.end]) == 2in
+  parallel([line1, line2, line3])
+}
 ```
 
 <!-- KCL: name=lines_units,skip3d=true,alt=Three lines of length 20 mm and 20 cm and 20 inches-->
@@ -59,22 +57,7 @@ Other suffixes include metres (`m`), feet (`ft`) and yards (`yd`).
 
 In the previous examples, before this chapter, we always used general-purpose numbers with no units (like `length = 20`). Each KCL file has a default unit. You can set it by adding `@settings(defaultLengthUnit = in)` at the top of your KCL file. It has to go at the very top, before any code (although comments are permitted before it). If you don't set the default in `@settings`, your [user- or project-level settings] might set it. Otherwise, if you truly don't set anything, it'll default to millimeters. 
 
-You can also set the units for angle measurements. Here's two toruses, one of which revolves 6 degrees (very little) and the other, 6 radians (almost a full revolution).
-
-
-```kcl=donut_angle_units
-// Revolve 6 degrees
-startSketchOn(XZ)
-  |> circle(center = [-200, -200], radius = 50)
-  |> revolve(axis = Y, angle = 6deg)
-
-// Revolve 6 radians
-startSketchOn(XZ)
-  |> circle(center = [200, 200], radius = 50)
-  |> revolve(axis = Y, angle = 6rad)
-```
-
-<!-- KCL: name=donut_angle_units,alt=Revolve of 6 degrees vs. 6 radians-->
+You can also set the units for angle measurements. For example, you can revolve a sketch either `180deg` or `3.14rad`.
 
 ## Mixing units
 
