@@ -81,7 +81,7 @@ KCL helps you automatically check your work. You should be able to analyze your 
  - Clearly explain what important requirements your design has, and how to correct mistakes if the assertion fails.
 
 [into parts and inspected them]: calling_functions.html#combining-functions
-[measuring them with tags]: tags.html#measuring-with-tags
+[measuring them with tags]: fillets.html#measuring-geometry
 [`assert`]: https://zoo.dev/docs/kcl-std/functions/std-assert
 [`segAng`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segAng
 [bracket]: https://zoo.dev/aquarium/bracket
