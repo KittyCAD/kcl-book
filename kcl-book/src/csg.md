@@ -5,7 +5,7 @@ We've seen how to make a lot of different solids. You could transform a 2D shape
 
 ## Constructive solid geometry
 
-Remember in school, when you learned about Venn diagrams? How you can take the _union_, the _intersection_ or the _difference_ of two shapes? If you need a quick recap, here's a screenshot from [Wikipedia's article on boolean operations].
+Remember in school, when you learned about Venn diagrams? How you can take the _union_, the _intersection_ or the _difference_ of two shapes? If you need a quick recap, here's a screenshot from [Wikipedia's article on set operations].
 
 ![Union, intersection and complement on 2D circles](images/static/boolean_2d_ops.png)
 
@@ -297,7 +297,7 @@ There's a few arguments you can set for these functions. To be honest, you proba
  - `tolerance` is a measure of how accurate the underlying 3D combination algorithms are. A tolerance of `0.1` means the algorithm is very inaccurate, but very fast. A tolerance of `0.000000001` makes the algorithm much more accurate, but slower. This is set to a sensible default, but you might need to change it for models with very precise, very small features.
  - `legacyMethod` lets you opt back into an older version of Zoo's geometry engine which used a different algorithm for CSG. We don't recommend setting this, and it will be removed at some point in the future.
 
-[Wikipedia's article on boolean operations]: https://en.wikipedia.org/wiki/Set_(mathematics)#Basic_operations
+[Wikipedia's article on set operations]: https://en.wikipedia.org/wiki/Set_(mathematics)#Basic_operations
 [`intersect`]: https://zoo.dev/docs/kcl-std/functions/std-solid-intersect
 [`subtract`]: https://zoo.dev/docs/kcl-std/functions/std-solid-subtract
 [`union`]: https://zoo.dev/docs/kcl-std/functions/std-solid-union

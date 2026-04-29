@@ -384,7 +384,7 @@ loftedSolid = loft([squareRegion, circleRegion, squareRegion2], vDegree = 1)
 
 The following loft is identical, but we set `vDegree = 2`. That's actually the default, so we don't need to set it, but for the sake of example we'll explicitly set it there.
 
-<details><summary>Click here for the same KCL code, but using `vDegree = 2`</summary>
+<details><summary>Click here for the same KCL code, but using vDegree = 2</summary>
 
 ```kcl=loft_vd2
 // Sketch a square

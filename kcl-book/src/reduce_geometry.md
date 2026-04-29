@@ -119,8 +119,7 @@ We write a function `addTooth` which adds a tooth (going up, then back down) to 
 
 <!-- KCL: name=reduce_comb,alt=A comb with a variable number of teeth-->
 
-To wrap up, [`reduce`] is a powerful way to make parametric designs, repeating geometric features as many times as you need. You can design parametric polygons with a variable number of sides, or repeat geometry linearly (like we did for our comb). You can even make parametric gears, take a look at the [KCL samples] for examples.
+To wrap up, [`reduce`] is a powerful way to make parametric designs, repeating geometric features as many times as you need. You can design parametric polygons with a variable number of sides, or repeat geometry linearly (like we did for our comb). 
 
 [`map`]: https://zoo.dev/docs/kcl-std/map
 [`reduce`]: https://zoo.dev/docs/kcl-std/functions/std-array-reduce
-[KCL samples]: https://zoo.dev/docs/kcl-samples/spur-gear

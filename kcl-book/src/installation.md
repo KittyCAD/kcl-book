@@ -20,7 +20,7 @@ Our [GitHub] for Zoo Design Studio has all of our developer tooling and the lang
 
 [available on GitHub too]: https://github.com/KittyCAD/kcl-book
 [GitHub]: https://github.com/KittyCAD/modeling-app
-[LSP]: https://github.com/KittyCAD/modeling-app
+[LSP]: https://github.com/KittyCAD/modeling-app/tree/main/rust/kcl-language-server
 [VSCode extension]: https://marketplace.visualstudio.com/items?itemName=KittyCAD.kcl-language-server
 [Zoo CLI]: https://zoo.dev/docs/cli/manual
 [Zoo Design Studio]: https://zoo.dev/modeling-app

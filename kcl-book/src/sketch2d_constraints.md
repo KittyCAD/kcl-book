@@ -1,4 +1,4 @@
-<!-- # Sketching 2D shapes -->
+# Sketching 2D shapes
 
 <!-- toc -->
 
