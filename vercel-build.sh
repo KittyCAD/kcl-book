@@ -3,10 +3,22 @@ set -euo pipefail
 
 # This is a build script intended to be consumed by Vercel, though it should work locally if your platform matches.
 
-# First install Rust because we need to compile mdbook-kcl
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-. "$HOME/.cargo/env"
-rustup install stable
+# First make sure Rust is available because we need to compile mdbook-kcl.
+if [ -f /rust/env ]; then
+  . /rust/env
+fi
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
+if ! command -v cargo >/dev/null 2>&1; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  . "$HOME/.cargo/env"
+fi
+
+if command -v rustup >/dev/null 2>&1; then
+  rustup install stable
+fi
 
 # Make a temporary directory for binaries
 mkdir -p bin
