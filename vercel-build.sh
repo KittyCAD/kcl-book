@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # This is a build script intended to be consumed by Vercel, though it should work locally if your platform matches.
 
@@ -24,3 +25,4 @@ tar -xvzf mdbook-toc.tar.gz -C bin
 export PATH="$(pwd)/bin:$PATH"
 which mdbook-kcl
 mdbook build kcl-book
+node scripts/build-markdown-artifacts.mjs
