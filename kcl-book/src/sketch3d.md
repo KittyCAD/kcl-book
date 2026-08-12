@@ -7,26 +7,33 @@ Previous chapters covered designing 2D shapes. Now it's time to design 3D shapes
 
 ## Regions and Extrudes
 
-Extruding basically takes a 2D shape and pulls it up, stretching it upwards into the third dimension. Let's start with our existing 2D pill shape from the previous chapter:
+Extruding takes a 2D shape and "pulls" it out of the plane, stretching it upwards into a third dimension. Let's start with the constrained pill shape we built in the previous chapter, sketched on the YZ plane:
 
 ```kcl
-height = 4
-width = 10
-pill = sketch(on = XY) {
-  bot = line(start = [0, 0], end = [width, 0])
-  top = line(start = [0, height], end = [width, height])
-  left = arc(start = [0, height], end = [0, 0], center = [0, height/2])
-  right = arc(start = [width, 0], end = [width, height], center = [width, height/2])
+pill = sketch(on = YZ) {
+  line1 = line(start = [var -4.18mm, var 5.88mm], end = [var 1.34mm, var 5.85mm])
+  line2 = line(start = [var 1.32mm, var 4.12mm], end = [var -4.19mm, var 4.15mm])
+  arc1 = arc(start = [var -4.18mm, var 5.88mm], end = [var -4.19mm, var 4.15mm], center = [var -4.18mm, var 5.01mm])
+  arc2 = arc(start = [var 1.32mm, var 4.12mm], end = [var 1.34mm, var 5.85mm], center = [var 1.33mm, var 4.99mm])
+  coincident([arc1.start, line1.start])
+  coincident([line1.end, arc2.end])
+  coincident([arc2.start, line2.start])
+  coincident([line2.end, arc1.end])
+  parallel([line1, line2])
+  equalLength([line1, line2])
+  equalRadius([arc2, arc1])
+  tangent([line1, arc1])
+  tangent([line1, arc2])
 }
 ```
 It should look like this:
 
-![2D pill, before extruding](images/static/fixed_pill.png)
+![2D pill, before extruding](images/static/pill_sketch.png)
 
 Now we're going to extrude it up into the third axis, making a 3D solid.
 
 ```kcl=pill_3d
-pill = sketch(on = XZ) {
+pill = sketch(on = YZ) {
   line1 = line(start = [var -4.18mm, var 5.88mm], end = [var 1.34mm, var 5.85mm])
   line2 = line(start = [var 1.32mm, var 4.12mm], end = [var -4.19mm, var 4.15mm])
   arc1 = arc(start = [var -4.18mm, var 5.88mm], end = [var -4.19mm, var 4.15mm], center = [var -4.18mm, var 5.01mm])
@@ -43,7 +50,7 @@ pill = sketch(on = XZ) {
 }
 
 // Add these lines!
-region001 = region(point = pill.arc1.center, sketch = pill)
+region001 = region(segments = [pill.line1, pill.arc2])
 extrude001 = extrude(region001, length = 1)
 ```
 
@@ -55,17 +62,89 @@ You should see something like this:
 
 We added two different functions to our program: [`region`] and [`extrude`]. They work together: `region` lets you pick out a closed region of 2D space from your sketch, and `extrude` transforms that region into a 3D solid.
 
+### Picking a region
+
 We need `region` because a sketch can contain lots of geometry. In the previous chapters, we used calls to [`line`] and [`arc`] to create closed shapes, like rhombuses and pills. But a sketch could contain multiple shapes, or free-floating lines that aren't part of any closed shape at all. Here's an example sketch:
 
-![A pill shape made from fixed arcs and lines](images/static/region_demo.png)
+![A sketch with two closed shapes and some free-floating lines](images/static/region_demo.png)
 
-This sketch contains two closed shapes (a triangle and a square) as well as other lines. So, when we use the `extrude` function, we have to say which closed region we want to extrude. The `region` call takes in a point as its first parameter, and it returns the region that contains this point. If the point isn't actually in a closed region (in other words, if it's not surrounded by lines), the `region` call will return an error message.
+This sketch contains two closed shapes (a triangle and a square) as well as other lines. So, when we use the `extrude` function, we have to say which closed region we want to extrude. There are two ways to do that: by naming the segments that bound the region, or by giving a point inside it.
 
-You can pass either a named point, like `point = pill.arc1.center`, or a point literal (a 2D position, like `point = [-1.44mm, 5.86mm]`). We suggest you prefer named points over literal points, because if you edit your sketch, the exact boundaries of the geometry might change, and your target region might no longer enclose the specific position in your point literal!
+#### Selecting by segments
 
-**NOTE**: We're working on other ways to select regions, by choosing the lines (or arcs) that bound the region instead. We'll update this book when that API is ready.
+This is the preferred way, and it's what we used above. Pass the `segments` argument the first two segments of the boundary you want. `region` starts at the first segment's start point, follows it to where it meets the second segment, and then turns at each intersection it reaches until it gets back to the first segment. Whichever loop it traced is your region.
 
-Once you have a region of 2D space, you can turn that 2D space into 3D. We use the [`extrude`] function to take a region and say, "extrude it up into the 3rd dimension". `extrude` takes a distance, which is how far along the third axis to extrude. Every plane has a _normal_, or an axis which is _tangent_ to the plane. For the plane XZ, this is the Y axis. This normal (also called the tangent, or the axis perpendicular to the plane), is the direction that `extrude` uses to add depth to your 2D region, making it 3D.
+So `region(segments = [pill.line1, pill.arc2])` starts at the left end of the pill's top line, runs along it to `arc2`, and carries on around the rest of the pill.
+
+If the whole boundary is one closed segment -- a circle, for example -- then just pass that single segment:
+
+```
+region(segments = [circleSketch.circle1])
+```
+
+Two optional arguments exist for boundaries that are ambiguous:
+
+ - `direction`: trace the boundary clockwise ([`CW`]) or counterclockwise ([`CCW`], the default).
+ - `intersectionIndex`: which crossing of the first two segments to stop at, when they cross more than once. Defaults to `-1`, meaning the last one.
+
+Neither is needed for a single closed loop, so you can usually ignore them.
+
+**NOTE**: Right now, the Zoo engine can only build a region from `segments` if the sketch contains exactly one closed region. On a sketch like the triangle-and-square one above, `segments` returns an error and you'll need to select by point instead. We'll update this book when that restriction is lifted.
+
+#### Selecting by point
+
+`region` can also take a point that lies inside the region you want, and return the region enclosing that point. If the point isn't actually in a closed region (in other words, if it's not surrounded by lines), the `region` call will return an error message.
+
+Any named point from the sketch works, and KCL already knows which sketch it came from:
+
+```
+region(point = pill.arc1.center)
+```
+
+You can also pass a point literal, i.e. a 2D position, but then you have to say which sketch it belongs to:
+
+```
+region(point = [-1.44mm, 5.86mm], sketch = pill)
+```
+
+We suggest you prefer named points over literal points, because if you edit your sketch, the exact boundaries of the geometry might change, and your target region might no longer enclose the specific position in your point literal!
+
+If no existing point sits inside the region you want, add a construction point to the sketch and constrain it into place. Because it's part of the sketch, the solver moves it along with everything else:
+
+```kcl
+plate = sketch(on = XY) {
+  line1 = line(start = [var 0mm, var 0mm], end = [var 20mm, var 0mm])
+  line2 = line(start = [var 20mm, var 0mm], end = [var 20mm, var 12mm])
+  line3 = line(start = [var 20mm, var 12mm], end = [var 0mm, var 12mm])
+  line4 = line(start = [var 0mm, var 12mm], end = [var 0mm, var 0mm])
+  coincident([line1.end, line2.start])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line4.start])
+  coincident([line4.end, line1.start])
+  coincident([line1.start, ORIGIN])
+  horizontal(line1)
+  vertical(line2)
+  parallel([line1, line3])
+  parallel([line2, line4])
+  distance([line1.start, line1.end]) == 20mm
+  distance([line2.start, line2.end]) == 12mm
+
+  // A construction line across the diagonal, with a point at its midpoint.
+  diagonal = line(start = [var 0mm, var 0mm], end = [var 20mm, var 12mm], construction = true)
+  coincident([diagonal.start, line1.start])
+  coincident([diagonal.end, line3.start])
+  middle = point(at = [var 9mm, var 5mm])
+  midpoint(diagonal, point = middle)
+}
+
+// `middle` moves with the sketch, so this region stays correct.
+region001 = region(point = plate.middle)
+extrude001 = extrude(region001, length = 3mm)
+```
+
+### Extruding a region
+
+Once you have a region of 2D space, you can turn that 2D space into 3D. We use the [`extrude`] function to take a region and say, "extrude it up into the 3rd dimension". `extrude` takes a distance, which is how far along the third axis to extrude. Every plane has a _normal_: the axis perpendicular to the plane. For the plane YZ, this is the X axis. That normal is the direction that `extrude` uses to add depth to your 2D region, making it 3D.
 
 ### Advanced extrude options
 
@@ -76,7 +155,7 @@ Once you have a region of 2D space, you can turn that 2D space into 3D. We use t
 
 ## Sweep
 
-An extrude takes some 2D region and drags it up in a straight line along the normal axis. A _sweep_ is like an extrude, but the shape isn't just moved along a straight line: it could be moved along any path. Let's reuse our previous pill-shape example, but this time we'll sweep it instead of extruding it. First, we have to define a path that the sweep will take. Let's add one:
+An extrude takes some 2D region and drags it up in a straight line along the normal axis. A _sweep_ is like an extrude, but the shape isn't just moved along a straight line: it could be moved along any path. Let's reuse our previous pill-shape example, but this time we'll sweep it instead of extruding it. First, we have to define a path that the sweep will take. The pill stays on `YZ`, but note that we sketch the path on `XZ`, so that it leads away from the pill instead of lying flat in it:
 
 ```kcl=path_for_sweep
 pillSketch = sketch(on = YZ) {
@@ -94,7 +173,7 @@ pillSketch = sketch(on = YZ) {
   tangent([line1, arc1])
   tangent([line1, arc2])
 }
-pillRegion = region(point = [-1.44mm, 5.86mm], sketch = pillSketch)
+pillRegion = region(segments = [pillSketch.line1, pillSketch.arc2])
 
 pathSketch = sketch(on = XZ) {
   line1 = line(start = [var 0mm, var 5.06mm], end = [var -5.02mm, var 4.93mm])
@@ -128,7 +207,7 @@ pillSketch = sketch(on = YZ) {
   tangent([line1, arc1])
   tangent([line1, arc2])
 }
-pillRegion = region(point = [-1.44mm, 5.86mm], sketch = pillSketch)
+pillRegion = region(segments = [pillSketch.line1, pillSketch.arc2])
 
 pathSketch = sketch(on = XZ) {
   line1 = line(start = [var 0mm, var 5.06mm], end = [var -5.02mm, var 4.93mm])
@@ -151,9 +230,12 @@ Sweeps and extrudes are pretty similar! A sweep is basically a generalization of
 
 The [`sweep`] call has several other options you can set, listed in its documentation. Here are some optional parameters you can use to tweak the exact algorithm Zoo uses to compute the sweep:
 
- - `relativeTo = sweep::TRAJECTORY` or `relativeTo = sweep::SKETCH_PLANE` affects how the shape being swept will move along the path. This is optional and defaults to `sweep::TRAJECTORY`.
  - `version = 1` or `version = 2` will change which Zoo sweep algorithm to use. The default, 0, means the Zoo engine will use whichever it thinks is best. 1 is the version we first launched Zoo with, and 2 is a new improved version that works better in many cases.
+ - `translateProfileToPath = true` moves the profile onto the path before the sweep starts, instead of starting the sweep from wherever the profile already sits. Defaults to `false`, and requires `version = 2`.
+ - `orientProfilePerpendicular = true` re-orients the profile so it's perpendicular to the path before the sweep starts. Defaults to `false`, and requires `version = 2`.
  - `sectional = true` will divide the swept path into several different stages, one per line in the path. The default is `sectional = false`.
+
+**NOTE**: Older KCL used a `relativeTo` parameter (set to `sweep::TRAJECTORY` or `sweep::SKETCH_PLANE`) to control how the swept shape moved along the path. It's deprecated -- use `translateProfileToPath` and `orientProfilePerpendicular` instead.
 
 If your sweep looks strange, try playing around with these options, or read the [`sweep`] docs page for more information.
 
@@ -197,7 +279,7 @@ circleSketch = sketch(on = XZ) {
 }
 
 // Pick the region inside the circle
-region001 = region(point = [20mm, -0.9975mm], sketch = circleSketch)
+region001 = region(segments = [circleSketch.circle1])
 
 // Revolve it around the center of the scene
 revolve001 = revolve(region001, axis = Y)
@@ -220,7 +302,7 @@ circleSketch = sketch(on = XZ) {
   coincident([line1.end, circle1.start])
   distance([line1.start, line1.end]) == 1mm
 }
-region001 = region(point = [20mm, -0.9975mm], sketch = circleSketch)
+region001 = region(segments = [circleSketch.circle1])
 
 // Change the angle to 240deg
 revolve001 = revolve(region001, angle = 240deg, axis = Y)
@@ -269,7 +351,7 @@ semiCircleSketch = sketch(on = XZ) {
   coincident([arc1.start, line2.end])
 }
 
-semiCircleRegion = region(point = [1.8275mm, 0mm], sketch = semiCircleSketch)
+semiCircleRegion = region(segments = [semiCircleSketch.arc1, semiCircleSketch.line1])
 revolve001 = revolve(semiCircleRegion, axis = Y)
 ```
 
@@ -311,8 +393,8 @@ circle = sketch(on = offsetPlane(XY, offset = 10mm)) {
 }
 
 // Pick out the right regions from each sketch.
-squareRegion = region(point = [0mm, -4.9975mm], sketch = square)
-circleRegion = region(point = [0mm, -1.4975mm], sketch = circle)
+squareRegion = region(segments = [square.line1, square.line2])
+circleRegion = region(segments = [circle.circle1])
 
 // Loft the square into the circle.
 loft([squareRegion, circleRegion])
@@ -372,9 +454,9 @@ square2 = sketch(on = offsetPlane(XY, offset = 20mm)) {
 }
 
 // Pick out the right regions from each sketch.
-squareRegion = region(point = [0mm, -4.9975mm], sketch = square)
-circleRegion = region(point = [0mm, -1.4975mm], sketch = circle)
-squareRegion2 = region(point = [0mm, -4.9975mm], sketch = square2)
+squareRegion = region(segments = [square.line1, square.line2])
+circleRegion = region(segments = [circle.circle1])
+squareRegion2 = region(segments = [square2.line1, square2.line2])
 
 // Loft the square into the circle.
 loftedSolid = loft([squareRegion, circleRegion, squareRegion2], vDegree = 1)
@@ -436,9 +518,9 @@ square2 = sketch(on = offsetPlane(XY, offset = 20mm)) {
 }
 
 // Pick out the right regions from each sketch.
-squareRegion = region(point = [0mm, -4.9975mm], sketch = square)
-circleRegion = region(point = [0mm, -1.4975mm], sketch = circle)
-squareRegion2 = region(point = [0mm, -4.9975mm], sketch = square2)
+squareRegion = region(segments = [square.line1, square.line2])
+circleRegion = region(segments = [circle.circle1])
+squareRegion2 = region(segments = [square2.line1, square2.line2])
 
 // Loft the square into the circle.
 // This time use vDegree = 2. This is the default, so you don't actually
@@ -454,6 +536,8 @@ As you can see, the `vDegree` makes a big difference. You can view other options
 
 [`extrude`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-extrude
 [`region`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-region
+[`CCW`]: https://zoo.dev/docs/kcl-std/consts/std-CCW
+[`CW`]: https://zoo.dev/docs/kcl-std/consts/std-CW
 [`loft`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-loft
 [`offsetPlane`]: https://zoo.dev/docs/kcl-std/functions/std-offsetPlane
 [`revolve`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-revolve

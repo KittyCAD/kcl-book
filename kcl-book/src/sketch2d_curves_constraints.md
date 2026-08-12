@@ -11,7 +11,7 @@ Let's sketch a pill shape, like a rectangle but with rounded edges. We'll need a
 ```kcl
 height = 4
 width = 10
-pill = sketch(on = XY) {
+pill = sketch(on = YZ) {
   bot = line(start = [0, 0], end = [width, 0])
   top = line(start = [0, height], end = [width, height])
   left = arc(start = [0, height], end = [0, 0], center = [0, height/2])
