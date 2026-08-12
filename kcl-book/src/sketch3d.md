@@ -72,13 +72,13 @@ This sketch contains two closed shapes (a triangle and a square) as well as othe
 
 #### Selecting by segments
 
-This is the preferred way, and it's what we used above. Pass `segments` two segments that bound the region you want:
+This is the preferred way, and it's what we used above. Pass `segments` two segments that are part of the region you want. Here we selected two connected segments:
 
 ```
 region(segments = [pill.line1, pill.arc2])
 ```
 
-If the boundary is a single closed segment, like a circle, pass just that one segment:
+If the boundary is a single closed segment (i.e., a circle) pass just that one segment:
 
 ```
 region(segments = [circleSketch.circle1])
@@ -102,9 +102,9 @@ You can also pass a point literal, i.e. a 2D position, but then you have to say 
 region(point = [-1.44mm, 5.86mm], sketch = pill)
 ```
 
-We suggest you prefer named points over literal points, because if you edit your sketch, the exact boundaries of the geometry might change, and your target region might no longer enclose the specific position in your point literal!
+We suggest you prefer named points over literal points (e.g., `pill.arc1.center` instead of `[-1.44mm, 5.86mm]`), because if you edit your sketch, the exact boundaries of the geometry might change, and your target region might no longer enclose the specific position in your point literal!
 
-If no existing point sits inside the region you want, add a construction point to the sketch and constrain it into place. Because it's part of the sketch, the solver moves it along with everything else:
+One neat trick is that if no existing named point sits inside the region you want, add a construction point to the sketch. Because it's part of the sketch, the solver moves it along with everything else:
 
 ```kcl
 plate = sketch(on = XY) {
