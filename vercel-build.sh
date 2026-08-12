@@ -3,6 +3,12 @@ set -euo pipefail
 
 # This is a build script intended to be consumed by Vercel, though it should work locally if your platform matches.
 
+# Toolchain versions live in one place, shared with CI and scripts/setup-local.sh.
+# Resolved relative to this script so the build does not depend on the caller's cwd.
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/versions.env
+. "$repo_root/scripts/versions.env"
+
 # First make sure Rust is available because we need to compile mdbook-kcl.
 if [ -f /rust/env ]; then
   . /rust/env
@@ -30,8 +36,10 @@ cd -
 mv mdbook-kcl/target/debug/mdbook-kcl bin
 ls bin
 
-curl -Lo mdbook-toc.tar.gz https://github.com/badboy/mdbook-toc/releases/download/0.14.2/mdbook-toc-0.14.2-x86_64-unknown-linux-musl.tar.gz
-curl -Lo mdbook.tar.gz https://github.com/rust-lang/mdBook/releases/download/v0.4.49/mdbook-v0.4.49-x86_64-unknown-linux-musl.tar.gz
+# -f so an HTTP error fails the build loudly instead of writing an error page into
+# the tarball and confusing tar; --retry to ride out transient GitHub blips.
+curl -fL --retry 3 --retry-delay 2 -o mdbook-toc.tar.gz "https://github.com/badboy/mdbook-toc/releases/download/${MDBOOK_TOC_VERSION}/mdbook-toc-${MDBOOK_TOC_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+curl -fL --retry 3 --retry-delay 2 -o mdbook.tar.gz "https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-musl.tar.gz"
 tar -xvzf mdbook.tar.gz -C bin
 tar -xvzf mdbook-toc.tar.gz -C bin
 export PATH="$(pwd)/bin:$PATH"
