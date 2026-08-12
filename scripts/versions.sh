@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Single source of truth for the book's build toolchain versions.
+#
+# Sourced by:
+#   - scripts/setup-local.sh   (local development)
+#   - vercel-build.sh          (production build)
+#   - .github/workflows/CI.yml (the `check` job)
+#
+# mdBook is pinned because 0.5.x is a breaking release: it rejects this book's
+# book.toml and changed the preprocessor wire format, so mdbook-kcl cannot run
+# under it. Bump these only alongside a port of mdbook-kcl.
+#
+# NOTE: mdbook-kcl/Cargo.toml declares its own `mdbook` dependency, which must
+# match MDBOOK_VERSION. Cargo enforces that one at build time, so it cannot
+# silently drift, but remember to update it here and there together.
+
+MDBOOK_VERSION=0.4.49
+MDBOOK_TOC_VERSION=0.14.2
