@@ -104,37 +104,35 @@ region(point = [-1.44mm, 5.86mm], sketch = pill)
 
 We suggest you prefer named points over literal points (e.g., `pill.arc1.center` instead of `[-1.44mm, 5.86mm]`), because if you edit your sketch, the exact boundaries of the geometry might change, and your target region might no longer enclose the specific position in your point literal!
 
-One neat trick is that if no existing named point sits inside the region you want, add a construction point to the sketch. Because it's part of the sketch, the solver moves it along with everything else:
+One neat trick is that you can add your own construction point to the sketch, and constrain it wherever you need. Because it's part of the sketch, the solver moves it along with everything else. Here's our pill again, with a construction line drawn across it and a point pinned to the middle of that line:
 
 ```kcl
-plate = sketch(on = XY) {
-  line1 = line(start = [var 0mm, var 0mm], end = [var 20mm, var 0mm])
-  line2 = line(start = [var 20mm, var 0mm], end = [var 20mm, var 12mm])
-  line3 = line(start = [var 20mm, var 12mm], end = [var 0mm, var 12mm])
-  line4 = line(start = [var 0mm, var 12mm], end = [var 0mm, var 0mm])
-  coincident([line1.end, line2.start])
-  coincident([line2.end, line3.start])
-  coincident([line3.end, line4.start])
-  coincident([line4.end, line1.start])
-  coincident([line1.start, ORIGIN])
-  horizontal(line1)
-  vertical(line2)
-  parallel([line1, line3])
-  parallel([line2, line4])
-  distance([line1.start, line1.end]) == 20mm
-  distance([line2.start, line2.end]) == 12mm
+pill = sketch(on = XZ) {
+  line1 = line(start = [var -4.18mm, var 5.88mm], end = [var 1.34mm, var 5.85mm])
+  line2 = line(start = [var 1.32mm, var 4.12mm], end = [var -4.19mm, var 4.15mm])
+  arc1 = arc(start = [var -4.18mm, var 5.88mm], end = [var -4.19mm, var 4.15mm], center = [var -4.18mm, var 5.01mm])
+  arc2 = arc(start = [var 1.32mm, var 4.12mm], end = [var 1.34mm, var 5.85mm], center = [var 1.33mm, var 4.99mm])
+  coincident([arc1.start, line1.start])
+  coincident([line1.end, arc2.end])
+  coincident([arc2.start, line2.start])
+  coincident([line2.end, arc1.end])
+  parallel([line1, line2])
+  equalLength([line1, line2])
+  equalRadius([arc2, arc1])
+  tangent([line1, arc1])
+  tangent([line1, arc2])
 
-  // A construction line across the diagonal, with a point at its midpoint.
-  diagonal = line(start = [var 0mm, var 0mm], end = [var 20mm, var 12mm], construction = true)
+  // A construction line corner to corner, with a point at its midpoint.
+  diagonal = line(start = [var -4.18mm, var 5.88mm], end = [var 1.32mm, var 4.12mm], construction = true)
   coincident([diagonal.start, line1.start])
-  coincident([diagonal.end, line3.start])
-  middle = point(at = [var 9mm, var 5mm])
+  coincident([diagonal.end, line2.start])
+  middle = point(at = [var -1.43mm, var 5mm])
   midpoint(diagonal, point = middle)
 }
 
 // `middle` moves with the sketch, so this region stays correct.
-region001 = region(point = plate.middle)
-extrude001 = extrude(region001, length = 3mm)
+region001 = region(point = pill.middle)
+extrude001 = extrude(region001, length = 1)
 ```
 
 ### Extruding a region
