@@ -72,22 +72,17 @@ This sketch contains two closed shapes (a triangle and a square) as well as othe
 
 #### Selecting by segments
 
-This is the preferred way, and it's what we used above. Pass the `segments` argument the first two segments of the boundary you want. `region` starts at the first segment's start point, follows it to where it meets the second segment, and then turns at each intersection it reaches until it gets back to the first segment. Whichever loop it traced is your region.
+This is the preferred way, and it's what we used above. Pass `segments` two segments that bound the region you want:
 
-So `region(segments = [pill.line1, pill.arc2])` starts at the left end of the pill's top line, runs along it to `arc2`, and carries on around the rest of the pill.
+```
+region(segments = [pill.line1, pill.arc2])
+```
 
-If the whole boundary is one closed segment -- a circle, for example -- then just pass that single segment:
+If the boundary is a single closed segment, like a circle, pass just that one segment:
 
 ```
 region(segments = [circleSketch.circle1])
 ```
-
-Two optional arguments exist for boundaries that are ambiguous:
-
- - `direction`: trace the boundary clockwise ([`CW`]) or counterclockwise ([`CCW`], the default).
- - `intersectionIndex`: which crossing of the first two segments to stop at, when they cross more than once. Defaults to `-1`, meaning the last one.
-
-Neither is needed for a single closed loop, so you can usually ignore them.
 
 **NOTE**: Right now, the Zoo engine can only build a region from `segments` if the sketch contains exactly one closed region. On a sketch like the triangle-and-square one above, `segments` returns an error and you'll need to select by point instead. We'll update this book when that restriction is lifted.
 
@@ -536,8 +531,6 @@ As you can see, the `vDegree` makes a big difference. You can view other options
 
 [`extrude`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-extrude
 [`region`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-region
-[`CCW`]: https://zoo.dev/docs/kcl-std/consts/std-CCW
-[`CW`]: https://zoo.dev/docs/kcl-std/consts/std-CW
 [`loft`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-loft
 [`offsetPlane`]: https://zoo.dev/docs/kcl-std/functions/std-offsetPlane
 [`revolve`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-revolve
