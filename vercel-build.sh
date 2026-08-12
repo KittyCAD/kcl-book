@@ -6,8 +6,8 @@ set -euo pipefail
 # Toolchain versions live in one place, shared with CI and scripts/setup-local.sh.
 # Resolved relative to this script so the build does not depend on the caller's cwd.
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=scripts/versions.sh
-. "$repo_root/scripts/versions.sh"
+# shellcheck source=scripts/versions.env
+. "$repo_root/scripts/versions.env"
 
 # First make sure Rust is available because we need to compile mdbook-kcl.
 if [ -f /rust/env ]; then

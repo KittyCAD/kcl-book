@@ -43,7 +43,7 @@ jobs:
       - name: Read pinned toolchain versions
         id: versions
         run: |
-          . ./scripts/versions.sh
+          . ./scripts/versions.env
           echo "mdbook=$MDBOOK_VERSION" >> "$GITHUB_OUTPUT"
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v2

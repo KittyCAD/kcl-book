@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Installs the toolchain needed to build the KCL book locally:
 #
-#   - mdbook       at the version pinned in scripts/versions.sh
+#   - mdbook       at the version pinned in scripts/versions.env
 #   - mdbook-toc   likewise (renders the <!-- toc --> markers)
 #   - mdbook-kcl   built from this repo (renders the <!-- KCL: ... --> markers
 #                  into 3D <model-viewer> elements)
@@ -12,8 +12,8 @@ set -euo pipefail
 # already installed; mdbook-kcl is always rebuilt, since it lives in this repo.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/versions.sh
-. "$repo_root/scripts/versions.sh"
+# shellcheck source=scripts/versions.env
+. "$repo_root/scripts/versions.env"
 
 if ! command -v cargo >/dev/null 2>&1; then
   echo "error: cargo not found. Install Rust from https://rustup.rs, then re-run." >&2

@@ -17,7 +17,7 @@ Then:
  - Use `cd kcl-book && mdbook serve` to spin up local copy
  - Use `cd kcl-book && mdbook build` to compile static site
 
-The pinned versions live in [`scripts/versions.sh`](scripts/versions.sh), which
+The pinned versions live in [`scripts/versions.env`](scripts/versions.env), which
 CI and the production build read too.
 
 **mdBook 0.5 does not work.** It is a breaking release that rejects this book's
