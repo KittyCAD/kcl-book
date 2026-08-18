@@ -10,7 +10,7 @@ The `import` statement lets you load models from other CAD files and use them in
 import "car motor.step" as motor
 ```
 
-Once you've imported the geometry, it'll be placed in your scene. You can then modify it like any other KCL solid. For example, let's make two motors:
+Once you've imported the geometry, it'll be placed in your scene, and referred to with its variable name, `motor`. Many (but not all) KCL functions accept imported geometry, and treat it like regular geometry made inside KCL. For example, let's make two motors:
 
 ```kcl
 import "car motor.step" as motor
@@ -20,6 +20,14 @@ motor
 clone(motor)
   |> translate(x=20)
 ```
+
+If a KCL function doesn't support imported geometry, its type signature will say so. For example, our CSG operations like [`subtract`](https://zoo.dev/docs/kcl-std/functions/std-solid-subtract#docs-page-top) don't support the `ImportedGeometry` type, because their type signature explicitly says it only takes `Solid` as a parameter. If you try to use one of them with imported geometry, you'll get a type error, something like:
+
+```
+> The input argument of `subtract` requires one or more `Solid`s (`[Solid; 1+]`), but found an array of `ImportedGeometry`
+```
+
+On the other hand, [`clone`](https://zoo.dev/docs/kcl-std/functions/std-clone#docs-page-top) supports imported geometry, as seen above. If you read the docs for `clone`, its parameters say you can clone a sketch, or solid, or imported geometry. If you want to use imported geometry for an operation that doesn't support it, your best bet is to import the geometry and then recreate it in KCL, using the original imported geometry as a visual reference.
 
 ## Exporting KCL into other formats
 
