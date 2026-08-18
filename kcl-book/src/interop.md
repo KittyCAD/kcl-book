@@ -10,7 +10,7 @@ The `import` statement lets you load models from other CAD files and use them in
 import "car motor.step" as motor
 ```
 
-Once you've imported the geometry, it'll be placed in your scene. You can then modify it like any other KCL solid. For example, let's make two motors:
+Once you've imported the geometry, it'll be placed in your scene. You can then move, rotate, scale, recolour, and clone it. For example, let's make two motors:
 
 ```kcl
 import "car motor.step" as motor
@@ -34,4 +34,14 @@ Wrote file: model/output.gltf
 
 Currently Zoo supports exporting and importing fbx, glb, gltf, obj, ply, step, and stl files.
 
-[Zoo CLI]: https://zoo.dev/docs/cli/manual
+## What you can't do with imported geometry
+
+An import is *not* a KCL solid. It has its own type, `ImportedGeometry`, and there's no conversion between the two. `clone`, `translate`, `rotate`, `scale`, `appearance`, `hide`, and `delete` all accept an import, but nothing that expects a `Solid` does. That rules out `subtract`, `union`, `intersect`, `fillet`, `chamfer`, `shell`, the pattern functions, and `startSketchOn`.
+
+So if you import that motor and try to subtract it from a housing you've modelled, KCL stops you before anything is built:
+
+> The input argument of `subtract` requires one or more `Solid`s (`[Solid; 1+]`), but found an array of `ImportedGeometry`
+
+This is about the type, not the file. A mesh format like STL has no surfaces to cut against, and a STEP file's BREP data isn't exposed to the modelling operations yet either, so both behave the same way.
+
+If you need to cut into an imported part, or boolean it against something you've modelled, you have two options. Recreate the shape in KCL, using the import as an on-screen reference while you rebuild, then operate on the native solid. Or leave the import alone and model a separate part that fits it, positioning your new geometry with `translate` and `rotate`.
