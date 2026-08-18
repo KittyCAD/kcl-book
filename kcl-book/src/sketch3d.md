@@ -72,7 +72,7 @@ This sketch contains two closed shapes (a triangle and a square) as well as othe
 
 #### Selecting by segments
 
-This is the preferred way, and it's what we used above. Pass `segments` two segments that are part of the region you want. Here we selected two connected segments:
+This is the preferred way, and it's what we used above. Pass `segments` one or more segments that are part of the region you want. With multiple segments, `region` traces the first segment from its start point to the intersection with the second segment, then turns at each intersection until it returns to the first segment. Here we selected two connected segments:
 
 ```
 region(segments = [pill.line1, pill.arc2])
@@ -84,11 +84,11 @@ If the boundary is a single closed segment (i.e., a circle) pass just that one s
 region(segments = [circleSketch.circle1])
 ```
 
-**NOTE**: Right now, the Zoo engine can only build a region from `segments` if the sketch contains exactly one closed region. On a sketch like the triangle-and-square one above, `segments` returns an error and you'll need to select by point instead. We'll update this book when that restriction is lifted.
+If the supplied segments could trace more than one boundary, use `direction` to choose clockwise or counterclockwise traversal and `intersectionIndex` to choose which intersection to follow. See the [`region`] reference for details.
 
 #### Selecting by point
 
-`region` can also take a point that lies inside the region you want, and return the region enclosing that point. If the point isn't actually in a closed region (in other words, if it's not surrounded by lines), the `region` call will return an error message.
+As a fallback, `region` can take a point that lies inside the region you want and return the region enclosing that point. If the point isn't actually in a closed region (in other words, if it's not surrounded by lines), the `region` call will return an error message.
 
 Any named point from the sketch works, and KCL already knows which sketch it came from:
 
