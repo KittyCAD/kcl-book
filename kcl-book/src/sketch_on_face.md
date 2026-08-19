@@ -9,6 +9,8 @@ In the previous chapter, we looked at how leveraging KCL tags lets you query you
 Let's start with a simple example. First, we'll sketch and extrude a triangle.
 
 ```kcl=triangle_for_sketching
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Make a triangle
 sketch001 = sketch(on = YZ) {
   line1 = line(start = [var 5.29mm, var -4.11mm], end = [var -4.31mm, var -4.11mm])
@@ -22,7 +24,7 @@ sketch001 = sketch(on = YZ) {
 }
 
 // Extrude it
-region001 = region(point = [0.49mm, -4.1075mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 extrude001 = extrude(region001, length = 1)
 ```
 
@@ -43,6 +45,8 @@ In all the previous example sketches, we've sketched on a _plane_ (like XY or YZ
 
 
 ```kcl=triangle_with_cylinder_sketched
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Make a triangle
 sketch001 = sketch(on = YZ) {
   line1 = line(start = [var 5.29mm, var -4.11mm], end = [var -4.31mm, var -4.11mm])
@@ -56,11 +60,11 @@ sketch001 = sketch(on = YZ) {
 }
 
 // Extrude it
-region001 = region(point = [0.49mm, -4.1075mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 extrude001 = extrude(region001, length = 1)
 
 // Sketch on a face of the triangle.
-face002 = faceOf(extrude001, face = region001.tags.line3)
+face002 = faceOf(extrude001, face = region001.tags.line2)
 sketch003 = sketch(on = face002) {
   line1 = line(start = [var -3.21mm, var 0mm], end = [var -2.7mm, var 0.65mm])
   horizontal([line1.start, ORIGIN])
@@ -72,7 +76,7 @@ sketch003 = sketch(on = face002) {
 }
 
 // Extrude that sketch
-region002 = region(point = [-2.9530332mm, 0.3234568mm], sketch = sketch003)
+region002 = region(segments = [sketch003.line1, sketch003.line2])
 extrude002 = extrude(region002, length = 2)
 ```
 
@@ -89,6 +93,8 @@ Great! We extruded a solid (the triangle), and could sketch on one of its faces,
 There's a simple solution to sketching on the top face. KCL has some built-in identifiers for the top and bottom face, [`END`] and [`START`]. We prefer the terms "start" and "end" to "top" and "bottom" because the latter depend on your camera angle, so they can be ambiguous. "Start" always refers to the original face from your 2D sketch. "End" always refers to the new face created at the end of the extrusion. Let's use them!
 
 ```kcl=triangle_top_and_bottom_sketches
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Same as previous example
 sketch001 = sketch(on = YZ) {
   line1 = line(start = [var 5.29mm, var -4.11mm], end = [var -4.31mm, var -4.11mm])
@@ -100,7 +106,7 @@ sketch001 = sketch(on = YZ) {
   equalLength([line2, line3])
   horizontal(line1)
 }
-region001 = region(point = [0.49mm, -4.1075mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 extrude001 = extrude(region001, length = 1)
 
 // Changed: We're using `face = END` here, which is a built-in
@@ -116,7 +122,7 @@ sketch003 = sketch(on = face002) {
 }
 
 // Extrude that sketch
-region002 = region(point = [-0.7777441mm, -0.2460774mm], sketch = sketch003)
+region002 = region(segments = [sketch003.line1, sketch003.line2])
 extrude002 = extrude(region002, length = 1)
 
 ```
@@ -146,6 +152,8 @@ Generally you won't need to use this method, but there are some niches where it'
 Now that we understand tags, we can use them to sketch on a chamfer! When you [`chamfer`] an edge, it creates a new face, which can also be sketched on! Consider this chamfered cube from the previous chapter:
 
 ```kcl=chamfered_cube
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Same as previous examples
 width = 1
 square = sketch(on = XY) {
@@ -154,7 +162,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line1, square.line2])
 extrudeCube = extrude(regionCube, length = width)
 
 // Apply a chamfer
@@ -170,6 +178,8 @@ chamferedCube = chamfer(
 The chamfer produced a new face, and we can sketch on it too. Firstly, we add a tag to the [`chamfer`] call. Then we can use it in `faceOf`, and then we can sketch on it like any other  face.
 
 ```kcl=sketch_on_chamfered_cube
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Same as previous examples
 width = 1
 square = sketch(on = XY) {
@@ -178,7 +188,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line1, square.line2])
 extrudeCube = extrude(regionCube, length = width)
 
 // Apply a chamfer
@@ -202,7 +212,7 @@ triangle = sketch(on = faceToSketchOn) {
   coincident([line2.end, line3.start])
   coincident([line3.end, line1.start])
 }
-region001 = region(point = [-0.2834107mm, 0.3980702mm], sketch = triangle)
+region001 = region(segments = [triangle.line1, triangle.line2])
 extrude001 = extrude(region001, length = 0.4)
 ```
 

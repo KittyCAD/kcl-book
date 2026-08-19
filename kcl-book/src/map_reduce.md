@@ -19,6 +19,8 @@ The [`map`] function takes an input array as its first argument, then a function
 You can use `map` to create geometry too! For example, let's make 3 cubes, next to each other.
 
 ```kcl=three_map_cubes
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 fn cube(@offset) {
   sideLen = 10
   sketch001 = sketch(on = XY) {
@@ -40,7 +42,7 @@ fn cube(@offset) {
     distance([line1.start, line1.end]) == sideLen
   }
   hide(sketch001)
-  return region(sketch = sketch001, point = [0.4, -0.4])
+  return region(segments = [sketch001.line1, sketch001.line2])
     |> extrude(length = sideLen)
     |> translate(x = offset)
 }
@@ -65,6 +67,8 @@ myObject = {
 This object has two fields, `offset` and `color`. You could access them by calling `myObject.offset` and `myObject.color`. Let's see how we can use this with `map`:
 
 ```kcl=three_map_cubes_color
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 fn cube(@params) {
   offset = params.x
   color = params.color
@@ -88,7 +92,7 @@ fn cube(@params) {
     distance([line1.start, line1.end]) == sideLen
   }
   hide(sketch001)
-  return region(sketch = sketch001, point = [0.4, -0.4])
+  return region(segments = [sketch001.line1, sketch001.line2])
     |> extrude(length = sideLen)
     |> translate(x = offset)
     |> appearance(color = color)
@@ -160,4 +164,3 @@ You'll find `map` and `reduce` useful when building geometry procedurally. They'
 
 [`map`]: https://zoo.dev/docs/kcl-std/functions/std-array-map
 [`reduce`]: https://zoo.dev/docs/kcl-std/functions/std-array-reduce
-
