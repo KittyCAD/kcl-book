@@ -68,12 +68,18 @@ y = 3cm // roughly 1.18 inches
 x = 10in - y
 ```
 
-If you open the Variables pane, you'll see that `x` is 8.818 inches. KCL can track the numbers and types involved, letting you flexibly compare different units. However, KCL is not perfect at this (yet -- we're working on it!) For example, right now, KCL cannot anticipate what 30 inches multiplied by 2 centimeters is. If you try `30in * 2cm`, you'll get a warning: `Multiplying numbers which have unknown or incompatible units.` KCL warns you so that you can explicitly provide units if you want.
+If you open the Variables pane, you'll see that `x` is 8.818 inches. KCL can track the numbers and types involved, letting you flexibly compare different units. However, KCL is not perfect at this (yet -- we're working on it!) For example, right now, KCL does not assume what output unit you want when multiplying two lengths. If you try `3cm * 2cm`, you'll get a warning: `Multiplying numbers which have unknown or incompatible units.` KCL warns you so that you can explicitly provide units if you want.
 
 ```kcl
 // This causes a warning that KCL doesn't know what units `z` uses
-z = 10in * 3cm
+z = 10cm * 3cm
 ```
+
+Multiplication is tricky because the above example could mean 30cm or could be trying to make an area, like a 10cm by 3cm rectangle of 30 square centimeters.
+
+Division, however, is simpler. `10cm/5cm` is a ratio of 2:1, so it returns an answer of 2, unitless. It's unitless because it's a ratio of two lengths, not a length itself.
+
+Similarly, multiplying or dividing a length by a unitless number gives you a length back, because you're applying a ratio to a length. For example, `3cm * 2_` is `6cm` and `10cm / 2_` is `5cm`.
 
 ## Units and function signatures
 
