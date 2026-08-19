@@ -14,6 +14,8 @@ We can perform similar operations on 3D solids in KCL. They're sometimes called 
 Let's see how these operations work. Here's two cubes.
 
 ```kcl=two_cubes
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -35,7 +37,7 @@ sketch001 = sketch(on = XY) {
   equalLength([line1, line2, line3, line4])
 }
 
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cubeGreen = extrude(region001, length = 5)
   |> appearance(color = "#229922")
 
@@ -49,6 +51,8 @@ cubeBlue = clone(cubeGreen)
 That's what it looks like _before_ we apply any CSG operations. Now let's see what happens when we use KCL's [`union`], [`intersect`] and [`subtract`] functions on these. Firstly, let's do a union. This should create a new solid which combines both input solids. 
 
 ```kcl=two_cubes_union
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // This part is unchanged from previous examples.
 sketch001 = sketch(on = XY) {
   line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
@@ -67,7 +71,7 @@ sketch001 = sketch(on = XY) {
   equalLength([line1, line2, line3, line4])
 }
 
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cubeGreen = extrude(region001, length = 5)
   |> appearance(color = "#229922")
 cubeBlue = clone(cubeGreen)
@@ -90,6 +94,8 @@ Let's try an intersection. This combines both cubes, but leaves only the volume 
 
 
 ```kcl=two_cubes_intersection
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // This part is unchanged from previous examples.
 sketch001 = sketch(on = XY) {
   line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
@@ -108,7 +114,7 @@ sketch001 = sketch(on = XY) {
   equalLength([line1, line2, line3, line4])
 }
 
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cubeGreen = extrude(region001, length = 5)
   |> appearance(color = "#229922")
 cubeBlue = clone(cubeGreen)
@@ -128,6 +134,8 @@ This keeps only the small cube shape from where the previous two intersected. Th
 Lastly, let's try a [`subtract`] call:
 
 ```kcl=two_cubes_subtraction
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // This part is unchanged from previous examples.
 sketch001 = sketch(on = XY) {
   line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
@@ -146,7 +154,7 @@ sketch001 = sketch(on = XY) {
   equalLength([line1, line2, line3, line4])
 }
 
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cubeGreen = extrude(region001, length = 5)
   |> appearance(color = "#229922")
 cubeBlue = clone(cubeGreen)
@@ -164,6 +172,8 @@ Note that the syntax for [`subtract`] is a little different. The first argument 
 Let's try a subtraction with multiple tools:
 
 ```kcl=two_cubes_subtraction_multi_tool
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // This part is unchanged from previous examples.
 sketch001 = sketch(on = XY) {
   line1 = line(start = [var -2.21mm, var -5.39mm], end = [var 2.8mm, var -5.39mm])
@@ -182,7 +192,7 @@ sketch001 = sketch(on = XY) {
   equalLength([line1, line2, line3, line4])
 }
 
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cubeGreen = extrude(region001, length = 5)
   |> appearance(color = "#229922")
 cubeBlue = clone(cubeGreen)
@@ -203,6 +213,8 @@ both = subtract(cubeGreen, tools = [cubeBlue, cubeBlue2])
 And one with multiple targets. We'll make two green cubes (our target), and a blue cube (our tool). Then we'll subtract the blue cube from both green cubes:
 
 ```kcl=two_cubes_sub_multi_target
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -223,7 +235,7 @@ sketch001 = sketch(on = XY) {
   distance([line1.start, line1.end]) == 5
   equalLength([line1, line2, line3, line4])
 }
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 
 // Target 1
 cubeGreen = extrude(region001, length = 5)
@@ -247,6 +259,8 @@ both = subtract([cubeGreen, cubeGreen2], tools = [cubeBlue])
 Lastly, we can do a subtraction with multiple tools, and multiple targets. We'll make two green cubes (targets) and two blue (the tools):
 
 ```kcl=subtract_multi_multi
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -267,7 +281,7 @@ sketch001 = sketch(on = XY) {
   distance([line1.start, line1.end]) == 5
   equalLength([line1, line2, line3, line4])
 }
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 
 // Make two green cubes and two blue cubes.
 cubeGreen = extrude(region001, length = 5)

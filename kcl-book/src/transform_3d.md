@@ -8,6 +8,8 @@ We've covered many different ways to create 3D solids from 2D sketches, but what
 So far, all our models have used the standard shiny grey metal appearance. But you can customize this! Let's change the texture. We'll make two cubes: one cyan, one shiny metallic green.
 
 ```kcl=cube_textures
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch 2 squares.
 sketch001 = sketch(on = XY) {
   // Rectangle 1
@@ -23,6 +25,7 @@ sketch001 = sketch(on = XY) {
   parallel([line3, line1])
   perpendicular([line1, line2])
   horizontal(line3)
+
   // Rectangle 2
   line5 = line(start = [var -10.25mm, var 2.72mm], end = [var -4.81mm, var 2.72mm])
   line6 = line(start = [var -4.81mm, var 2.72mm], end = [var -4.81mm, var 8.16mm])
@@ -50,11 +53,11 @@ sketch001 = sketch(on = XY) {
   ])
 }
 
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cube1 = extrude(region001, length = 5)
   |> appearance(color = "#00ffbf")
 
-region002 = region(point = [-7.5300003mm, 2.9425003mm], sketch = sketch001)
+region002 = region(segments = [sketch001.line5, sketch001.line6])
 cube2 = extrude(region002, length = 5)
   |> appearance(color = "#147807", metalness = 90, roughness = 60)
 ```
@@ -76,6 +79,8 @@ We can transform solids, keeping them _basically_ the same -- the same number of
 Firstly, we can [`translate`] them (shifting them around in their coordinate system). To demonstrate this, we'll use the [`clone`] function to create a second copy of a cube, then use [`translate`] to move it left, then [`appearance`] to give it a different color:
 
 ```kcl=translate_cubes
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -98,7 +103,7 @@ sketch001 = sketch(on = XY) {
 }
 
 // This cube has the default silvery appearance.
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 silverCube = extrude(region001, length = 5)
 
 // Clone it, move it left, then make it green.
@@ -116,6 +121,8 @@ The [`translate`] call takes three arguments, `x`, `y` and `z`. Each of them is 
 Next, we can [`scale`] them, making them bigger or smaller.
 
 ```kcl=scaled_cubes
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -138,7 +145,7 @@ sketch001 = sketch(on = XY) {
 }
 
 // This cube has the default silvery appearance.
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 silverCube = extrude(region001, length = 5)
 
 // Clone it, move it up, make it 4x longer, and green.
@@ -163,6 +170,8 @@ Lastly, we can rotate them. The [`rotate`] call is similar to translate and rota
 Let's see an example:
 
 ```kcl=rotated_cubes
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -185,7 +194,7 @@ sketch001 = sketch(on = XY) {
 }
 
 // This cube has the default silvery appearance.
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 silverCube = extrude(region001, length = 5)
 
 extrude002 = clone(silverCube)
@@ -211,6 +220,8 @@ Note that these rotations are all around their own center (not the center of the
 Roll, pitch and yaw are one valid way to represent a rotation, but there are other ways too. You could also choose an axis, and rotate around that axis. For example, let's put 4 cubes at the same point, and then rotate them each a little bit around the axis.
 
 ```kcl=rotated_cubes_axis
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square
 sketch001 = sketch(on = XY) {
   // Sketch a rectangle first.
@@ -235,7 +246,7 @@ sketch001 = sketch(on = XY) {
 angle = 15deg
 
 // This cube has the default silvery appearance.
-region001 = region(point = [0.295mm, -5.3875mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 silverCube = extrude(region001, length = 1)
 
 extrude002 = clone(silverCube)

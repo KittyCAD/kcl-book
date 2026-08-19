@@ -55,6 +55,8 @@ Let's use functions to build a parametric pipe flange. We can start with a speci
 Here's a specific model. It's got 8 unthreaded holes, each with a radius of 4, and the overall model has a radius of 60. It's 10mm thick.
 
 ```kcl=specific_flange
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a big circle.
 bigCircleSketch = sketch(on = XZ) {
   circle1 = circle(start = [var 0mm, var 10mm], center = [var 0mm, var 0mm])
@@ -64,7 +66,7 @@ bigCircleSketch = sketch(on = XZ) {
 }
 
 // Extrude it into a "base".
-bigCircle = region(sketch = bigCircleSketch, point = [0, 0])
+bigCircle = region(segments = [bigCircleSketch.circle1])
 thickness = 10mm
 base = extrude(bigCircle, length = thickness, symmetric = true)
 
@@ -78,7 +80,7 @@ smallCircleSketch = sketch(on = XZ) {
 
 // Extrude that circle into a small cylinder,
 // then pattern it around, making little pegs.
-pegs = region(point = [0mm, 7.3125mm], sketch = smallCircleSketch)
+pegs = region(segments = [smallCircleSketch.circle1])
   |> extrude(length = thickness * 3, symmetric = true)
   |> translate(x = 50)
   |> patternCircular3d(instances = 8, axis = Y, useOriginal = true)
@@ -92,6 +94,8 @@ baseWithHoles = subtract(base, tools = pegs)
 Its specific measurements, like number of holes, radius, thickness etc were chosen somewhat arbitrarily. What if we want to make another pipe flange in the future, with different measurements? We can turn this specific flange model into a parametric design by making it into a function. We'll define a function `flange` which takes in several parameters. Let's see:
 
 ```kcl=parametric_flange
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Define a parametric flange
 fn flange(numHoles, holeRadius, baseRadius, thickness, holeEdgeGap) {
   // Sketch a big circle.
@@ -103,7 +107,7 @@ fn flange(numHoles, holeRadius, baseRadius, thickness, holeEdgeGap) {
   }
 
   // Extrude it into a "base".
-  bigCircle = region(sketch = bigCircleSketch, point = [0, 0])
+  bigCircle = region(segments = [bigCircleSketch.circle1])
   base = extrude(bigCircle, length = thickness, symmetric = true)
 
   // Start sketching a smaller circle
@@ -116,7 +120,7 @@ fn flange(numHoles, holeRadius, baseRadius, thickness, holeEdgeGap) {
 
   // Extrude that circle into a small cylinder,
   // then pattern it around, making little pegs.
-  pegs = region(point = [0mm, 7.3125mm], sketch = smallCircleSketch)
+  pegs = region(segments = [smallCircleSketch.circle1])
     |> extrude(length = thickness * 3, symmetric = true)
     |> translate(x = baseRadius - holeEdgeGap)
     |> patternCircular3d(instances = numHoles, axis = Y, useOriginal = true)
@@ -172,6 +176,8 @@ Functions can also be used to avoid writing the same code over and over again, i
 If we wanted to make 3 cubes, we shouldn't copy and paste this code 3 times. That would be annoying to read. We could use the `clone()` function to copy the cube, and then use transform functions like `translate()` or `appearance()` to tweak the cube. But we could also make a reusable `cube` helper function, like this.
 
 ```kcl=two_cubes_purple_blue
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 /// Helper function to make a 3D cube with the given length and position along X.
 fn cube(sideLen, offset) {
   sketch001 = sketch(on = XY) {
@@ -193,7 +199,7 @@ fn cube(sideLen, offset) {
     distance([line1.start, line1.end]) == sideLen
   }
   hide(sketch001)
-  return region(sketch = sketch001, point = [0.4, -0.4])
+  return region(segments = [sketch001.line1, sketch001.line2])
     |> extrude(length = sideLen)
     |> translate(x = offset)
 }
@@ -214,4 +220,3 @@ This is neater than copying and pasting the code to make 2 separate cubes, and i
 By putting the details of "what does a cube look like" in a single function, we make our code both more readable, and easier to change in the future.
 
 **Note**: Currently, Zoo Design Studio doesn't support using point-and-click UI to change geometry created in functions. That's something we hope to support in the future.
-

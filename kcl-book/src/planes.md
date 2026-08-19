@@ -71,6 +71,8 @@ The plane's Z axis is the cross product of its X and Y axes. It's uniquely deter
 Now let's use this custom plane in a sketch. We'll build two identical cylinders, but one is on the standard XY plane, and one is on the custom plane we defined above.
 
 ```kcl=custom_plane
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 customPlane = {
   origin = { x = 0, y = 6, z = 0 },
   xAxis = { x = 1, y = 0.5, z = 0 },
@@ -87,7 +89,7 @@ sketch001 = sketch(on = customPlane) {
   distance([line1.start, line1.end]) == 1
   vertical(line1)
 }
-region001 = region(point = [0mm, -0.9975mm], sketch = sketch001)
+region001 = region(segments = [sketch001.circle1])
 extrude001 = extrude(region001, length = 2)
 
 // Build the same cylinder, but on the XY plane.
@@ -100,7 +102,7 @@ sketch002 = sketch(on = XY) {
   distance([line1.start, line1.end]) == 1
   vertical(line1)
 }
-region002 = region(point = [0mm, -0.9975mm], sketch = sketch002)
+region002 = region(segments = [sketch002.circle1])
 extrude002 = extrude(region002, length = 2)
 ```
 
@@ -125,6 +127,8 @@ There's one last method to create a plane: via the [`planeOf`] function. You can
 
 ```kcl
 // Make a square
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 sketch001 = sketch(on = XY) {
   line1 = line(start = [var -1.53mm, var -1.41mm], end = [var 1.99mm, var -1.41mm])
   line2 = line(start = [var 1.99mm, var -1.41mm], end = [var 1.99mm, var 1.42mm])
@@ -139,7 +143,7 @@ sketch001 = sketch(on = XY) {
   perpendicular([line1, line2])
   horizontal(line3)
 }
-region001 = region(point = [0.23mm, -1.4075mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 
 // Make an arc to sweep the square along
 sketch002 = sketch(on = YZ) {

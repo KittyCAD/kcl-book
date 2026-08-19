@@ -11,6 +11,8 @@ So far, all our KCL examples have been a single file -- `main.kcl`. That's the d
 Say we have a KCL file like this, which defines a cube function, a sphere function, and then models several cubes and spheres.
 
 ```kcl=cubes_and_spheres
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 fn cube() {
   sideLen = 10
   sketch001 = sketch(on = XY) {
@@ -32,7 +34,7 @@ fn cube() {
     distance([line1.start, line1.end]) == sideLen
   }
   hide(sketch001)
-  return region(sketch = sketch001, point = [0.4, -0.4])
+  return region(segments = [sketch001.line1, sketch001.line2])
     |> extrude(length = sideLen)
 }
 
@@ -49,7 +51,7 @@ fn sphere() {
     coincident([arc1.start, line1.end])
   }
   hidden001 = hide(sketch001)
-  region001 = region(point = [0mm, 0.0025mm], sketch = sketch001)
+  region001 = region(segments = [sketch001.line1, sketch001.arc1])
   return revolve(region001, angle = 360deg, axis = X)
 }
 
@@ -114,7 +116,7 @@ fn cube(sideLength) {
   sketch001 = sketch(on = XY) {
     // Code omitted for brevity; same as previous cube examples
   }
-  return region(sketch = sketch001, point = [0.4, -0.4])
+  return region(segments = [sketch001.line1, sketch001.line2])
     |> extrude(length = sideLen)
 }
 

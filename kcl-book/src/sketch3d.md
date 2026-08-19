@@ -68,11 +68,11 @@ We need `region` because a sketch can contain lots of geometry. In the previous 
 
 ![A sketch with two closed shapes and some free-floating lines](images/static/region_demo.png)
 
-This sketch contains two closed shapes (a triangle and a square) as well as other lines. So, when we use the `extrude` function, we have to say which closed region we want to extrude. There are two ways to do that: by naming the segments that bound the region, or by giving a point inside it.
+This sketch contains two closed shapes (a triangle and a square) as well as other lines. So, when we use the `extrude` function, we have to say which closed region we want to extrude by naming segments that bound it.
 
 #### Selecting by segments
 
-This is the preferred way, and it's what we used above. Pass `segments` one or more segments that are part of the region you want. With multiple segments, `region` traces the first segment from its start point to the intersection with the second segment, then turns at each intersection until it returns to the first segment. Here we selected two connected segments:
+Pass `segments` one or more segments that are part of the region you want. With multiple segments, `region` traces the first segment from its start point to the intersection with the second segment, then turns at each intersection until it returns to the first segment. Here we selected two connected segments:
 
 ```
 region(segments = [pill.line1, pill.arc2])
@@ -85,55 +85,6 @@ region(segments = [circleSketch.circle1])
 ```
 
 If the supplied segments could trace more than one boundary, use `direction` to choose clockwise or counterclockwise traversal and `intersectionIndex` to choose which intersection to follow. See the [`region`] reference for details.
-
-#### Selecting by point
-
-As a fallback, `region` can take a point that lies inside the region you want and return the region enclosing that point. If the point isn't actually in a closed region (in other words, if it's not surrounded by lines), the `region` call will return an error message.
-
-Any named point from the sketch works, and KCL already knows which sketch it came from:
-
-```
-region(point = pill.arc1.center)
-```
-
-You can also pass a point literal, i.e. a 2D position, but then you have to say which sketch it belongs to:
-
-```
-region(point = [-1.44mm, 5.86mm], sketch = pill)
-```
-
-We suggest you prefer named points over literal points (e.g., `pill.arc1.center` instead of `[-1.44mm, 5.86mm]`), because if you edit your sketch, the exact boundaries of the geometry might change, and your target region might no longer enclose the specific position in your point literal!
-
-One neat trick is that you can add your own construction point to the sketch, and constrain it wherever you need. Because it's part of the sketch, the solver moves it along with everything else. Here's our pill again, with a construction line drawn across it and a point pinned to the middle of that line:
-
-```kcl
-pill = sketch(on = XZ) {
-  line1 = line(start = [var -4.18mm, var 5.88mm], end = [var 1.34mm, var 5.85mm])
-  line2 = line(start = [var 1.32mm, var 4.12mm], end = [var -4.19mm, var 4.15mm])
-  arc1 = arc(start = [var -4.18mm, var 5.88mm], end = [var -4.19mm, var 4.15mm], center = [var -4.18mm, var 5.01mm])
-  arc2 = arc(start = [var 1.32mm, var 4.12mm], end = [var 1.34mm, var 5.85mm], center = [var 1.33mm, var 4.99mm])
-  coincident([arc1.start, line1.start])
-  coincident([line1.end, arc2.end])
-  coincident([arc2.start, line2.start])
-  coincident([line2.end, arc1.end])
-  parallel([line1, line2])
-  equalLength([line1, line2])
-  equalRadius([arc2, arc1])
-  tangent([line1, arc1])
-  tangent([line1, arc2])
-
-  // A construction line corner to corner, with a point at its midpoint.
-  diagonal = line(start = [var -4.18mm, var 5.88mm], end = [var 1.32mm, var 4.12mm], construction = true)
-  coincident([diagonal.start, line1.start])
-  coincident([diagonal.end, line2.start])
-  middle = point(at = [var -1.43mm, var 5mm])
-  midpoint(diagonal, point = middle)
-}
-
-// `middle` moves with the sketch, so this region stays correct.
-region001 = region(point = pill.middle)
-extrude001 = extrude(region001, length = 1)
-```
 
 ### Extruding a region
 

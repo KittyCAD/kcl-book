@@ -8,6 +8,8 @@ Real-world objects often have repeated parts. Consider a LEGO brick, which has a
 Let's start simple. We can use patterns to replicate our geometry, copying it into our scene several times. Let's take this simple cylinder, and copy it 4 times.
 
 ```kcl=linear_pattern
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a circle
 circleSketch = sketch(on = XY) {
   circle1 = circle(start = [var -1mm, var 1mm], center = [var 0mm, var 0mm])
@@ -16,7 +18,7 @@ circleSketch = sketch(on = XY) {
 }
 
 // Extrude it into a cylinder, then pattern it.
-cylinders = extrude(region(sketch = circleSketch, point = [0, 0]), length = 4)
+cylinders = extrude(region(segments = [circleSketch.circle1]), length = 4)
   |> patternLinear3d(instances = 4, distance = 10, axis = X)
 ```
 
@@ -37,6 +39,8 @@ In our above example, it places 3 extra instances (for a total of 4) along the X
 You can also use patterns to replicate something and lay them out in an arc around a point. We'll use the [`patternCircular3d`] function. Here's an example where we put 12 cubes in a circle:
 
 ```kcl=circular_cubes_false
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square, just like normal.
 sketch001 = sketch(on = XZ) {
   line1 = line(start = [var 2.66mm, var -2.08mm], end = [var -2.31mm, var -2.08mm])
@@ -57,7 +61,7 @@ sketch001 = sketch(on = XZ) {
 }
 
 // Extrude square into a cube.
-region001 = region(point = [2.38mm, -4.7575mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cube = extrude(region001, length = 5)
 
 // First, move the square to the northernmost position (like 12 o'clock)
@@ -82,6 +86,8 @@ Here, the center of the pattern is `[0, 0, 0]`. We drew the first cube at the no
 Notice that we used `rotateDuplicates = false`. If we set it to `true`, each duplicate object is also rotated as it is copied around the circle, so that they're all facing the center. Like this:
 
 ```kcl=circular_cubes_true
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square.
 sketch001 = sketch(on = XZ) {
   line1 = line(start = [var 2.66mm, var -2.08mm], end = [var -2.31mm, var -2.08mm])
@@ -102,7 +108,7 @@ sketch001 = sketch(on = XZ) {
 }
 
 // Extrude square into a cube.
-region001 = region(point = [2.38mm, -4.7575mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cube = extrude(region001, length = 5)
 
 // First, move the square to the northernmost position (like 12 o'clock)
@@ -122,6 +128,8 @@ translate(cube, z = 30)
 The `arcDegrees` argument is optional, and defaults to 360 degrees. We can set it to `240deg` to only pattern around two thirds of the circle instead:
 
 ```kcl=circular_cubes_partway
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a square.
 sketch001 = sketch(on = XZ) {
   line1 = line(start = [var 2.66mm, var -2.08mm], end = [var -2.31mm, var -2.08mm])
@@ -142,7 +150,7 @@ sketch001 = sketch(on = XZ) {
 }
 
 // Extrude square into a cube.
-region001 = region(point = [2.38mm, -4.7575mm], sketch = sketch001)
+region001 = region(segments = [sketch001.line1, sketch001.line2])
 cube = extrude(region001, length = 5)
 
 // First, move the square to the northernmost position (like 12 o'clock)
@@ -162,6 +170,8 @@ translate(cube, z = 30)
 You can use patterns and sketch on face together, patterning an extrusion upon some base.
 
 ```kcl=pattern_sof
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 // Sketch a big circle.
 bigCircleSketch = sketch(on = XZ) {
   circle1 = circle(start = [var 0mm, var 10mm], center = [var 0mm, var 0mm])
@@ -171,7 +181,7 @@ bigCircleSketch = sketch(on = XZ) {
 }
 
 // Extrude it into a "base".
-bigCircle = region(sketch = bigCircleSketch, point = [0, 0])
+bigCircle = region(segments = [bigCircleSketch.circle1])
 base = extrude(bigCircle, length = 2)
 
 // Start sketching a smaller circle on that base.
@@ -184,7 +194,7 @@ smallCircleSketch = sketch(on = face001) {
 
 // Extrude that circle into a small cylinder,
 // then pattern it around.
-region(point = [0mm, 7.3125mm], sketch = smallCircleSketch)
+region(segments = [smallCircleSketch.circle1])
   |> extrude(length = 2)
   |> patternCircular3d(
        instances = 6,
@@ -205,6 +215,8 @@ Circular and linear patterns cover a lot of really common use-cases for mechanic
 When might you need a pattern transform? Here's one use: to do a 2D pattern, like tiling a grid. Let's use a pattern transform to make a 5 by 5 grid.
 
 ```kcl=xform_grid
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 numColumns = 5    // how many columns in our grid
 width = 10        // side length of each square
 gap = 1.5 * width // gap between each square
@@ -241,7 +253,7 @@ fn grid(@i) {
 }
 
 // Extrude square, then pattern it using the transform function.
-region(point = [0.0450001mm, 5.1274998mm], sketch = squareSketch)
+region(segments = [squareSketch.line1, squareSketch.line2])
   |> extrude(length = 2)
   |> patternTransform(instances = numColumns * numColumns, transform = grid)
 ```
@@ -268,6 +280,8 @@ The final result speaks for itself:
 We can transform each replica in other ways, too. For example, we can skip a replica altogether! Let's make a chessboard pattern, where we skip every second tile. 
 
 ```kcl=xform_chessboard
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 numColumns = 5    // how many columns in our grid
 width = 10        // side length of each square
 gap = 1.05 * width // gap between each square
@@ -305,7 +319,7 @@ fn grid(@i) {
 }
 
 // Extrude square, then pattern it using the transform function.
-region(point = [0.0450001mm, 5.1274998mm], sketch = squareSketch)
+region(segments = [squareSketch.line1, squareSketch.line2])
   |> extrude(length = 2)
   |> patternTransform(instances = numColumns * numColumns, transform = grid)
 ```
@@ -317,6 +331,8 @@ In this example, we use a very similar transform function. The only difference i
 Here's another example, with some different transform properties being set.
 
 ```kcl=cube_spiral
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
 width = 10        // side length of each square
 
 // Sketch a square
@@ -354,7 +370,7 @@ fn transform(@i) {
 
 
 // Extrude square, then pattern it using the transform function.
-region(point = [0.0450001mm, 5.1274998mm], sketch = squareSketch)
+region(segments = [squareSketch.line1, squareSketch.line2])
   |> extrude(length = 2)
   |> patternTransform(instances = 25, transform)
 ```
