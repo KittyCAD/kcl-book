@@ -12,7 +12,7 @@ import "car motor.step" as motor
 
 Note the `as motor` part. Because "car motor.step" has a space in it, it isn't a valid KCL identifier, so you have to give it a name yourself -- see [naming an imported directory](./modules.md#naming-an-imported-directory) for more on that.
 
-Unlike importing `.kcl` files, importing a CAD file isn't restricted to the current directory. The [rules about import paths](./modules.md#organizing-modules-into-directories) -- only importing `main.kcl` from a subdirectory, and never importing from a parent directory -- apply only to KCL modules. A CAD file can live anywhere, so both of these work:
+CAD files aren't subject to the [rules about import paths](./modules.md#organizing-modules-into-directories) that KCL modules are. Those rules -- only importing `main.kcl` from a subdirectory, and never importing from a parent directory -- apply only to `.kcl` files. You can point at a CAD file anywhere, by any path, so both of these work:
 
 ```kcl
 import "parts/car motor.step" as motor
