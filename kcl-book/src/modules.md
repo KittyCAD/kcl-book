@@ -215,7 +215,7 @@ import "../constants.kcl"
 
 which fails to parse with:
 
-> import path may not start with '..'. Cannot traverse to something outside the bounds of your project.
+> import path may not start with '..'. Cannot reference a parent module or anything outside the bounds of your project.
 
 Modules can only ever reach sideways or downwards, which means a directory never depends on where it's been placed. If a nested module needs a value from higher up in the project, pass it in as a function parameter instead of importing it: have `tire.kcl` export a `fn tire(diameter)`, and let `car/main.kcl` supply the diameter from `constants.kcl`.
 
