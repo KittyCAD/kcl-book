@@ -385,11 +385,16 @@ Pattern transforms are a very powerful tool. They're definitely one of the most 
 
 ## 2D patterns and holes
 
-> **WARNING**: 2D patterns are, currently, only supported for our old sketch syntax. We're actively working on porting 2D patterns to our new sketch syntax, so you can use them with constraint solvers. Until then, you can read the rest of this chapter and use it with our old sketch syntax.
+> **WARNING**: This section is a KCL 1 maintenance reference. 2D patterns are
+> currently supported only by the old sketch syntax, and `subtract2d` is
+> deprecated as of KCL 2. New KCL 2 models should pattern solid cutters and use
+> 3D [`subtract`] instead.
 
 So far all of the patterns we've used have replicated 3D solids. But you can use patterns to replicate 2D sketches too. The [`patternLinear2d`], [`patternCircular2d`] and [`patternTransform2d`] functions work like their 3D variants, except they take 2D axes and 2D points. Here's a simple example:
 
 ```kcl=pattern2d
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
 manyCircles = startSketchOn(XZ)
   |> circle(radius = 4, center = [50, 0])
   |> patternCircular2d(
@@ -404,9 +409,13 @@ manyCircles = startSketchOn(XZ)
 
 Now, you could use these 2D patterns as the basis for 3D solids, by extruding or revolving them. You can see this by adding the line `extrude(manyCircles, length = 10)` to the end of the above KCL program. But it's not a good idea, because it produces the exact same model as you would have gotten from making a single 3D solid, then using 3D patterns on that. The only difference is, extruding a 2D pattern is much slower than patterning a 3D solid. So, can we do anything _useful_ with 2D patterns?
 
-Yes! One important use case is putting holes into 2D sketches. We have a special [`subtract2d`] function for this. Let's take the pattern from above, and use it to cut holes into another sketch.
+In existing KCL 1 models, the deprecated [`subtract2d`] function can put these
+holes into a 2D sketch. The following example is retained for maintaining those
+models, not as guidance for new KCL 2 code.
 
 ```kcl=subtract2d_patterns
+@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+
 manyCircles = startSketchOn(XZ)
   |> circle(radius = 4, center = [50, 0])
   |> patternCircular2d(
@@ -424,7 +433,9 @@ base = startSketchOn(XZ)
 
 <!-- KCL: name=subtract2d_patterns,alt=Subtracting a pattern of circles then extruding-->
 
-This could be done with CSG, but it's faster to produce the 2D sketch you want, then do a simple extrude, rather than doing the extrude and then many CSG operations. Full 3D CSG operations are mathematically difficult to calculate compared to simple 2D operations, so if you see the chance to use a simple [`subtract2d`], you should consider it.
+For new KCL 2 models, create one solid cutter, pattern that solid, and pass the
+result to 3D [`subtract`]. Continue using [`subtract2d`] only when maintaining a
+KCL 1 model that has not yet been migrated.
 
 [`patternLinear3d`]: https://zoo.dev/docs/kcl-std/functions/std-solid-patternLinear3d
 [`patternLinear2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternLinear2d
@@ -432,6 +443,7 @@ This could be done with CSG, but it's faster to produce the 2D sketch you want, 
 [`patternCircular2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternCircular2d
 [`patternTransform`]: https://zoo.dev/docs/kcl-std/functions/std-solid-patternTransform
 [`patternTransform2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-patternTransform2d
+[`subtract`]: https://zoo.dev/docs/kcl-std/functions/std-solid-subtract
 [`rem`]: https://zoo.dev/docs/kcl-std/functions/std-math-rem
 [`floor`]: https://zoo.dev/docs/kcl-std/functions/std-math-floor
 [`subtract2d`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-subtract2d
