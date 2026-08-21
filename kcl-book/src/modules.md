@@ -83,7 +83,16 @@ If you open this file, you'll see the same image as before (10 spheres and 10 cu
  1. Grouping related code into its own file can make it easier to read.
  2. In KCL, _each module executes in parallel_. This means the cubes and spheres will be drawn simultaneously, taking roughly half the time. Splitting big KCL files into smaller modules really speed up large projects.
 
-Each of your `.kcl` files is a KCL module. Files can be imported from the same directory. If you want to import from another directory, you can only import `main.kcl` from that directory. Import statements have to be at the top of a file -- they can't be nested within something like a function definition.
+Each of your `.kcl` files is a KCL module. Import paths are always relative to the file doing the importing, so any module can import the `.kcl` files sitting next to it in the same directory. Once your project grows big enough to need subdirectories, there are a few more rules to learn -- see [Organizing modules into directories](#organizing-modules-into-directories) below.
+
+One other rule: `import` statements must be at the _top level_ of a file. They can't be nested inside a function definition or any other block. They don't have to be the first lines in the file, though -- this is fine:
+
+```kcl
+sideLen = 10
+import "cubes.kcl"
+```
+
+Most people put their imports at the top anyway, because it makes it easy to see what a file depends on.
 
 ## Importing and exporting specific items
 
@@ -160,6 +169,97 @@ import "cube.kcl" as mySpecificCube
 mySpecificCube |> translate(x = 50) |> rotate(pitch = 45)
 secondCube = cube(sideLength = 7)
 ```
+
+## Organizing modules into directories
+
+Once a project has more than a handful of files, you'll want to group them into directories. Say we're modeling a car, and we've put everything to do with the wheels in its own directory:
+
+```text
+car/
+├── main.kcl
+├── chassis.kcl
+├── constants.kcl
+└── wheels/
+    ├── main.kcl
+    ├── tire.kcl
+    └── rim.kcl
+```
+
+KCL has three rules about which of these files can import which.
+
+**1. Any module can import its neighbors.** Import paths are relative to the file doing the importing, not to the top of your project. So `car/main.kcl` can import `chassis.kcl` and `constants.kcl`, and `wheels/main.kcl` can import `tire.kcl` and `rim.kcl`.
+
+**2. From a directory, you can only import its `main.kcl`.** So `car/main.kcl` can do this:
+
+```kcl
+import "wheels/main.kcl"
+```
+
+but _not_ this:
+
+```text
+import "wheels/tire.kcl"
+```
+
+which fails to parse with:
+
+> import path to a subdirectory must only refer to main.kcl.
+
+Think of a directory's `main.kcl` as its front door. Everything inside the directory is private, and `main.kcl` decides what the rest of the project is allowed to see. This keeps directories self-contained: you can rearrange the files inside `wheels/` without breaking anything outside it. The rule applies at any depth -- if `wheels/` had a `hardware/` directory inside it, `car/main.kcl` could import `"wheels/hardware/main.kcl"`. It's only the _last_ part of the path that has to be `main.kcl`.
+
+**3. You can never import from a parent directory.** An import path can't start with `..`, and it can't be an absolute path like `/Users/me/parts/bolt.kcl`. So `wheels/tire.kcl` cannot do this:
+
+```text
+import "../constants.kcl"
+```
+
+which fails to parse with:
+
+> import path may not start with '..'. Cannot reference a parent module or anything outside the bounds of your project.
+
+Modules can only ever reach sideways or downwards, which means a directory never depends on where it's been placed. If a nested module needs a value from higher up in the project, pass it in as a function parameter instead of importing it: have `tire.kcl` export a `fn tire(diameter)`, and let `car/main.kcl` supply the diameter from `constants.kcl`.
+
+### Re-exporting through `main.kcl`
+
+Rule 2 sounds restrictive, but it isn't, because a `main.kcl` can pass items through from its neighbors using `export import`. This lets a directory expose exactly what it wants, and nothing else.
+
+```kcl
+// wheels/main.kcl
+// Let the rest of the project use `tireWidth`, but keep the rest of tire.kcl private.
+export import tireWidth from "tire.kcl"
+
+// Or re-export everything that rim.kcl exports.
+export import * from "rim.kcl"
+```
+
+Now `car/main.kcl` can import those items straight from the `wheels` directory, without knowing which file inside it they came from:
+
+```kcl
+// car/main.kcl
+import tireWidth, rimWidth from "wheels/main.kcl"
+```
+
+Anything `wheels/main.kcl` doesn't re-export stays invisible outside the directory, even if the file it lives in exports it. Note that `export` only works on the `import x from "..."` and `import * from "..."` forms -- writing `export import "tire.kcl"` won't re-export anything.
+
+### Naming an imported directory
+
+When you import a whole module without naming it, KCL derives a name from the path. For a directory import, that name is the _directory_ name, not `main`:
+
+```kcl
+// This makes the module available as `wheels`, not `main`.
+import "wheels/main.kcl"
+
+// Access its exported items with `::`
+myTire = wheels::tire()
+```
+
+If the name KCL derives wouldn't be a valid KCL identifier -- because the file name contains a hyphen or a space, or starts with a digit or underscore -- you have to name it yourself with `as`:
+
+```kcl
+import "cube-inches.kcl" as cubeInches
+```
+
+Finally, imports can't be circular. If `a.kcl` imports `b.kcl`, then `b.kcl` can't import `a.kcl`, directly or through a chain of other modules.
 
 For more details, you can read the [modules reference] in the KCL docs.
 

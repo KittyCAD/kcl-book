@@ -4,10 +4,19 @@ KCL tries to work well with the rest of the CAD ecosystem. That means you can us
 
 ## Importing other files into KCL
 
-The `import` statement lets you load models from other CAD files and use them in your KCL. Once imported, they can be translated, rotated, cloned etc. For example, let's import a shape from some CAD file. If you place a file named "car motor.step" in the root of your KCL project (i.e. next to `main.kcl`), you can run this:
+The `import` statement lets you load models from other CAD files and use them in your KCL. Once imported, they can be translated, rotated, cloned etc. For example, let's import a shape from some CAD file. If you place a file named "car motor.step" next to your `main.kcl`, you can run this:
 
 ```kcl
 import "car motor.step" as motor
+```
+
+Note the `as motor` part. Because "car motor.step" has a space in it, it isn't a valid KCL identifier, so you have to give it a name yourself -- see [naming an imported directory](./modules.md#naming-an-imported-directory) for more on that.
+
+CAD files aren't subject to the [rules about import paths](./modules.md#organizing-modules-into-directories) that KCL modules are. Those rules -- only importing `main.kcl` from a subdirectory, and never importing from a parent directory -- apply only to `.kcl` files. You can point at a CAD file anywhere, by any path, so both of these work:
+
+```kcl
+import "parts/car motor.step" as motor
+import "../shared/bolt.step" as bolt
 ```
 
 Once you've imported the geometry, it'll be placed in your scene, and referred to with its variable name, `motor`. Many (but not all) KCL functions accept imported geometry, and treat it like regular geometry made inside KCL. For example, let's make two motors:
