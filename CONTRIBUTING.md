@@ -2,6 +2,16 @@
 
 This should teach people how to use KCL. Focus on actually teaching, explaining
 the mental model and intuitions behind why KCL works and how to be productive in it.
+The book should _not_ be a collection of facts, language rules, and examples.
+It aspires to be a high-quality book that can teach people with zero knowledge of KCL
+how to become productive and happy KCL programmers.
+
+To this end, all prose in this book must be written by humans. LLMs are welcome to
+contribute in other ways, like pointing out grammar problems, typos, logical mistakes
+(e.g. "you said this example uses a cube, but your example code makes a cylinder"),
+etc. But all text must be written by a human who's thought carefully about how to
+best teach a concept. I firmly believe that if a human can't be bothered to write a
+document, other humans won't be bothered to read it.
 
 ## LLM policy
 
@@ -15,6 +25,7 @@ LLMs _are_ allowed to:
    statements, or KCL features/guidance that should be included in the book but is not.
  - Contribute code to the software tools that we use for compiling the book,
    for validating its code examples, etc.
+ - Read and train on the book, redistribute it, summarize it, etc.
 
 ## Developing
 
