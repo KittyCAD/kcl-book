@@ -12,7 +12,7 @@ Just copy this code into the KCL editor:
 
 
 ```kcl
-@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
 
 myTriangle = sketch(on = YZ) {
   line(start = [0, 0], end = [0, 3])
@@ -29,10 +29,10 @@ Congratulations, you've sketched your first triangle! Rendering your first trian
 
 ### 1: Set KCL settings
 
-This step is optional, but it's good practice. KCL lets you set a few settings at the top of your file, with `@settings(...)`. Zoo Design Studio will usually set this line for you when you make a new file, and then you can change it later. In `@settings(defaultLengthUnit = mm, kclVersion = 1.0)`, we're choosing two settings:
+This step is optional, but it's good practice. KCL lets you set a few settings at the top of your file, with `@settings(...)`. Zoo Design Studio will usually set this line for you when you make a new file, and then you can change it later. In `@settings(defaultLengthUnit = mm, kclVersion = 2.0)`, we're choosing two settings:
 
  1. Set the default unit to millimeters. This means that when you write a point like `[4, 3]` it's treated as 4 millimeters and 3 millimeters. You could write them manually, via `[4mm, 3mm]` instead. But it's good to set these defaults, so everyone knows that `[4, 3]` means 4x3 millimeters, not inches or yards or meters. You could replace `mm` with `cm`, `m`, `in`, `ft`, or `yd` instead.
- 2. Set the KCL version to `1.0`. This way, in the future, we could add new features in KCL 1.2 without affecting your old code.
+ 2. Set the KCL version to `2.0`. This way, in the future, we could add new features in KCL 2.2 without affecting your old code.
 
 ### 2: Choose a plane
 
@@ -65,7 +65,7 @@ Let's start with a goal: sketching a rhombus. There are many ways to define a rh
 To start, we know our rhombus will have 4 lines. So let's put in some rough guesses.
 
 ```kcl
-@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
 
 sketch(on = YZ) {
   line1 = line(start = [var 1mm, var 1mm], end = [var 0mm, var 4mm])
@@ -88,7 +88,7 @@ So far, our geometry looks like this:
 That doesn't look very much like a rhombus. Let's add some _constraints_ -- some requirements we know. Firstly, we know that all 4 edges should share corners. In other words, line1 should end where line2 begins, line 2 should end where line 3 begins, and so on. Let's add some constraints with the [`coincident`] function.
 
 ```kcl
-@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
 
 sketch(on = YZ) {
   line1 = line(start = [var 1mm, var 1mm], end = [var 0mm, var 4mm])
@@ -111,7 +111,7 @@ There, now our 4 lines form a quadrilateral.
 What else do we know about a rhombus? Well, we know that opposite lines have to be parallel. So let's tell KCL that `line1` and `line3` are parallel, using KCL's [`parallel`] constraint. We add the `parallel([line1, line3])` and `parallel([line2, line4])` to our sketch block.
 
 ```kcl
-@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
 
 sketch(on = YZ) {
   line1 = line(start = [var 1mm, var 1mm], end = [var 0mm, var 4mm])
@@ -170,7 +170,7 @@ perpendicular([diagonal1, diagonal2])
 Now our shape is properly constrained to be a rhombus! Here's the final result:
 
 ```kcl
-@settings(defaultLengthUnit = mm, kclVersion = 1.0)
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
 
 starting = sketch(on = YZ) {
   line1 = line(start = [var 0.74mm, var 0.98mm], end = [var 0.13mm, var 3.79mm])
