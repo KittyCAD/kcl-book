@@ -14,6 +14,7 @@
 - [Sketching 2D shapes](./sketch2d_constraints.md)
 - [Sketching curved lines](./sketch2d_curves_constraints.md)
 - [Creating 3D shapes](./sketch3d.md)
+- [Edge references](./edge_references.md)
 - [Fillets, Chamfers and Edges](./fillets.md)
 - [Sketch on face](./sketch_on_face.md)
 - [Planes](./planes.md)

@@ -162,13 +162,13 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
 
 // Apply a chamfer
 chamferedCube = chamfer(
   extrudeCube,
-  tags = [getOppositeEdge(extrudeCube.sketch.tags.line1)],
+  edges = [{ sideFaces = [regionCube.tags.line1, endCap] }],
   length = 0.2,
 )
 ```
@@ -188,13 +188,13 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
+regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
 
 // Apply a chamfer
 chamferedCube = chamfer(
   extrudeCube,
-  tags = [getOppositeEdge(extrudeCube.sketch.tags.line1)],
+  edges = [{ sideFaces = [regionCube.tags.line1, endCap] }],
   length = 0.2,
   // Add a tag to the chamfered face:
   tag = $myChamferedFace,
