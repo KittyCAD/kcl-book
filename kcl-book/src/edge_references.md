@@ -4,15 +4,21 @@
 
 ## Why edges are described by faces
 
-An edge reference is a topological query based on faces. Faces are more stable and predictable than edges, so deriving edges from its surrounding faces provides a robust selection API. As a point, in complex CSG operations, the number of edges created various considerable depending on the input geometery, where as for faces, since they transferred through the operation the upper bound of faces isknown.
+An edge reference selects edges by describing the faces around them. Faces are generally more stable and predictable than edges after modeling operations, so face-based references make edge selection more robust.
 
-An edge reference starts with `sideFaces`: the faces adjacent to each side of the edge. It can add `endFaces` and, rarely, an `index` until the reference identifies exactly one intended edge. Operations such as `fillet`, `chamfer`, `revolve`, `helix`, and `mirror3d` all use the same reference shape.
+An edge reference starts with `sideFaces`: the faces adjacent to each side of the edge. It can add `endFaces` and, rarely, an `index` until the reference identifies the intended edge or edges. Operations such as `fillet`, `chamfer`, `revolve`, `helix`, and `mirror3d` all use the same reference shape.
 
-The following examples show when each part of an edge reference is needed.
+| Reference field | What it does |
+| --- | --- |
+| `sideFaces` | Finds edges shared by the listed adjacent faces. |
+| `endFaces` | Narrows those matches to edges that end at the listed faces. |
+| `index` | Chooses one edge when the face information still produces multiple matches. |
+
+The examples below move from the common case to situations where an edge selection needs additional disambiguation. Each example includes the geometry needed to create that particular case, but the part to focus on is the small object passed to `edges` (`gdt:annotation` or `fillet`). Its face values are tags created earlier in each example.
 
 ## Two side faces
 
-If we take a simple extruded rectangle, each edge is uniquely identified by two side faces. The four walls are available through the region's sketch-segment tags, while `tagStart` and `tagEnd` identify the two caps.
+Start with the simplest case: on an extruded rectangle, two side faces are enough to identify an edge. The sketch-segment names provide tags for the four walls, while `tagStart` and `tagEnd` create tags for the two caps.
 
 ```kcl=edge_reference_side_faces
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -47,11 +53,11 @@ hide(square)
 
 </div>
 
-The order of the two faces does not matter. In the example above, the edge is identified by the sketch-segment tag `bottom` and the cap tag `endCap`. Any edge on this cube can be identified by using the appropriate pair of face tags.
+The selection to focus on is `edges = [{ sideFaces = [squareRegion.tags.bottom, endCap] }]`. It selects the edge shared by the wall created from `bottom` and the extrusion's end cap. The order of the faces does not matter. Any edge on this cube can be selected with the appropriate pair of face tags.
 
 ## Split edges and one end face
 
-A modeling operation can split an edge into multiple. These edges can have the same two side faces, so more information is needed to disambiguate a single edge. This is where we use `endFaces` (faces that touch the ends of the edge rather than its two adjacent sides).
+A modeling operation can split an edge into several edges. The longer setup in this example creates that situation: two resulting edges have the same `sideFaces`. To select only one of them, the reference also supplies an `endFaces` entry. An end face touches the end of an edge rather than running alongside it.
 
 ```kcl=edge_reference_one_end_face
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -93,9 +99,9 @@ hide(sketch002)
 
 </div>
 
-Here, `capStart001` touches the intended edge, so adding it narrows the result to the single edge we want.
+The selection to focus on is the object containing the two `sideFaces` plus `endFaces = [capStart001]`. Both candidate edges share the side faces, but only the intended edge touches `capStart001`, so the end face narrows the result to one edge.
 
-Some operations deliberately accept a reference that matches several edges. For example, omitting `endFaces` from this model lets one `fillet` reference apply to both edges shared by the two side faces. As you can see, both edges are filleted from the one fillet operation:
+An edge reference does not always have to resolve to one edge. Some operations deliberately accept multiple matches. The next example uses the same geometry but omits `endFaces`; the `sideFaces` pair therefore selects both matching edges, and one `fillet` call fillets both of them:
 
 ```kcl=edge_reference_multiple_matches
 @settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
@@ -133,7 +139,7 @@ hide(sketch002)
 
 ## Two end faces
 
-One end face is not always enough to resolve a single edge. In the following model, the two side faces meet along three edges. Each circular cutter touches two of them, so both end faces are required to identify the middle edge.
+One end face is not always enough to resolve a single edge. The setup in the following example creates three edges with the same two side faces. Each circular cutter creates an end face that touches two of those edges, so the reference needs both end faces to select only the middle edge.
 
 ```kcl=edge_reference_two_end_faces
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -191,11 +197,11 @@ hide(cutSketch)
 
 </div>
 
-The first end face rules out one candidate and the second rules out the other. Together with the side faces, they leave exactly one edge.
+The selection to focus on combines `sideFaces` with two entries in `endFaces`. The first end face rules out one candidate and the second rules out the other, leaving exactly one edge.
 
 ## Final disambiguation with `index`
 
-In rare topology, multiple edges can share every useful side and end face. Face information cannot distinguish those edges, so `index` selects one from the remaining matches using a zero-based index.
+In rare topologies, multiple edges can share every useful side and end face. The setup below creates two such matches. Because face information cannot distinguish them, the reference uses the zero-based `index` field to select one of the matching edges.
 
 ```kcl=edge_reference_index
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -247,11 +253,11 @@ hide(cutSketch)
 
 </div>
 
-You should always prefer face information to uniquely identify an edge and use `index` only in the rare geometry where it is needed. A face-based reference is more semantic and therefore provides a more robust topological query for the edge.
+The selection to focus on uses the shared `sideFaces` and adds `index = 1`, selecting the second matching edge. Prefer face information whenever it can identify the intended edge, and use `index` only when the geometry leaves indistinguishable matches. Face-based references express the geometric relationship and are therefore more robust.
 
 ## Surface edges
 
-A surface body does not enclose a volume, so its boundary edges do not always have two side faces or useful end faces. A surface edge reference therefore uses a single side face and relies on `index` more often:
+A surface body does not enclose a volume, so a boundary edge may have only one side face and no useful end faces. In this example all of the boundary edges belong to the same surface face, so the reference uses that one `sideFaces` entry and `index` to select a particular boundary edge:
 
 ```kcl=surface_edge_reference
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
