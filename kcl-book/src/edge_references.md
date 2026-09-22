@@ -8,11 +8,9 @@ An edge reference selects edges by describing the faces around them. Faces are g
 
 An edge reference starts with `sideFaces`: the faces adjacent to each side of the edge. It can add `endFaces` and, rarely, an `index` until the reference identifies the intended edge or edges. Operations such as `fillet`, `chamfer`, `revolve`, `helix`, and `mirror3d` all use the same reference shape.
 
-| Reference field | What it does |
-| --- | --- |
-| `sideFaces` | Finds edges shared by the listed adjacent faces. |
-| `endFaces` | Narrows those matches to edges that end at the listed faces. |
-| `index` | Chooses one edge when the face information still produces multiple matches. |
+- `sideFaces` finds edges shared by the listed adjacent faces.
+- `endFaces` narrows those matches to edges that end at the listed faces.
+- `index` chooses one edge when the face information still produces multiple matches.
 
 The examples below move from the common case to situations where an edge selection needs additional disambiguation. Each example includes the geometry needed to create that particular case, but the part to focus on is the small object passed to `edges` (`gdt:annotation` or `fillet`). Its face values are tags created earlier in each example.
 
