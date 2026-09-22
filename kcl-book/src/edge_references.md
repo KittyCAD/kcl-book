@@ -4,7 +4,7 @@
 
 ## Why edges are described by faces
 
-An edge reference is a topological query based on faces. Faces are more stable and predictable than edges, so deriving an edge from its surrounding faces provides a more robust API for selecting it. Even in complex CSG operations, the number of edges created is difficult to predict, while faces are transferred through the operation and their sources are known.
+An edge reference is a topological query based on faces. Faces are more stable and predictable than edges, so deriving edges from its surrounding faces provides a robust selection API. As a point, in complex CSG operations, the number of edges created various considerable depending on the input geometery, where as for faces, since they transferred through the operation the upper bound of faces isknown.
 
 An edge reference starts with `sideFaces`: the faces adjacent to each side of the edge. It can add `endFaces` and, rarely, an `index` until the reference identifies exactly one intended edge. Operations such as `fillet`, `chamfer`, `revolve`, `helix`, and `mirror3d` all use the same reference shape.
 
@@ -51,7 +51,7 @@ The order of the two faces does not matter. In the example above, the edge is id
 
 ## Split edges and one end face
 
-A modeling operation can split an edge into multiple edges. These edges can have the same two side faces, so more information is needed to disambiguate a single edge. This is where we use `endFaces`: faces that touch the ends of the edge rather than its two adjacent sides.
+A modeling operation can split an edge into multiple. These edges can have the same two side faces, so more information is needed to disambiguate a single edge. This is where we use `endFaces` (faces that touch the ends of the edge rather than its two adjacent sides).
 
 ```kcl=edge_reference_one_end_face
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -95,7 +95,7 @@ hide(sketch002)
 
 Here, `capStart001` touches the intended edge, so adding it narrows the result to the single edge we want.
 
-Some operations deliberately accept a reference that matches several edges. For example, omitting `endFaces` from this model lets one `fillet` reference apply to both edges shared by the two side faces. As you can see, both edges are filleted as a result:
+Some operations deliberately accept a reference that matches several edges. For example, omitting `endFaces` from this model lets one `fillet` reference apply to both edges shared by the two side faces. As you can see, both edges are filleted from the one fillet operation:
 
 ```kcl=edge_reference_multiple_matches
 @settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
