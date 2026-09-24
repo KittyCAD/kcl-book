@@ -162,7 +162,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(segments = [square.line4, square.line1])
+regionCube = region(segments = [square.line1, square.line2])
 extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
 
 // Apply a chamfer
@@ -188,7 +188,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(segments = [square.line4, square.line1])
+regionCube = region(segments = [square.line1, square.line2])
 extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
 
 // Apply a chamfer
