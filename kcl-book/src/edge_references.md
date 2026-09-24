@@ -27,7 +27,7 @@ square = sketch(on = XY) {
   top = line(start = [20, 20], end = [0, 20])
   left = line(start = [0, 20], end = [0, 0])
 }
-squareRegion = region(point = [10, 10], sketch = square)
+squareRegion = region(segments = [square.left, square.bottom])
 cube = extrude(
   squareRegion,
   length = 20,

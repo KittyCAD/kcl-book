@@ -43,7 +43,7 @@ square = sketch(on = XY) {
 }
 
 // Extrude a cube.
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line4, square.line1])
 extrudeCube = extrude(regionCube, length = width, tagStart = $startCap)
 
 // Fillet one edge
@@ -75,7 +75,7 @@ square = sketch(on = XY) {
 }
 
 // Extrude a cube.
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line4, square.line1])
 extrudeCube = extrude(regionCube, length = width, tagStart = $startCap)
 
 // Fillet all bottom edges
@@ -109,7 +109,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line4, square.line1])
 extrudeCube = extrude(
   regionCube,
   length = width,
@@ -144,7 +144,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line4, square.line1])
 extrudeCube = extrude(
   regionCube,
   length = width,
@@ -189,7 +189,7 @@ square = sketch(on = XY) {
 }
 
 // Extrude a cube
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line4, square.line1])
 extrudeCube = extrude(regionCube, length = width, tagStart = $startCap)
 
 // Fillet edges
@@ -289,7 +289,7 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
-regionCube = region(point = [0.4975mm, 0mm], sketch = square)
+regionCube = region(segments = [square.line4, square.line1])
 extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
 
 // Apply a chamfer
