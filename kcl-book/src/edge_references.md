@@ -2,6 +2,15 @@
 
 <!-- toc -->
 
+In the Sketch on Face chapter, we saw how to reference _faces_ of a solid. This chapter dives into how we can reference _edges_ in a solid. KCL programmers need to reference edges for many reasons:
+
+* Applying fillets or chamfers
+* Applying an annotation, like a Geometric Dimensioning and Tolerancing (GD&T) callout
+* Getting the length of an edge, for use in later calculations
+* Extruding a sketch until it touches the chosen edge
+
+But before we can apply any of these fun operations to edges, we first have to learn how to reference an edge. Then we can use those edges as arguments to the operations above.
+
 ## Why edges are described by faces
 
 An edge reference selects edges by describing the faces around them. Faces are generally more stable and predictable than edges after modeling operations, so face-based references make edge selection more robust.

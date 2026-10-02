@@ -2,11 +2,13 @@
 
 <!-- toc -->
 
-In the previous chapter, we looked at how leveraging KCL tags lets you query your edges (to find their length, or angle with the previous edge), or apply an edge cut (like a fillet or chamfer). But you can also tag more than just edges! In this chapter, we'll learn how to tag faces, and how that lets you build more complicated 3D models.
+Previously, we've seen how to sketch 2D shapes on planes, and extrude them into 3D solids. In this chapter, we'll make more complex 3D solids that combine multiple simpler solids! We do this by sketching on a face of an existing solid, extruding that sketch, and getting a more complex solid as a result.
+
+To do this, we'll learn how to refer to faces of a solid. This is a core skill in KCL. Right now we're only going to use it to sketch on those faces. But in following chapters, we'll use references to faces for all kinds of interesting tricks.
 
 ## Side faces
 
-Let's start with a simple example. First, we'll sketch and extrude a triangle.
+Let's start with a simple example: referencing the side face of a solid. First, we'll sketch and extrude a triangle.
 
 ```kcl=triangle_for_sketching
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -30,18 +32,22 @@ extrude001 = extrude(region001, length = 1)
 
 <!-- KCL: name=triangle_for_sketching,alt=An extruded triangle -->
 
-When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces (surfaces). So, each new side face corresponds to an existing edge. And crucially, the faces are linked back to their parent edge. This means the face which grew out of the `line1` can be referred to via `extrude001.sketch.tags.line1`. We can use this to reference this face in our 3D model.
+When our triangle is extruded, its 3 edges create 3 new side faces, one for each original edge. The extrusion process also creates a top and bottom face, but we'll get to those faces later.
+
+I like to imagine extrusion like an invisible hand grabbing the flat sketch and pulling it upwards into the third dimension, slowly stretching each edge until they expand to become faces (surfaces). So, each new side face corresponds to an existing line of the sketch. This isn't just an abstract explanation of geometry -- KCL actually tracks which line segment is the metaphorical "parent" of a side face. For example, the face which grew out of the `line3` can be referred to via `extrude001.sketch.tags.line3`. We can use this to reference this face in our 3D model.
 
 Now, if we want to start a new sketch _on that face_, we can do so, with the [`faceOf`] function!
 
 ```kcl
-myFace = faceOf(extrude001, face = region001.tags.line3)
+myFace = faceOf(extrude001, face = extrude001.sketch.tags.line3)
 sketch003 = sketch(on = myFace) {
   // We'll add lines to this sketch later.
 }
 ```
 
-In all the previous example sketches, we've sketched on a _plane_ (like XY or YZ). But now, we're passing a solid face (of our extruded triangle) instead. The solid has five faces (three side faces, a bottom, and a top), so we use [`faceOf`] to say which face in particular we want to sketch on. As we discussed above, the face can be referenced via `line1` (the line that it was extruded from). Now we can start sketching on this face, and even extrude that sketch too.
+(note: you could also do `face = region001.tags.line3`)
+
+In all the previous example sketches, we've sketched on a _plane_ (like XY or YZ). But now, we're passing a solid face (of our extruded triangle) instead. The solid has five faces (three side faces, a bottom, and a top), so we use [`faceOf`] to say which face in particular we want to sketch on. As we discussed above, the face can be referenced via `line3` (the line that it was extruded from). Now we can start sketching on this face, and even extrude that sketch too.
 
 
 ```kcl=triangle_with_cylinder_sketched
@@ -86,7 +92,7 @@ Great! We extruded a solid (the triangle), and could sketch on one of its faces,
 
 >**Note**: When you sketch on a face, the sketch uses the _global coordinate system_. This means when you use 2D points in your sketches, they're relative to the overall global scene, and _not_ the face you're sketching on.
 
- Sketching on faces is a really common pattern when designing real-world objects. A LEGO brick is a good example -- first you'd sketch the rectangular brick, then you'd sketch on its top face, adding the little bumps on top. But wait a second. How would we specify the top face of the brick? That face isn't created from any particular edge. So we can't tag its `line` call and then reuse that tag for the face. What should we do?
+ Sketching on faces is a really common pattern when designing real-world objects. A LEGO brick is a good example -- first you'd sketch the rectangular brick, then you'd sketch on its top face, adding the little bumps on top. But wait a second. How would we specify the top face of the brick? That face isn't created from any particular line of the sketch. It's created by extruding the entire sketch's region, enclosed by four lines. Without a unique parent line like `line2`, we can't use `extrude001.sketch.tags.line2`. What should we do?
 
 ## Standard faces
 
@@ -129,94 +135,61 @@ extrude002 = extrude(region002, length = 1)
 
 <!-- KCL: name=triangle_top_and_bottom_sketches,alt=Solid with another triangle extruded from it-->
 
-Great! These built-in face identifiers are always available on solids. We've learned how to sketch on the top, bottom and side faces. That covers all possible faces, right? Right? Not exactly! There's one more kind of face we haven't talked about yet. 
+Great! These built-in face identifiers are always available on solids. We've learned how to sketch on the top, bottom and side faces. There's one more way to refer to a face: via a "tag". 
 
 ## Tags
 
-When you [`chamfer`] an edge, it creates a new face, which can also be sketched on! But before we do, we've got to take a quick detour and talk about tags.
+The standard faces `START` and `END` work fine when you're dealing with a single solid. But they can get confusing when there are many solids. It's usually clear from context which solid's START or END you're referring to, but not always. If you need to refer to a specific model's START or END, and KCL can't tell which model you're talking about, you need to use tags.
 
-When Zoo launched, tags were used a lot. These days, you probably won't ever need to use tags very much, if at all, because they've been mostly replaced by variables. There are still a _few_ cases where you'll need tags, and sketching on a chamfered face is one of them. We're trying to phase them out, but we haven't finished that job yet.
+When Zoo launched, tags were used a lot. These days, you probably won't need to use tags very much, if at all, because they've been mostly replaced by variables. We're trying to phase them out, but we haven't finished yet. There are still a _few_ cases where you'll need tags, and referring to a specific start/end face of a specific solid is one of them.
 
-So far, we've been able to refer to geometric features (like edges and faces) by using variables. But tags let you refer to geometry that isn't assigned to a variable. For example, take the chamfered face created by a `chamfer(myRegion)` call. When we call `mySolid = chamfer(myRegion, length = 1)` the variable `mySolid` refers to the _entire_ solid, including the chamfered face. How do we refer to some specific face, like the chamfered face? 
+When you do an `extrude` call, you can optionally _tag_ the start or end face, like this:
 
-The solution: we use `mySolid = chamfer(myRegion, length = 1, tag = $myFace)`. That tags the face, so we can refer to it later as `myFace`. You can think of this like declaring a variable inside the function, when it executes. The `$` means you're declaring a tag. So, `$myFace` _declares_ a tag called `myFace`. If you later use just `myFace`, you're _referring_ to a tag that already exists.
-
-Here's another example. Say you extrude a square into a cube. As discussed above, the top of the cube can be referred to with the standard face `END`. You can sketch on that top face via `sketch(on = faceOf(extrude001, face = END))`. Say you extrude a cylinder from the cube. How do you sketch on the top face of the cylinder? Does `END` refer to the cylinder, or the cube?
-
-You can use `extrude(mySketch, tagEnd = $endOfCylinder)` to disambiguate these. Again, this defines a tag as part of the extrude, which refers to a particular face. Then you can use that tag later when you need to use the face.
-
-Generally you won't need to use this method, but there are some niches where it's helpful.
-
-## Sketch on chamfer
-
-Now that we understand tags, we can use them to sketch on a chamfer! When you [`chamfer`] an edge, it creates a new face, which can also be sketched on! Consider this chamfered cube from the previous chapter:
-
-```kcl=chamfered_cube
-@settings(defaultLengthUnit = mm, kclVersion = 2.0)
-
-// Same as previous examples
-width = 1
-square = sketch(on = XY) {
-  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
-  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
-  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
-  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
-}
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
-
-// Apply a chamfer
-chamferedCube = chamfer(
-  extrudeCube,
-  edges = [{ sideFaces = [regionCube.tags.line1, endCap] }],
-  length = 0.2,
-)
+```kcl
+myBox = extrude(mySketch, length = 1, tagStart = $myBoxStart)
+myButton = extrude(mySketch, length = 1, tagEnd = $buttonEnd)
 ```
 
-<!-- KCL: name=chamfered_cube,alt=A chamfered cube-->
+These two examples add a new name for referring to the start or end faces of an extruded solid. You can still refer to them via `START` and `END`, but declaring new tags for a face gives you an unambiguous, readable name for it. 
 
-The chamfer produced a new face, and we can sketch on it too. Firstly, we add a tag to the [`chamfer`] call. Then we can use it in `faceOf`, and then we can sketch on it like any other  face.
+You can think of a tag declaration (like `$myBoxStart`) as a special variable being declared inside the function, when it executes. The `$` means you're declaring a tag. So, `$myBoxStart` _declares_ a tag called `myBoxStart`. If you later use just `myBoxStart`, you're _referring_ to a tag that already exists.
 
-```kcl=sketch_on_chamfered_cube
+Here's a full example. This KCL produces the exact same solid as the previous examples, but we're using `tagEnd = $frontOfTriangle` and then later sketching on `face = frontOfTriangle`, which can be clearer than just using `END` everywhere in a complex model.
+
+```kcl=custom_tag_extrude
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
 
-// Same as previous examples
-width = 1
-square = sketch(on = XY) {
-  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
-  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
-  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
-  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
-}
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
-
-// Apply a chamfer
-chamferedCube = chamfer(
-  extrudeCube,
-  edges = [{ sideFaces = [regionCube.tags.line1, endCap] }],
-  length = 0.2,
-  // Add a tag to the chamfered face:
-  tag = $myChamferedFace,
-)
-
-// Refer back to the tagged face
-faceToSketchOn = faceOf(extrudeCube, face = myChamferedFace)
-
-// Start sketching on that face.
-triangle = sketch(on = faceToSketchOn) {
-  line1 = line(start = [var -0.37mm, var 0.33mm], end = [var -0.2mm, var 0.47mm])
-  line2 = line(start = [var -0.2mm, var 0.47mm], end = [var 0.26mm, var 0.29mm])
+// Same as previous example
+sketch001 = sketch(on = YZ) {
+  line1 = line(start = [var 5.29mm, var -4.11mm], end = [var -4.31mm, var -4.11mm])
+  line2 = line(start = [var -4.31mm, var -4.11mm], end = [var 0.49mm, var 5.14mm])
   coincident([line1.end, line2.start])
-  line3 = line(start = [var 0.26mm, var 0.29mm], end = [var -0.37mm, var 0.33mm])
+  line3 = line(start = [var 0.49mm, var 5.14mm], end = [var 5.29mm, var -4.11mm])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line1.start])
+  equalLength([line2, line3])
+  horizontal(line1)
+}
+region001 = region(segments = [sketch001.line1, sketch001.line2])
+extrude001 = extrude(region001, length = 1, tagEnd = $frontOfTriangle)
+
+// Changed: We're using the tag we declared above,
+// to identify exactly the right face.
+face002 = faceOf(extrude001, face = frontOfTriangle)
+sketch003 = sketch(on = face002) {
+  line1 = line(start = [var -0.3mm, var 0.76mm], end = [var -1.26mm, var -1.25mm])
+  line2 = line(start = [var -1.26mm, var -1.25mm], end = [var 1.68mm, var -1.14mm])
+  coincident([line1.end, line2.start])
+  line3 = line(start = [var 1.68mm, var -1.14mm], end = [var -0.3mm, var 0.76mm])
   coincident([line2.end, line3.start])
   coincident([line3.end, line1.start])
 }
-region001 = region(segments = [triangle.line1, triangle.line2])
-extrude001 = extrude(region001, length = 0.4)
-```
 
-<!-- KCL: name=sketch_on_chamfered_cube,alt=Chamfered cube with cylinder sketched on the chamfered face-->
+// Extrude that sketch
+region002 = region(segments = [sketch003.line1, sketch003.line2])
+extrude002 = extrude(region002, length = 1)
+
+```
 
 ## Updating bodies, or creating new bodies?
 
@@ -241,7 +214,7 @@ OK! Now we've learned how to sketch on all sorts of things:
  - Standard planes like XY or -XZ
  - Tagged faces of existing solids
  - Top or bottom faces of solids, using [`START`] and [`END`]
- - Chamfered faces cut out of solids, by tagging the [`chamfer`] call
+ - How to tag faces, like `tagStart = $myFace`
 
 There's one more thing we can sketch on: custom planes. Let's learn more about planes in the next chapter.
 

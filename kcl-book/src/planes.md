@@ -169,7 +169,7 @@ We've covered three different ways to create planes:
  - Manually defining a plane with axes and an origin
  - Using the plane of a face.
 
-Combined with the six standard planes, you have a wide range of planes that you can use to sketch on, or build solids with. In the next chapter, we'll look at how to manipulate and change those solids.
+Combined with the six standard planes, you have a wide range of planes that you can use to sketch on, or build solids with. In the next few chapters, we'll talk about how to further modify those solids, by referencing their edges and changing them with fillets and chamfers.
 
 [`offsetPlane`]: <https://zoo.dev/docs/kcl-std/functions/std-offsetPlane>
 [`planeOf`]: <https://zoo.dev/docs/kcl-std/functions/std-sketch-planeOf>
