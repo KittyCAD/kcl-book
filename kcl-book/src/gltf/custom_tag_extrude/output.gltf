@@ -1,0 +1,1692 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "byteOffset": 0,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0,
+        -0.004110000096261501,
+        -0.005289999768137932
+      ],
+      "max": [
+        0.0010000000474974513,
+        -0.004110000096261501,
+        0.004310000222176313
+      ]
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 12,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 0,
+      "count": 9,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0,
+        -0.004110000096261501,
+        -0.005289999768137932
+      ],
+      "max": [
+        0.0010000000474974513,
+        0.005140000022947788,
+        -0.0004900000058114529
+      ]
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 12,
+      "count": 9,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 0,
+      "count": 9,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0,
+        -0.004110000096261501,
+        -0.0004900000058114529
+      ],
+      "max": [
+        0.0010000000474974513,
+        0.005140000022947788,
+        0.004310000222176313
+      ]
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 12,
+      "count": 9,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 0,
+      "count": 3,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0,
+        -0.004110000096261501,
+        -0.005289999768137932
+      ],
+      "max": [
+        0,
+        0.005140000022947788,
+        0.004310000222176313
+      ]
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 12,
+      "count": 3,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 0,
+      "count": 24,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0.0010000000474974513,
+        -0.004110000096261501,
+        -0.005289999768137932
+      ],
+      "max": [
+        0.0010000000474974513,
+        0.005140000022947788,
+        0.004310000222176313
+      ]
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 12,
+      "count": 24,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "byteOffset": 0,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0.0010000000474974513,
+        -0.0012499999720603228,
+        -0.0016799999866634607
+      ],
+      "max": [
+        0.0020000000949949026,
+        -0.0011399999493733048,
+        0.0012600000482052565
+      ]
+    },
+    {
+      "bufferView": 5,
+      "byteOffset": 12,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "byteOffset": 0,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0.0010000000474974513,
+        -0.0011399999493733048,
+        -0.0016799999866634607
+      ],
+      "max": [
+        0.0020000000949949026,
+        0.0007600000244565308,
+        0.0003000000142492354
+      ]
+    },
+    {
+      "bufferView": 6,
+      "byteOffset": 12,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 7,
+      "byteOffset": 0,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0.0010000000474974513,
+        -0.0012499999720603228,
+        0.0003000000142492354
+      ],
+      "max": [
+        0.0020000000949949026,
+        0.0007600000244565308,
+        0.0012600000482052565
+      ]
+    },
+    {
+      "bufferView": 7,
+      "byteOffset": 12,
+      "count": 6,
+      "componentType": 5126,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 0,
+      "count": 3,
+      "componentType": 5126,
+      "type": "VEC3",
+      "min": [
+        0.0020000000949949026,
+        -0.0012499999720603228,
+        -0.0016799999866634607
+      ],
+      "max": [
+        0.0020000000949949026,
+        0.0007600000244565308,
+        0.0012600000482052565
+      ]
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 12,
+      "count": 3,
+      "componentType": 5126,
+      "type": "VEC3"
+    }
+  ],
+  "asset": {
+    "generator": "zoo.dev",
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "byteLength": 1728,
+      "uri": "data:application/octet-stream;base64,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"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 144,
+      "byteOffset": 0,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 216,
+      "byteOffset": 144,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 216,
+      "byteOffset": 360,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 72,
+      "byteOffset": 576,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 576,
+      "byteOffset": 648,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 144,
+      "byteOffset": 1224,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 144,
+      "byteOffset": 1368,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 144,
+      "byteOffset": 1512,
+      "byteStride": 24,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 72,
+      "byteOffset": 1656,
+      "byteStride": 24,
+      "target": 34962
+    }
+  ],
+  "scene": 0,
+  "extensions": {
+    "KITTYCAD_boundary_representation": {
+      "solids": [
+        {
+          "shells": [
+            [
+              0,
+              1
+            ]
+          ],
+          "mesh": 0,
+          "extras": {
+            "KITTYCAD": {
+              "material": 0
+            }
+          }
+        }
+      ],
+      "shells": [
+        {
+          "faces": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              8,
+              1
+            ]
+          ]
+        }
+      ],
+      "faces": [
+        {
+          "surface": [
+            0,
+            1
+          ],
+          "loops": [
+            [
+              0,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "3e16a80d-31d4-576f-aae8-1bf36b028e5a"
+            }
+          }
+        },
+        {
+          "surface": [
+            1,
+            1
+          ],
+          "loops": [
+            [
+              1,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "ddd2fa0f-40a4-5040-8cf5-437440ba9fb8"
+            }
+          }
+        },
+        {
+          "surface": [
+            2,
+            1
+          ],
+          "loops": [
+            [
+              2,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "784362f5-b555-584c-b9e5-d3650bc8e831"
+            }
+          }
+        },
+        {
+          "surface": [
+            3,
+            -1
+          ],
+          "loops": [
+            [
+              3,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "10b091d3-3cee-52e9-98a5-f3be0af4e605"
+            }
+          }
+        },
+        {
+          "surface": [
+            4,
+            1
+          ],
+          "loops": [
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "9f5b043b-5dec-5fbe-b0df-bc3afad40d8f"
+            }
+          }
+        },
+        {
+          "surface": [
+            5,
+            1
+          ],
+          "loops": [
+            [
+              6,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "2147b1bc-0e86-58cf-b979-a1abcf613618"
+            }
+          }
+        },
+        {
+          "surface": [
+            6,
+            1
+          ],
+          "loops": [
+            [
+              7,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "dc700ece-abf1-5d4d-b57d-8fa8eecf901d"
+            }
+          }
+        },
+        {
+          "surface": [
+            7,
+            1
+          ],
+          "loops": [
+            [
+              8,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "57dcebaf-f488-5f18-a3d0-8a7c5e588523"
+            }
+          }
+        },
+        {
+          "surface": [
+            8,
+            1
+          ],
+          "loops": [
+            [
+              9,
+              1
+            ]
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "25662764-9b8b-5d82-98e0-84ff503bf2cc"
+            }
+          }
+        }
+      ],
+      "loops": [
+        {
+          "edges": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              -1
+            ],
+            [
+              3,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              6,
+              -1
+            ],
+            [
+              1,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              7,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              8,
+              -1
+            ],
+            [
+              5,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              7,
+              -1
+            ],
+            [
+              4,
+              -1
+            ],
+            [
+              0,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              2,
+              1
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              8,
+              1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              9,
+              -1
+            ],
+            [
+              10,
+              -1
+            ],
+            [
+              11,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              11,
+              1
+            ],
+            [
+              12,
+              1
+            ],
+            [
+              13,
+              -1
+            ],
+            [
+              14,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              10,
+              1
+            ],
+            [
+              15,
+              1
+            ],
+            [
+              16,
+              -1
+            ],
+            [
+              12,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              9,
+              1
+            ],
+            [
+              14,
+              1
+            ],
+            [
+              17,
+              -1
+            ],
+            [
+              15,
+              -1
+            ]
+          ]
+        },
+        {
+          "edges": [
+            [
+              13,
+              1
+            ],
+            [
+              16,
+              1
+            ],
+            [
+              17,
+              1
+            ]
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "curve": [
+            0,
+            1
+          ],
+          "start": 0,
+          "end": 1,
+          "t": [
+            0,
+            0.0096
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "528e3091-bba6-53b9-bf02-c0bbec9ede73"
+            }
+          }
+        },
+        {
+          "curve": [
+            1,
+            1
+          ],
+          "start": 1,
+          "end": 2,
+          "t": [
+            0,
+            0.001
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "2f2daa61-e474-5451-99da-01d3b4e6896c"
+            }
+          }
+        },
+        {
+          "curve": [
+            2,
+            1
+          ],
+          "start": 3,
+          "end": 2,
+          "t": [
+            0,
+            0.0096
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "a9cca173-6198-5ae2-a59e-8b4a4b84e566"
+            }
+          }
+        },
+        {
+          "curve": [
+            3,
+            1
+          ],
+          "start": 0,
+          "end": 3,
+          "t": [
+            0,
+            0.001
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "3b3c8a78-7302-5dcc-99f1-967e94c16511"
+            }
+          }
+        },
+        {
+          "curve": [
+            4,
+            1
+          ],
+          "start": 1,
+          "end": 4,
+          "t": [
+            0,
+            0.01042125232397719
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "b62e7e88-de5f-5734-ac0e-f8bb7e15dc3b"
+            }
+          }
+        },
+        {
+          "curve": [
+            5,
+            1
+          ],
+          "start": 4,
+          "end": 5,
+          "t": [
+            0,
+            0.001
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "fe98d3c6-41b9-5eee-8d0b-eae1cb51d03a"
+            }
+          }
+        },
+        {
+          "curve": [
+            6,
+            1
+          ],
+          "start": 2,
+          "end": 5,
+          "t": [
+            0,
+            0.01042125232397719
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "de241bb8-7e52-5408-94c8-f70c7ddd1c3a"
+            }
+          }
+        },
+        {
+          "curve": [
+            7,
+            1
+          ],
+          "start": 4,
+          "end": 0,
+          "t": [
+            0,
+            0.01042125232397719
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "2fa67edc-6644-58ac-b963-4a5cd9971833"
+            }
+          }
+        },
+        {
+          "curve": [
+            8,
+            1
+          ],
+          "start": 5,
+          "end": 3,
+          "t": [
+            0,
+            0.01042125232397719
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "a1a26952-28d2-5b84-8af9-1de0ec7d3177"
+            }
+          }
+        },
+        {
+          "curve": [
+            9,
+            1
+          ],
+          "start": 6,
+          "end": 7,
+          "t": [
+            0,
+            0.002227487373701589
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "0b103b5b-2c76-59d8-a1c9-1578a87c525d"
+            }
+          }
+        },
+        {
+          "curve": [
+            10,
+            1
+          ],
+          "start": 8,
+          "end": 6,
+          "t": [
+            0,
+            0.0027441574298862664
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "b8b462a8-12d5-5d61-81c9-4d9526a1027e"
+            }
+          }
+        },
+        {
+          "curve": [
+            11,
+            1
+          ],
+          "start": 7,
+          "end": 8,
+          "t": [
+            0,
+            0.002942057103456695
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "d7518b2c-4d82-5ba0-b611-3d52753b062a"
+            }
+          }
+        },
+        {
+          "curve": [
+            12,
+            1
+          ],
+          "start": 8,
+          "end": 9,
+          "t": [
+            0,
+            0.001
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "a3adac7d-c56c-5cbb-84be-07d1b23308cb"
+            }
+          }
+        },
+        {
+          "curve": [
+            13,
+            1
+          ],
+          "start": 10,
+          "end": 9,
+          "t": [
+            0,
+            0.002942057103456695
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "175dedae-41eb-53a3-a4ac-e5c0c236e1b7"
+            }
+          }
+        },
+        {
+          "curve": [
+            14,
+            1
+          ],
+          "start": 7,
+          "end": 10,
+          "t": [
+            0,
+            0.001
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "44dc3936-5515-5043-b247-6625e6a5c42c"
+            }
+          }
+        },
+        {
+          "curve": [
+            15,
+            1
+          ],
+          "start": 6,
+          "end": 11,
+          "t": [
+            0,
+            0.001
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "8091992f-d696-5c70-85e2-55be71238c7d"
+            }
+          }
+        },
+        {
+          "curve": [
+            16,
+            1
+          ],
+          "start": 9,
+          "end": 11,
+          "t": [
+            0,
+            0.0027441574298862664
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "9caf97d6-4fd3-586d-bc51-4200a0990283"
+            }
+          }
+        },
+        {
+          "curve": [
+            17,
+            1
+          ],
+          "start": 11,
+          "end": 10,
+          "t": [
+            0,
+            0.002227487373701589
+          ],
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "8c0deb2f-1671-58eb-a5a0-7f73ec91728e"
+            }
+          }
+        }
+      ],
+      "vertices": [
+        [
+          0,
+          -0.00411,
+          0.00431
+        ],
+        [
+          0,
+          -0.00411,
+          -0.00529
+        ],
+        [
+          0.001,
+          -0.00411,
+          -0.00529
+        ],
+        [
+          0.001,
+          -0.00411,
+          0.00431
+        ],
+        [
+          0,
+          0.00514,
+          -0.00049
+        ],
+        [
+          0.001,
+          0.00514,
+          -0.00049
+        ],
+        [
+          0.001,
+          0.00076,
+          0.0003
+        ],
+        [
+          0.001,
+          -0.00125,
+          0.00126
+        ],
+        [
+          0.001,
+          -0.00114,
+          -0.00168
+        ],
+        [
+          0.002,
+          -0.00114,
+          -0.00168
+        ],
+        [
+          0.002,
+          -0.00125,
+          0.00126
+        ],
+        [
+          0.002,
+          0.00076,
+          0.0003
+        ]
+      ],
+      "surfaces": [
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              1,
+              0,
+              0
+            ],
+            "yAxis": [
+              -0,
+              0,
+              1
+            ],
+            "origin": [
+              0.0005,
+              -0.00411,
+              -0.00049
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "3e16a80d-31d4-576f-aae8-1bf36b028e5a"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              1,
+              0,
+              0
+            ],
+            "yAxis": [
+              0,
+              -0.8876092548955045,
+              -0.4605972325403699
+            ],
+            "origin": [
+              0.0005,
+              0.000515,
+              -0.00289
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "ddd2fa0f-40a4-5040-8cf5-437440ba9fb8"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              1,
+              0,
+              -0
+            ],
+            "yAxis": [
+              -0,
+              0.8876092548955045,
+              -0.4605972325403699
+            ],
+            "origin": [
+              0.0005,
+              0.000515,
+              0.00191
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "784362f5-b555-584c-b9e5-d3650bc8e831"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              -0,
+              1,
+              0
+            ],
+            "yAxis": [
+              0,
+              -0,
+              1
+            ],
+            "origin": [
+              0,
+              0,
+              -0
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "10b091d3-3cee-52e9-98a5-f3be0af4e605"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              -0,
+              1,
+              0
+            ],
+            "yAxis": [
+              0,
+              -0,
+              1
+            ],
+            "origin": [
+              0.001,
+              0,
+              -0
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "9f5b043b-5dec-5fbe-b0df-bc3afad40d8f"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              1,
+              0,
+              0
+            ],
+            "yAxis": [
+              0,
+              -0.037388810149408674,
+              0.999300793993286
+            ],
+            "origin": [
+              0.0015,
+              -0.001195,
+              -0.00021
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "2147b1bc-0e86-58cf-b979-a1abcf613618"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              1,
+              0,
+              0
+            ],
+            "yAxis": [
+              0,
+              -0.6923800997189933,
+              -0.7215329497071613
+            ],
+            "origin": [
+              0.0015,
+              -0.00019,
+              -0.00069
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "dc700ece-abf1-5d4d-b57d-8fa8eecf901d"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              1,
+              0,
+              -0
+            ],
+            "yAxis": [
+              -0,
+              0.9023620193119682,
+              -0.4309788696713878
+            ],
+            "origin": [
+              0.0015,
+              -0.000245,
+              0.00078
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "57dcebaf-f488-5f18-a3d0-8a7c5e588523"
+            }
+          }
+        },
+        {
+          "type": "plane",
+          "plane": {
+            "xAxis": [
+              -0,
+              1,
+              0
+            ],
+            "yAxis": [
+              0,
+              -0,
+              1
+            ],
+            "origin": [
+              0.002,
+              0,
+              -0
+            ]
+          },
+          "extras": {
+            "KITTYCAD": {
+              "uuid": "25662764-9b8b-5d82-98e0-84ff503bf2cc"
+            }
+          }
+        }
+      ],
+      "curves3D": [
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0,
+              -0.00411,
+              0.00431
+            ],
+            "direction": [
+              0,
+              0,
+              -1
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0,
+              -0.00411,
+              -0.00529
+            ],
+            "direction": [
+              1,
+              0,
+              -0
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              -0.00411,
+              0.00431
+            ],
+            "direction": [
+              0,
+              0,
+              -1
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0,
+              -0.00411,
+              0.00431
+            ],
+            "direction": [
+              1,
+              0,
+              -0
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0,
+              -0.00411,
+              -0.00529
+            ],
+            "direction": [
+              0,
+              0.8876092539010522,
+              0.46059723445676226
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0,
+              0.00514,
+              -0.00049
+            ],
+            "direction": [
+              1,
+              0,
+              -0
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              -0.00411,
+              -0.00529
+            ],
+            "direction": [
+              0,
+              0.8876092539010522,
+              0.46059723445676226
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0,
+              0.00514,
+              -0.00049
+            ],
+            "direction": [
+              0,
+              -0.8876092539010522,
+              0.4605972344567622
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              0.00514,
+              -0.00049
+            ],
+            "direction": [
+              0,
+              -0.8876092539010522,
+              0.4605972344567622
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              0.00076,
+              0.0003
+            ],
+            "direction": [
+              0,
+              -0.9023620172804064,
+              0.4309788739249703
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              -0.00114,
+              -0.00168
+            ],
+            "direction": [
+              0,
+              0.6923801015595329,
+              0.7215329479409869
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              -0.00125,
+              0.00126
+            ],
+            "direction": [
+              0,
+              0.037388805224330406,
+              -0.9993007941775576
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              -0.00114,
+              -0.00168
+            ],
+            "direction": [
+              1,
+              0,
+              -0
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.002,
+              -0.00125,
+              0.00126
+            ],
+            "direction": [
+              0,
+              0.037388805224330406,
+              -0.9993007941775576
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              -0.00125,
+              0.00126
+            ],
+            "direction": [
+              1,
+              0,
+              -0
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.001,
+              0.00076,
+              0.0003
+            ],
+            "direction": [
+              1,
+              0,
+              -0
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.002,
+              -0.00114,
+              -0.00168
+            ],
+            "direction": [
+              0,
+              0.6923801015595329,
+              0.7215329479409869
+            ]
+          }
+        },
+        {
+          "type": "line",
+          "line": {
+            "origin": [
+              0.002,
+              0.00076,
+              0.0003
+            ],
+            "direction": [
+              0,
+              -0.9023620172804064,
+              0.4309788739249703
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "extensionsUsed": [
+    "KITTYCAD_boundary_representation"
+  ],
+  "materials": [
+    {
+      "alphaMode": "OPAQUE",
+      "doubleSided": false,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.9,
+          0.9,
+          0.9,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 1
+      },
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 2,
+            "NORMAL": 3
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 6,
+            "NORMAL": 7
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 10,
+            "NORMAL": 11
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 12,
+            "NORMAL": 13
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 14,
+            "NORMAL": 15
+          },
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 16,
+            "NORMAL": 17
+          },
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ]
+    },
+    {
+      "children": [
+        2
+      ]
+    },
+    {
+      "extensions": {
+        "KITTYCAD_boundary_representation": {
+          "solid": 0
+        }
+      },
+      "mesh": 0
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

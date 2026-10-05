@@ -2,9 +2,9 @@
 
 <!-- toc -->
 
-## Motivation: Applying a fillet
+## Basic fillets
 
-When you manufacture a part, you often want to smooth off its sharp edges, so they're rounded and won't accidentally cut someone who holds it.
+When you manufacture a part, you often want to smooth off its sharp edges, so they're rounded and won't accidentally cut someone who holds it. We call this applying a _fillet_ to an edge.
 Let's say we're modeling a cube, like this:
 
 ```kcl=cube_no_fillets
@@ -28,7 +28,7 @@ It produces a cube like this:
 
 <!-- KCL: name=cube_no_fillets,alt=A cube -->
 
-What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. Those edges were made by the four [`line`] function calls, which were all assigned to variables (`line1`, `line2`, etc). The region preserves those variables under `.tags`, so we can reference the edge created from `line1` via `regionCube.tags.line1` and apply a fillet to it.
+What if we want to fillet one of its sides? Let's start simple and refer to one of the four bottom edges. We'll use an edge reference from the [previous chapter](edge_references.html). We'll tag the start cap of the cube, even though it's not really necessary here, because it's helpful to get into the habit for when you're working with more complex models.
 
 ```kcl=cube_one_fillet
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -44,19 +44,25 @@ square = sketch(on = XY) {
 
 // Extrude a cube.
 regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
+extrudeCube = extrude(regionCube, length = width, tagStart = $startCap)
 
 // Fillet one edge
-filletCube = fillet(extrudeCube, tags = regionCube.tags.line1, radius = 0.2)
+filletCube = fillet(
+  extrudeCube,
+  // This uses an edge reference,
+  // see the Edge Reference chapter for more.
+  edges = [{ sideFaces = [regionCube.tags.line1, startCap] }],
+  radius = 0.2,
+)
 ```
 
-The [`fillet`] function accepts an argument `tags`, which expects edges to fillet. You can pass in a single edge, like we did, or an array of edges like `[regionCube.tags.line1, regionCube.tags.line2]`.
+The [`fillet`] function accepts an `edges` array. Each edge reference describes the faces around an edge. Here, the edge is shared by the side face created from `line1` and the extrusion's `startCap`.
 
 That program should produce a cube with one filleted edge, like this:
 
 <!-- KCL: name=cube_one_fillet,alt=A cube with one filleted edge -->
 
-Nice! We could fillet all four bottom sides if we wanted to:
+Nice! We could fillet all four bottom edges if we wanted to, by just passing more edge references in the array of `edges`:
 
 ```kcl=cube_four_fillets
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -72,16 +78,16 @@ square = sketch(on = XY) {
 
 // Extrude a cube.
 regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
+extrudeCube = extrude(regionCube, length = width, tagStart = $startCap)
 
 // Fillet all bottom edges
 filletCube = fillet(
   extrudeCube,
-  tags = [
-    regionCube.tags.line1,
-    regionCube.tags.line2,
-    regionCube.tags.line3,
-    regionCube.tags.line4,
+  edges = [
+    { sideFaces = [regionCube.tags.line1, startCap] },
+    { sideFaces = [regionCube.tags.line2, startCap] },
+    { sideFaces = [regionCube.tags.line3, startCap] },
+    { sideFaces = [regionCube.tags.line4, startCap] },
   ],
   radius = 0.2,
 )
@@ -89,13 +95,10 @@ filletCube = fillet(
 
 <!-- KCL: name=cube_four_fillets,alt=A cube with four filleted edges-->
 
-## Relationships between edges
+Or all edges:
 
-So far, we've assigned geometry (like a line) to a variable when we create it, and then use that variable to refer to it later (e.g. for fillets). What about edges we don't create directly, and therefore can't assign to a variable? For example, we've already filleted the four bottom edges, but how do we fillet the top four edges? We aren't creating them via [`line`] calls. They're created by the CAD engine in the [`extrude`] call. If we didn't explicitly create them with a sketch function, how do we store them in a variable? Here's the secret --- you don't. KCL has a few helpful functions to access edges that you didn't create directly. Because we can refer to the bottom edges, we can use helper functions like [`getOppositeEdge`] to reference the top edges, like this:
-
-
-```kcl=cube_two_opposite_fillets
-@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+```kcl=cube_all_fillets
+@settings(defaultLengthUnit = mm, kclVersion = "3.0-preview", experimentalFeatures = allow)
 
 // This is all the same as previous examples.
 width = 1
@@ -105,168 +108,46 @@ square = sketch(on = XY) {
   line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
+hide(square)
 regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
+extrudeCube = extrude(
+  regionCube,
+  length = width,
+  tagStart = $startCap,
+  tagEnd = $endCap,
+)
 
-// Note that here we're using `getOppositeEdge`.
 filletCube = fillet(
   extrudeCube,
-  tags = [
-    // Fillet the bottom edge
-    regionCube.tags.line1,
+  edges = [
     // Fillet the top edge
-    getOppositeEdge(regionCube.tags.line1)
+    { sideFaces = [regionCube.tags.line1, endCap] },
+    { sideFaces = [regionCube.tags.line2, endCap] },
+    { sideFaces = [regionCube.tags.line3, endCap] },
+    { sideFaces = [regionCube.tags.line4, endCap] },
+
+    // Bottom edges
+    { sideFaces = [regionCube.tags.line1, startCap] },
+    { sideFaces = [regionCube.tags.line2, startCap] },
+    { sideFaces = [regionCube.tags.line3, startCap] },
+    { sideFaces = [regionCube.tags.line4, startCap] },
+
+    // Sides
+    { sideFaces = [regionCube.tags.line1, regionCube.tags.line2] },
+    { sideFaces = [regionCube.tags.line2, regionCube.tags.line3] },
+    { sideFaces = [regionCube.tags.line3, regionCube.tags.line4] },
+    { sideFaces = [regionCube.tags.line4, regionCube.tags.line1] },
   ],
   radius = 0.2,
 )
 ```
 
-<!-- KCL: name=cube_two_opposite_fillets,alt=Cube with one filleted edge on the bottom and the opposite top edge too-->
+<!-- KCL: name=cube_all_fillets,alt=A cube with all filleted edges-->
 
-We can fillet all four bottom edges _and_ all four top edges by using [`getOppositeEdge`] on each:
-
-```kcl=cube_eight_fillets
-@settings(defaultLengthUnit = mm, kclVersion = 2.0)
-
-// Same as previous examples:
-width = 1
-square = sketch(on = XY) {
-  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
-  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
-  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
-  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
-}
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
-
-// Fillet edges
-filletCube = fillet(
-  extrudeCube,
-  tags = [
-    // Fillet the bottom four edges
-    regionCube.tags.line1,
-    regionCube.tags.line2,
-    regionCube.tags.line3,
-    regionCube.tags.line4,
-    // Fillet the top four edges
-    getOppositeEdge(regionCube.tags.line1),
-    getOppositeEdge(regionCube.tags.line2),
-    getOppositeEdge(regionCube.tags.line3),
-    getOppositeEdge(regionCube.tags.line4)
-  ],
-  radius = 0.2,
-)
-
-```
-
-<!-- KCL: name=cube_eight_fillets,alt=Cube with all top and bottom edge fillets-->
-
-So, we've filleted the bottom horizontal edges, and the top horizontal edges. What about the side (vertical) edges, which connect the top and bottom face? We can use [`getNextAdjacentEdge`] and [`getPreviousAdjacentEdge`] to reference them:
-
-```kcl=cube_next_prev_fillets
-@settings(defaultLengthUnit = mm, kclVersion = 2.0)
-
-// Sketch a square
-width = 1
-square = sketch(on = XY) {
-  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
-  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
-  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
-  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
-}
-
-// Extrude a cube
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
-
-// Fillet edges
-filletCube = fillet(
-  extrudeCube,
-  tags = [
-    // Bottom edge
-    regionCube.tags.line1,
-    // One side edge
-    getNextAdjacentEdge(regionCube.tags.line1),
-    // The other side edge
-    getPreviousAdjacentEdge(regionCube.tags.line1),
-  ],
-  radius = 0.2,
-)
-```
-
-<!-- KCL: name=cube_next_prev_fillets,alt=Cube with two side fillets and one bottom-->
-
-Here, we filleted the bottom side, `line1` just like we did before. But we've also filleted the sides adjacent to it. One side is "before" line1, one side is "after" line1, in Zoo's internal tracking of edges. We can use a similar trick to fillet all four vertical side edges:
-
-
-```kcl=cube_next_prev_fillets_all_sides
-@settings(defaultLengthUnit = mm, kclVersion = 2.0)
-
-// Sketch a square
-width = 1
-square = sketch(on = XY) {
-  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
-  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
-  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
-  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
-}
-
-// Extrude a cube
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
-
-// Fillet edges
-filletCube = fillet(
-  extrudeCube,
-  tags = [
-    getNextAdjacentEdge(regionCube.tags.line1),
-    getPreviousAdjacentEdge(regionCube.tags.line1),
-    getNextAdjacentEdge(regionCube.tags.line3),
-    getPreviousAdjacentEdge(regionCube.tags.line3),
-  ],
-  radius = 0.2,
-)
-```
-
-<!-- KCL: name=cube_next_prev_fillets_all_sides,alt=Cube with two side fillets and one bottom fillet-->
-
-## Edges between faces
-
-Sometimes `getNextAdjacentEdge` and similar functions are a bit tricky to use. It can be hard to look at a model and figure out which is the next, or previous, or opposite, edge. There's another way to refer to edges: which faces does this edge touch? For this we use the [`getCommonEdge`] function.
-
-```kcl=cube_common_edge
-@settings(defaultLengthUnit = mm, kclVersion = 2.0)
-
-// This is the same as previous examples
-width = 1
-square = sketch(on = XY) {
-  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
-  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
-  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
-  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
-}
-regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
-
-// Find the edge that borders the face from line4 and the face from line1.
-edge = getCommonEdge(faces = [
-  regionCube.tags.line4,
-  regionCube.tags.line1
-])
-
-// Then fillet it.
-fillet(extrudeCube, tags = edge, radius = 0.2)
-```
-
-[`getCommonEdge`] takes a list of faces, and returns the edge that is shared between them -- their _common_ edge. This is a pretty useful function, because usually it's easier to reference and name faces rather than edges.
-
-Notice in this example that the list of `faces` looks like a list of edges. We're passing in `line4` and `line1`, which we used to reference edges in the above examples. That's because KCL recognizes that `extrude` creates a face out of each edge (imagine each edge being dragged upwards, to create a face).
-
-There are other ways to refer to faces, but we'll see them later in this book.
 
 ## Chamfers
 
-A [`chamfer`] is just like a fillet, except that fillets smooth away an edge to make it round, but chamfers just make a single cut across an edge. Here's an example of the difference. Compare this chamfered cube with the filleted cubes above:
+A [`chamfer`] is just like a fillet, except that fillets smooth away an edge to make it round, while chamfers just make a single cut across an edge. Here's an example of the difference. Compare this chamfered cube with the filleted cubes above:
 
 ```kcl=chamfered_cube
 @settings(defaultLengthUnit = mm, kclVersion = 2.0)
@@ -280,10 +161,14 @@ square = sketch(on = XY) {
   line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
 }
 regionCube = region(segments = [square.line1, square.line2])
-extrudeCube = extrude(regionCube, length = width)
+extrudeCube = extrude(regionCube, length = width, tagEnd = $endCap)
 
 // Apply a chamfer
-chamferedCube = chamfer(extrudeCube, tags = [getOppositeEdge(regionCube.tags.line1)], length = 0.2)
+chamferedCube = chamfer(
+  extrudeCube,
+  edges = [{ sideFaces = [regionCube.tags.line1, endCap] }],
+  length = 0.2,
+)
 ```
 
 <!-- KCL: name=chamfered_cube,alt=A chamfered cube-->
@@ -298,9 +183,60 @@ To define the chamfer, you only need to provide its `length`. But if you want mo
 
 Setting a second length which is much bigger or smaller than the first length means the chamfer will be "steep" -- the new face will be at a very sharp (or very obtuse) angle between the existing two faces. You can also set this angle explicitly, via the `angle` parameter. You can't use both `angle` and `secondLength` because they're essentially two different ways of setting the same property.
 
+### Sketching on chamfers
+
+Chamfering creates a new face. Just like any face, you can sketch on it! To sketch on the face of a chamfer, we just tag this new face, like this:
+
+```
+chamfer(mySolid, length = 1, tag = $myFace)
+```
+
+That tags the face, so we can refer to it later as `myFace`. Then we can sketch on it, like [previously discussed in the Sketch On Face chapter](sketch_on_face.html).
+
+```kcl=sketch_on_chamfered_cube
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+// Same as previous examples
+width = 1
+square = sketch(on = XY) {
+  line1 = line(start = [width / 2, -width / 2], end = [width / 2, width / 2])
+  line2 = line(start = [width / 2, width / 2], end = [-width / 2, width / 2])
+  line3 = line(start = [-width / 2, width / 2], end = [-width / 2, -width / 2])
+  line4 = line(start = [-width / 2, -width / 2], end = [width / 2, -width / 2])
+}
+regionCube = region(segments = [square.line1, square.line2])
+extrudeCube = extrude(regionCube, length = width)
+
+// Apply a chamfer
+chamferedCube = chamfer(
+  extrudeCube,
+  tags = [getOppositeEdge(extrudeCube.sketch.tags.line1)],
+  length = 0.2,
+  // Add a tag to the chamfered face:
+  tag = $myChamferedFace,
+)
+
+// Refer back to the tagged face
+faceToSketchOn = faceOf(extrudeCube, face = myChamferedFace)
+
+// Start sketching on that face.
+triangle = sketch(on = faceToSketchOn) {
+  line1 = line(start = [var -0.37mm, var 0.33mm], end = [var -0.2mm, var 0.47mm])
+  line2 = line(start = [var -0.2mm, var 0.47mm], end = [var 0.26mm, var 0.29mm])
+  coincident([line1.end, line2.start])
+  line3 = line(start = [var 0.26mm, var 0.29mm], end = [var -0.37mm, var 0.33mm])
+  coincident([line2.end, line3.start])
+  coincident([line3.end, line1.start])
+}
+region001 = region(segments = [triangle.line1, triangle.line2])
+extrude001 = extrude(region001, length = 0.4)
+```
+
+<!-- KCL: name=sketch_on_chamfered_cube,alt=Chamfered cube with extrusion from the chamfered face-->
+
 ## Measuring geometry
 
-So we've learned to use variables from sketch blocks to reference the lines we create, then use helper functions like [`getOppositeEdge`] to reference other geometry elsewhere in the model. But these variables aren't just used for altering edges. They provide a valuable way to query and measure your models. Let's see how.
+So we've learned to use sketch variables and face relationships to reference geometry elsewhere in the model. These variables aren't just used for altering edges. They provide a valuable way to query and measure your models. Let's see how.
 
 Let's say you've got a solid triangle, like this:
 
@@ -360,15 +296,11 @@ There are other helpers too, like [`segStart`] and [`segEnd`] to find a line's s
 
 [`chamfer`]: https://zoo.dev/docs/kcl-std/functions/std-solid-chamfer
 [`fillet`]: https://zoo.dev/docs/kcl-std/functions/std-solid-fillet
-[`getNextAdjacentEdge`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-getNextAdjacentEdge
-[`getOppositeEdge`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-getOppositeEdge
-[`getPreviousAdjacentEdge`]:
-  https://zoo.dev/docs/kcl-std/functions/std-sketch-getPreviousAdjacentEdge
 [`segAng`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segAng
 [`segEnd`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segEnd
 [`segLen`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segLen
 [`segStart`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-segStart
 [`line`]: https://zoo.dev/docs/kcl-std/functions/std-solver-line
 [`extrude`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-extrude
-[`getCommonEdge`]: https://zoo.dev/docs/kcl-std/functions/std-sketch-getCommonEdge
+[Edge references]: ./edge_references.md
 [standard library docs]: <https://zoo.dev/docs/kcl-std>
