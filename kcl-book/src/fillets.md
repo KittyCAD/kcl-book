@@ -204,7 +204,7 @@ filletTop = fillet(
 )
 
 
-// Because we explicitly set `tangentChain: false`,
+// Because we explicitly set `tangentChain = false`,
 // only one of the tangential edges around the bottom of the body
 // gets a fillet.
 filletBottom = fillet(
@@ -224,7 +224,7 @@ filletBottom = fillet(
 
 <!-- KCL: name=tangent_chain,alt=A shape where all the tangential edges have fillets-->
 
-Usually, if you want to fillet one of the edges in a shape with tangential edges, you _probably_ want to fillet the other ones too. That's why KCL defaults `tangentChain` to true. Just turn it off by setting `tangentChain: false` if you need to.
+Usually, if you want to fillet one of the edges in a shape with tangential edges, you _probably_ want to fillet the other ones too. That's why KCL defaults `tangentChain` to true. Just turn it off by setting `tangentChain = false` if you need to.
 
 ## Chamfers
 
