@@ -144,6 +144,87 @@ filletCube = fillet(
 
 <!-- KCL: name=cube_all_fillets,alt=A cube with all filleted edges-->
 
+## Filleting tangential edges
+
+By default, when you choose an edge to fillet, KCL will fillet all edges tangent to that too. That's because the `fillet()` function has an optional arg, `tangentChain` which defaults to `true`. Here's an example, where all the edges on the top have fillets, but only one of the bottom edges:
+
+```kcl=tangent_chain
+@settings(kclVersion = 3.0)
+
+// Sketch and extrude a pill-shaped solid.
+sketch001 = sketch(on = XY) {
+  line1 = line(start = [var -2.78mm, var 0mm], end = [var -2.78mm, var -3.91mm])
+  line2 = line(start = [var 2.78mm, var 0mm], end = [var 2.78mm, var -3.91mm])
+  arc1 = arc(
+    start = [var -2.78mm, var 0mm],
+    end = [var 2.78mm, var 0mm],
+    center = [var 0mm, var 0mm],
+    direction = CW,
+  )
+  coincident([arc1.end, line2.start])
+  coincident([line1.start, arc1.start])
+  tangent([line1, arc1])
+  arc2 = arc(start = [var -2.78mm, var -3.91mm], end = [var 2.78mm, var -3.91mm], center = [var 0mm, var -3.91mm])
+  coincident([arc2.end, line2.end])
+  coincident([line1.end, arc2.start])
+  tangent([line1, arc2])
+  vertical(line1)
+  vertical(line2)
+  vertical([arc1.center, arc2.center])
+  equalLength([line1, line2])
+  distance([line2.start, line2.end]) == 3.91mm
+  radius(arc1) == 2.78mm
+  coincident([arc1.center, ORIGIN])
+}
+hidden001 = hide(sketch001)
+region001 = region(segments = [sketch001.arc2, sketch001.line2])
+extrude001 = extrude(
+  region001,
+  length = 1,
+  // Set tags for the top and bottom faces,
+  // so we can easily fillet them later.
+  tagEnd = $top,
+  tagStart = $bottom,
+)
+
+// Because we leave `tangentChain` as its default (true),
+// all the tangential edges around the top of the body
+// get a fillet.
+filletTop = fillet(
+  extrude001,
+  edges = [
+    {
+      sideFaces = [
+        region001.tags.line2,
+        extrude001.faces.top
+      ]
+    }
+  ],
+  radius = 0.2,
+)
+
+
+// Because we explicitly set `tangentChain: false`,
+// only one of the tangential edges around the bottom of the body
+// gets a fillet.
+filletBottom = fillet(
+  extrude001,
+  edges = [
+    {
+      sideFaces = [
+        region001.tags.line2,
+        extrude001.faces.bottom
+      ]
+    }
+  ],
+  radius = 0.7,
+  tangentChain = false,
+)
+```
+
+<!-- KCL: name=tangent_chain,alt=A shape where all the tangential edges have fillets-->
+
+Usually, if you want to fillet one of the edges in a shape with tangential edges, you _probably_ want to fillet the other ones too. That's why KCL defaults `tangentChain` to true. Just turn it off by setting `tangentChain: false` if you need to.
 
 ## Chamfers
 
