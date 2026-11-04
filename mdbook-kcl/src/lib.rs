@@ -1,7 +1,6 @@
-use mdbook::BookItem;
-use mdbook::book::{Book, Chapter};
-use mdbook::errors::Error;
-use mdbook::preprocess::{Preprocessor, PreprocessorContext};
+use mdbook_preprocessor::book::{Book, BookItem, Chapter};
+use mdbook_preprocessor::errors::Error;
+use mdbook_preprocessor::{Preprocessor, PreprocessorContext};
 use pulldown_cmark::{Event, Parser, Tag, TagEnd};
 
 const LOAD_MODEL_VIEWER: &str =
@@ -34,12 +33,7 @@ impl Preprocessor for Kcl {
         "kcl"
     }
 
-    fn run(&self, ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
-        // Check config
-        if let Some(_nop_cfg) = ctx.config.get_preprocessor(self.name()) {
-            // No config yet
-        }
-
+    fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
         // Process each chapter
         let mut errors = Vec::new();
         let mut count = 0;
@@ -64,8 +58,8 @@ impl Preprocessor for Kcl {
         Ok(book)
     }
 
-    fn supports_renderer(&self, renderer: &str) -> bool {
-        renderer == "html"
+    fn supports_renderer(&self, renderer: &str) -> Result<bool, Error> {
+        Ok(renderer == "html")
     }
 }
 
@@ -150,7 +144,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn nop_preprocessor_run() {
+    fn renders_model_viewer_from_mdbook_input() {
         let test_chapter = r##"<!-- KCL: name=pill_2d,skip3d=false,alt=Alt text description cannot contain commas -->"##;
         let input_json = format!(
             r##"[
@@ -160,19 +154,18 @@ mod test {
                         "book": {{
                             "authors": ["AUTHOR"],
                             "language": "en",
-                            "multilingual": false,
                             "src": "src",
                             "title": "TITLE"
                         }},
                         "preprocessor": {{
-                            "nop": {{}}
+                            "kcl": {{}}
                         }}
                     }},
                     "renderer": "html",
-                    "mdbook_version": "0.4.21"
+                    "mdbook_version": "0.5.4"
                 }},
                 {{
-                    "sections": [
+                    "items": [
                         {{
                             "Chapter": {{
                                 "name": "Chapter 1",
@@ -184,24 +177,30 @@ mod test {
                                 "parent_names": []
                             }}
                         }}
-                    ],
-                    "__non_exhaustive": null
+                    ]
                 }}
             ]"##,
             test_chapter,
         );
         let input_json = input_json.as_bytes();
 
-        let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-        // let input_book = book.clone().sections.remove(0);
-        let result = Kcl::new().run(&ctx, book);
-        assert!(result.is_ok());
-
-        // The nop-preprocessor should not have made any changes to the book content.
-        let actual_book = &result.unwrap().sections[0];
-        eprintln!("{actual_book:#?}");
-
-        // assert_eq!(actual_book, &expected_book);
+        let (ctx, book) = mdbook_preprocessor::parse_input(input_json).unwrap();
+        let result = Kcl::new().run(&ctx, book).unwrap();
+        let BookItem::Chapter(chapter) = &result.items[0] else {
+            panic!("Expected a chapter");
+        };
+        assert!(chapter.content.contains(LOAD_MODEL_VIEWER));
+        assert!(chapter.content.contains("<model-viewer"));
+        assert!(chapter.content.contains("src=\"gltf/pill_2d/output.gltf\""));
+        assert!(
+            chapter
+                .content
+                .contains("poster=\"images/dynamic/pill_2d.png\"")
+        );
+        assert!(!chapter.content.contains("<!-- KCL:"));
+        let output = serde_json::to_value(&result).unwrap();
+        assert_eq!(output["items"][0]["Chapter"]["path"], "chapter_1.md");
+        assert!(output.get("sections").is_none());
     }
 
     #[test]

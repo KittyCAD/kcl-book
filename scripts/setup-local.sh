@@ -63,8 +63,4 @@ cat <<'EOF'
 Next:
 
   cd kcl-book && mdbook serve
-
-If a preprocessor is missing from PATH, mdBook 0.4 only warns and carries on,
-producing a book with no 3D models and no tables of contents. If the models are
-missing from your local preview, check the three paths printed above.
 EOF

@@ -1,21 +1,21 @@
 [book]
 authors = ["Adam Chalmers"]
 language = "en"
-multilingual = false
 src = "src"
 title = "Modeling with KCL"
 
 [preprocessor.kcl]
 command = "mdbook-kcl"
-renderer = ["html"]
+renderers = ["html"]
 
 [preprocessor.toc]
 command = "mdbook-toc"
-renderer = ["html"]
+renderers = ["html"]
 
 [output.html]
+additional-css = ["theme/css/kcl.css"]
 git-repository-url = "https://github.com/KittyCAD/kcl-book"
-git-repository-icon = "fa-github"
+git-repository-icon = "fab-github"
 edit-url-template = "https://github.com/KittyCAD/kcl-book/edit/main/guide/{path}"
 site-url = "/docs/kcl-lang/"
 

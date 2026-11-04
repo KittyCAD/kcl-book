@@ -31,7 +31,7 @@ mkdir -p bin
 
 # Compile mdbook-kcl
 cd mdbook-kcl
-cargo build
+cargo build --locked
 cd -
 mv mdbook-kcl/target/debug/mdbook-kcl bin
 ls bin
